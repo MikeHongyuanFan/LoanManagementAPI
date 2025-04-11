@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Signature Request Cancelled</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #666666;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Signature Request Cancelled</h1>
+    </div>
+    <div class="content">
+        <p>Hello {{ recipient_name }},</p>
+        
+        <p>The signature request for document <strong>{{ document_title }}</strong> has been cancelled by {{ cancelled_by }}.</p>
+        
+        <p>No further action is required from you regarding this signature request.</p>
+        
+        <p>If you have any questions about why this request was cancelled, please contact the document owner or your system administrator.</p>
+        
+        <p>Best regards,<br>
+        {{ site_name }} Team</p>
+    </div>
+    <div class="footer">
+        <p>This is an automated message from {{ site_name }}. Please do not reply to this email.</p>
+        <p>If you have any questions, please contact your system administrator.</p>
+    </div>
+</body>
+</html>

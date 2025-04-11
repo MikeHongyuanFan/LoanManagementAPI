@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .application-info {
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background-color: #f2f2f2;
+            padding: 5px 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            width: 30%;
+        }
+        .status-approved {
+            color: green;
+            font-weight: bold;
+        }
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+        .status-rejected {
+            color: red;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 10px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .disclaimer {
+            font-style: italic;
+            margin-top: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Loan Application Summary</h1>
+        <p>Generated on {{ current_date }}</p>
+    </div>
+    
+    <div class="application-info">
+        <p><strong>Application ID:</strong> {{ application_id }}</p>
+        <p><strong>Status:</strong> 
+            {% if status == 'Approved' %}
+                <span class="status-approved">{{ status }}</span>
+            {% elif status == 'Rejected' %}
+                <span class="status-rejected">{{ status }}</span>
+            {% else %}
+                <span class="status-pending">{{ status }}</span>
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">BORROWER INFORMATION</div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{ borrower_name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ borrower_email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ borrower_phone }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    {% if broker_name %}
+    <div class="section">
+        <div class="section-title">BROKER INFORMATION</div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{ broker_name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ broker_email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ broker_phone }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+    
+    <div class="section">
+        <div class="section-title">LOAN INFORMATION</div>
+        <table>
+            <tr>
+                <th>Loan Type</th>
+                <td>{{ loan_type }}</td>
+            </tr>
+            <tr>
+                <th>Loan Amount</th>
+                <td>{{ loan_amount }}</td>
+            </tr>
+            <tr>
+                <th>Interest Rate</th>
+                <td>{{ interest_rate }}</td>
+            </tr>
+            <tr>
+                <th>Loan Term</th>
+                <td>{{ loan_term }}</td>
+            </tr>
+            <tr>
+                <th>Payment Amount</th>
+                <td>{{ payment_amount }}</td>
+            </tr>
+            <tr>
+                <th>Payment Frequency</th>
+                <td>{{ payment_frequency }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">APPLICATION TIMELINE</div>
+        <table>
+            <tr>
+                <th>Submitted Date</th>
+                <td>{{ submitted_date }}</td>
+            </tr>
+            <tr>
+                <th>Last Updated</th>
+                <td>{{ last_updated }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="disclaimer">
+        <p>This is a summary of the loan application and does not constitute a loan agreement. The final loan terms may differ based on underwriting and approval processes. Please contact {{ company_name }} at {{ company_phone }} for any questions regarding this application.</p>
+    </div>
+    
+    <div class="footer">
+        <p>{{ company_name }} | {{ company_address }} | {{ company_phone }}</p>
+        <p>Application Summary - Reference Number: {{ application_id }}</p>
+    </div>
+</body>
+</html>

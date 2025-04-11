@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Document Expiring Soon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #ff9900;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+        .warning {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ff9900;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Document Expiring Soon</h1>
+    </div>
+    <div class="content">
+        <p>Hello {{ recipient_name }},</p>
+        
+        <div class="warning">
+            <p>Your document <strong>{{ document_title }}</strong> will expire in {{ days_remaining }} days (on {{ expiration_date|date:"F j, Y" }}).</p>
+        </div>
+        
+        <p>Please take appropriate action before the document expires:</p>
+        <ul>
+            <li>Update the document with a new version</li>
+            <li>Extend the expiration date if the document is still valid</li>
+            <li>Archive the document if it's no longer needed</li>
+        </ul>
+        
+        <a href="{{ document_url }}" class="button">View Document</a>
+        
+        <p>If you have any questions, please contact your system administrator.</p>
+        
+        <p>Best regards,<br>
+        {{ site_name }} Team</p>
+    </div>
+    <div class="footer">
+        <p>This is an automated message from {{ site_name }}. Please do not reply to this email.</p>
+        <p>If you have any questions, please contact your system administrator.</p>
+    </div>
+</body>
+</html>

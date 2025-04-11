@@ -38,12 +38,10 @@ This document provides an overview of the documentation structure for the CRM Lo
 
 | Document | Status | Notes |
 |----------|--------|-------|
-| README.md | ⚠️ | Needs update to reflect current project status |
-| PROJECT_PLAN.md | ✅ | Current official project plan |
-| ProjectPlan.md | 🔄 | Working draft with annotations - consider merging with PROJECT_PLAN.md |
+| ProjectPlan.md | ✅ | Detailed information of project development lifecycle|
 | API_USAGE_GUIDE.md | ✅ | Current |
-| COMPLETE_API_REFERENCE.md | ✅ | Current |
-| ADVANCED_DOCUMENT_ORGANIZATION.md | ✅ | Current |
+| API_REFERENCE.md | ✅ | Current |
+| DocumentOrganizieStructure.md | ✅ | Current |
 | payment_verification_plan.md | ✅ | Current (Chinese version) |
 | alternative_payment_tracking.md | ✅ | Current |
 | documentAuthenticationFix.md | ✅ | Technical note |

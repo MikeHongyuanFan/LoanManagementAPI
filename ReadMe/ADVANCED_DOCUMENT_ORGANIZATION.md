@@ -30,18 +30,81 @@ This document outlines the advanced document organization features implemented i
    - Pin important documents
    - Add documents to multiple collections
 
-## Document Collections
+## API Reference
+
+### Document Collections
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/collections/` | GET | List all collections |
+| `/api/document-management/collections/` | POST | Create a new collection |
+| `/api/document-management/collections/{id}/` | GET | Get collection details |
+| `/api/document-management/collections/{id}/` | PUT | Update a collection |
+| `/api/document-management/collections/{id}/` | PATCH | Partially update a collection |
+| `/api/document-management/collections/{id}/` | DELETE | Delete a collection |
+| `/api/document-management/collections/{id}/subcollections/` | GET | Get all subcollections of a collection |
+| `/api/document-management/collections/{id}/documents/` | GET | Get all documents in a collection |
+| `/api/document-management/collections/{id}/share/` | POST | Share a collection with users |
+| `/api/document-management/collections/{id}/unshare/` | POST | Unshare a collection with users |
+| `/api/document-management/documents/{id}/add_to_collection/` | POST | Add document to collection |
+| `/api/document-management/documents/{id}/remove_from_collection/` | POST | Remove document from collection |
+
+### Document Relationships
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/relationships/` | GET | List all relationships |
+| `/api/document-management/relationships/` | POST | Create a new relationship |
+| `/api/document-management/relationships/{id}/` | GET | Get relationship details |
+| `/api/document-management/relationships/{id}/` | PUT | Update a relationship |
+| `/api/document-management/relationships/{id}/` | PATCH | Partially update a relationship |
+| `/api/document-management/relationships/{id}/` | DELETE | Delete a relationship |
+| `/api/document-management/documents/{id}/add_relationship/` | POST | Add a relationship to another document |
+| `/api/document-management/documents/{id}/relationships/` | GET | Get all relationships for a document |
+
+### Custom Metadata
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/metadata-fields/` | GET | List all metadata fields |
+| `/api/document-management/metadata-fields/` | POST | Create a new metadata field |
+| `/api/document-management/metadata-fields/{id}/` | GET | Get metadata field details |
+| `/api/document-management/metadata-fields/{id}/` | PUT | Update a metadata field |
+| `/api/document-management/metadata-fields/{id}/` | PATCH | Partially update a metadata field |
+| `/api/document-management/metadata-fields/{id}/` | DELETE | Delete a metadata field |
+| `/api/document-management/metadata-fields/for_document_type/` | GET | Get metadata fields for a specific document type |
+| `/api/document-management/metadata/` | GET | List all metadata values |
+| `/api/document-management/metadata/` | POST | Create a new metadata value |
+| `/api/document-management/metadata/{id}/` | GET | Get metadata value details |
+| `/api/document-management/metadata/{id}/` | PUT | Update a metadata value |
+| `/api/document-management/metadata/{id}/` | PATCH | Partially update a metadata value |
+| `/api/document-management/metadata/{id}/` | DELETE | Delete a metadata value |
+| `/api/document-management/documents/{id}/add_metadata/` | POST | Add custom metadata to a document |
+
+### Document Categories
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/categories/` | GET | List all categories |
+| `/api/document-management/categories/` | POST | Create a new category |
+| `/api/document-management/categories/{id}/` | GET | Get category details |
+| `/api/document-management/categories/{id}/` | PUT | Update a category |
+| `/api/document-management/categories/{id}/` | PATCH | Partially update a category |
+| `/api/document-management/categories/{id}/` | DELETE | Delete a category |
+| `/api/document-management/categories/{id}/subcategories/` | GET | Get all subcategories of a category |
+
+### Document Organization Actions
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/documents/{id}/toggle_favorite/` | POST | Toggle favorite status |
+| `/api/document-management/documents/{id}/toggle_pinned/` | POST | Toggle pinned status |
+
+## Usage Examples
+
+### Document Collections
 
 Document collections allow users to organize documents into folders or collections, similar to a file system.
-
-### Key Features
-
-- **Hierarchical Structure**: Collections can have subcollections, creating a folder-like hierarchy
-- **Sharing**: Collections can be shared with specific users
-- **Visual Customization**: Collections can have custom icons and colors
-- **Document Count**: Automatic tracking of document count in collections and subcollections
-
-### Usage Examples
 
 #### Creating a Collection
 
@@ -86,11 +149,11 @@ Request:
 }
 ```
 
-## Document Relationships
+### Document Relationships
 
 Document relationships allow establishing connections between related documents, creating a network of related information.
 
-### Relationship Types
+#### Relationship Types
 
 - **Supersedes**: Document replaces another document
 - **Supplements**: Document provides additional information
@@ -98,8 +161,6 @@ Document relationships allow establishing connections between related documents,
 - **Requires**: Document requires another document
 - **Amends**: Document amends another document
 - **Custom**: User-defined relationship type
-
-### Usage Examples
 
 #### Creating a Relationship
 
@@ -134,19 +195,17 @@ Request:
 }
 ```
 
-## Custom Metadata Fields
+### Custom Metadata Fields
 
 Custom metadata fields allow adding flexible metadata to documents beyond the standard fields.
 
-### Field Types
+#### Field Types
 
 - **Text**: Single-line or multi-line text
 - **Number**: Numeric values
 - **Date**: Date values
 - **Boolean**: True/false values
 - **Select**: Selection from predefined options
-
-### Usage Examples
 
 #### Creating a Metadata Field
 
@@ -197,17 +256,9 @@ Request:
 }
 ```
 
-## Enhanced Document Categorization
+### Enhanced Document Categorization
 
 Enhanced document categorization provides a more flexible way to categorize documents.
-
-### Key Features
-
-- **Hierarchical Categories**: Categories can have subcategories
-- **Auto-categorization Rules**: Rules for automatically categorizing documents
-- **Visual Customization**: Categories can have custom icons and colors
-
-### Usage Examples
 
 #### Creating a Category
 
@@ -230,17 +281,9 @@ Request:
 }
 ```
 
-## Document Organization Actions
+### Document Organization Actions
 
 Additional actions for organizing documents.
-
-### Key Features
-
-- **Favorite Documents**: Mark documents as favorites for quick access
-- **Pin Documents**: Pin important documents to the top
-- **Multiple Collections**: Add documents to multiple collections
-
-### Usage Examples
 
 #### Toggle Favorite Status
 
@@ -268,6 +311,19 @@ Response:
 }
 ```
 
+## Filter Parameters
+
+The document management API endpoints support filtering, searching, and ordering:
+
+- **Filter fields**: `document_type`, `category`, `status`, `application`, `is_confidential`, `is_favorite`, `is_pinned`
+- **Search fields**: `title`, `description`, `keywords`
+- **Ordering fields**: `title`, `created_at`, `updated_at`, `status`
+
+Example:
+```
+GET /api/document-management/documents/?document_type=agreement&is_favorite=true&ordering=-created_at
+```
+
 ## Implementation Details
 
 ### Database Models
@@ -278,13 +334,6 @@ Response:
 - **DocumentMetadata**: For storing custom metadata values
 - **Enhanced DocumentCategory**: With additional fields for hierarchical structure and visual customization
 - **Enhanced Document**: With additional fields for organization features
-
-### API Endpoints
-
-- Collection management endpoints
-- Relationship management endpoints
-- Custom metadata management endpoints
-- Document organization action endpoints
 
 ## Benefits
 

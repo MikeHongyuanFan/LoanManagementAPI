@@ -18,273 +18,116 @@ class MetricAggregationService:
     Service for aggregating metrics from various data sources
     """
     
-    @staticmethod
-    def update_application_metrics():
+    @classmethod
+    def _update_or_create_metric(cls, name, display_name, category, metric_type, value=None, json_value=None):
+        """
+        Helper method to update or create a metric
+        """
+        DashboardMetric.objects.update_or_create(
+            name=name,
+            category=category,
+            defaults={
+                'display_name': display_name,
+                'description': f'{display_name} metric',
+                'metric_type': metric_type,
+                'value': value,
+                'json_value': json_value,
+            }
+        )
+    
+    @classmethod
+    def update_application_metrics(cls):
         """
         Update application-related metrics
         """
         # Total applications
-        DashboardMetric.objects.update_or_create(
-            name='total_applications',
-            category='application',
-            defaults={
-                'display_name': 'Total Applications',
-                'description': 'Total number of loan applications',
-                'metric_type': 'count',
-                'value': Application.objects.count(),
-            }
-        )
+        total_applications = Application.objects.count()
+        cls._update_or_create_metric('total_applications', 'Total Applications', 'application', 'count', total_applications)
         
         # Applications by status
         status_counts = dict(
             Application.objects.values('status').annotate(count=Count('id')).values_list('status', 'count')
         )
-        
-        DashboardMetric.objects.update_or_create(
-            name='applications_by_status',
-            category='application',
-            defaults={
-                'display_name': 'Applications by Status',
-                'description': 'Distribution of applications by status',
-                'metric_type': 'custom',
-                'json_value': status_counts,
-            }
-        )
-        
-        # Total loan amount
-        total_loan_amount = Application.objects.aggregate(total=Sum('loan_amount'))['total'] or 0
-        
-        DashboardMetric.objects.update_or_create(
-            name='total_loan_amount',
-            category='application',
-            defaults={
-                'display_name': 'Total Loan Amount',
-                'description': 'Sum of all loan amounts',
-                'metric_type': 'currency',
-                'value': total_loan_amount,
-            }
-        )
+        cls._update_or_create_metric('applications_by_status', 'Applications by Status', 'application', 'custom', json_value=status_counts)
         
         # Applications in last 30 days
         thirty_days_ago = timezone.now() - timedelta(days=30)
         recent_apps_count = Application.objects.filter(created_at__gte=thirty_days_ago).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='recent_applications',
-            category='application',
-            defaults={
-                'display_name': 'Recent Applications (30 days)',
-                'description': 'Applications created in the last 30 days',
-                'metric_type': 'count',
-                'value': recent_apps_count,
-            }
-        )
+        cls._update_or_create_metric('recent_applications', 'Recent Applications (30 days)', 'application', 'count', recent_apps_count)
     
-    @staticmethod
-    def update_document_metrics():
+    @classmethod
+    def update_document_metrics(cls):
         """
         Update document-related metrics
         """
         # Total documents
-        DashboardMetric.objects.update_or_create(
-            name='total_documents',
-            category='document',
-            defaults={
-                'display_name': 'Total Documents',
-                'description': 'Total number of documents',
-                'metric_type': 'count',
-                'value': Document.objects.count(),
-            }
-        )
+        total_documents = Document.objects.count()
+        cls._update_or_create_metric('total_documents', 'Total Documents', 'document', 'count', total_documents)
         
         # Documents by type
         type_counts = dict(
             Document.objects.values('document_type').annotate(count=Count('id')).values_list('document_type', 'count')
         )
-        
-        DashboardMetric.objects.update_or_create(
-            name='documents_by_type',
-            category='document',
-            defaults={
-                'display_name': 'Documents by Type',
-                'description': 'Distribution of documents by type',
-                'metric_type': 'custom',
-                'json_value': type_counts,
-            }
-        )
+        cls._update_or_create_metric('documents_by_type', 'Documents by Type', 'document', 'custom', json_value=type_counts)
         
         # Documents pending approval
         pending_approval = Document.objects.filter(status='pending_approval').count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='documents_pending_approval',
-            category='document',
-            defaults={
-                'display_name': 'Documents Pending Approval',
-                'description': 'Number of documents awaiting approval',
-                'metric_type': 'count',
-                'value': pending_approval,
-            }
-        )
+        cls._update_or_create_metric('documents_pending_approval', 'Documents Pending Approval', 'document', 'count', pending_approval)
         
         # Documents pending signature
         pending_signature = Document.objects.filter(status='pending_signature').count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='documents_pending_signature',
-            category='document',
-            defaults={
-                'display_name': 'Documents Pending Signature',
-                'description': 'Number of documents awaiting signature',
-                'metric_type': 'count',
-                'value': pending_signature,
-            }
-        )
+        cls._update_or_create_metric('documents_pending_signature', 'Documents Pending Signature', 'document', 'count', pending_signature)
     
-    @staticmethod
-    def update_borrower_metrics():
+    @classmethod
+    def update_borrower_metrics(cls):
         """
         Update borrower-related metrics
         """
         # Total borrowers
-        DashboardMetric.objects.update_or_create(
-            name='total_borrowers',
-            category='borrower',
-            defaults={
-                'display_name': 'Total Borrowers',
-                'description': 'Total number of borrowers',
-                'metric_type': 'count',
-                'value': Borrower.objects.count(),
-            }
-        )
-        
-        # Active borrowers
-        active_borrowers = Borrower.objects.filter(is_active=True).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='active_borrowers',
-            category='borrower',
-            defaults={
-                'display_name': 'Active Borrowers',
-                'description': 'Number of active borrowers',
-                'metric_type': 'count',
-                'value': active_borrowers,
-            }
-        )
+        total_borrowers = Borrower.objects.count()
+        cls._update_or_create_metric('total_borrowers', 'Total Borrowers', 'borrower', 'count', total_borrowers)
         
         # New borrowers in last 30 days
         thirty_days_ago = timezone.now() - timedelta(days=30)
         new_borrowers = Borrower.objects.filter(created_at__gte=thirty_days_ago).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='new_borrowers',
-            category='borrower',
-            defaults={
-                'display_name': 'New Borrowers (30 days)',
-                'description': 'Borrowers created in the last 30 days',
-                'metric_type': 'count',
-                'value': new_borrowers,
-            }
-        )
+        cls._update_or_create_metric('new_borrowers', 'New Borrowers (30 days)', 'borrower', 'count', new_borrowers)
     
-    @staticmethod
-    def update_broker_metrics():
+    @classmethod
+    def update_broker_metrics(cls):
         """
         Update broker-related metrics
         """
         # Total brokers
-        DashboardMetric.objects.update_or_create(
-            name='total_brokers',
-            category='broker',
-            defaults={
-                'display_name': 'Total Brokers',
-                'description': 'Total number of brokers',
-                'metric_type': 'count',
-                'value': Broker.objects.count(),
-            }
-        )
-        
-        # Active brokers
-        active_brokers = Broker.objects.filter(is_active=True).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='active_brokers',
-            category='broker',
-            defaults={
-                'display_name': 'Active Brokers',
-                'description': 'Number of active brokers',
-                'metric_type': 'count',
-                'value': active_brokers,
-            }
-        )
+        total_brokers = Broker.objects.count()
+        cls._update_or_create_metric('total_brokers', 'Total Brokers', 'broker', 'count', total_brokers)
         
         # New brokers in last 30 days
         thirty_days_ago = timezone.now() - timedelta(days=30)
         new_brokers = Broker.objects.filter(created_at__gte=thirty_days_ago).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='new_brokers',
-            category='broker',
-            defaults={
-                'display_name': 'New Brokers (30 days)',
-                'description': 'Brokers created in the last 30 days',
-                'metric_type': 'count',
-                'value': new_brokers,
-            }
-        )
+        cls._update_or_create_metric('new_brokers', 'New Brokers (30 days)', 'broker', 'count', new_brokers)
     
-    @staticmethod
-    def update_product_metrics():
+    @classmethod
+    def update_product_metrics(cls):
         """
         Update product-related metrics
         """
         # Total products
-        DashboardMetric.objects.update_or_create(
-            name='total_products',
-            category='product',
-            defaults={
-                'display_name': 'Total Products',
-                'description': 'Total number of loan products',
-                'metric_type': 'count',
-                'value': Product.objects.count(),
-            }
+        total_products = Product.objects.count()
+        cls._update_or_create_metric('total_products', 'Total Products', 'product', 'count', total_products)
+        
+        # Products by usage
+        products_by_usage = dict(
+            Application.objects.values('product__name').annotate(count=Count('id')).values_list('product__name', 'count')
         )
-        
-        # Active products
-        active_products = Product.objects.filter(is_active=True).count()
-        
-        DashboardMetric.objects.update_or_create(
-            name='active_products',
-            category='product',
-            defaults={
-                'display_name': 'Active Products',
-                'description': 'Number of active loan products',
-                'metric_type': 'count',
-                'value': active_products,
-            }
-        )
-        
-        # Average interest rate
-        avg_rate = Product.objects.aggregate(avg=Avg('base_interest_rate'))['avg'] or 0
-        
-        DashboardMetric.objects.update_or_create(
-            name='average_interest_rate',
-            category='product',
-            defaults={
-                'display_name': 'Average Interest Rate',
-                'description': 'Average base interest rate across all products',
-                'metric_type': 'percentage',
-                'value': avg_rate,
-            }
-        )
+        cls._update_or_create_metric('products_by_usage', 'Products by Usage', 'product', 'custom', json_value=products_by_usage)
     
-    @staticmethod
-    def update_all_metrics():
+    @classmethod
+    def update_all_metrics(cls):
         """
         Update all metrics
         """
-        MetricAggregationService.update_application_metrics()
-        MetricAggregationService.update_document_metrics()
-        MetricAggregationService.update_borrower_metrics()
-        MetricAggregationService.update_broker_metrics()
-        MetricAggregationService.update_product_metrics()
+        cls.update_application_metrics()
+        cls.update_document_metrics()
+        cls.update_borrower_metrics()
+        cls.update_broker_metrics()
+        cls.update_product_metrics()

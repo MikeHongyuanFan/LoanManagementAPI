@@ -132,7 +132,7 @@ class DashboardOverviewAPI(APIView):
             'average_processing_time': Application.objects.filter(
                 status='approved'
             ).aggregate(avg_time=Avg(F('updated_at') - F('created_at')))['avg_time'] or 0,
-            'total_loan_amount': Application.objects.aggregate(total=Sum('loan_amount'))['total'] or 0,
+            'total_loan_amount': Application.objects.aggregate(total=Sum('gross_loan_amount'))['total'] or 0,
         }
         
         # Document Metrics
@@ -151,7 +151,6 @@ class DashboardOverviewAPI(APIView):
         # Borrower Metrics
         borrowers = {
             'total_borrowers': Borrower.objects.count(),
-            'active_borrowers': Borrower.objects.filter(is_active=True).count(),
             'borrowers_by_state': dict(
                 Borrower.objects.values('state').annotate(count=Count('id')).values_list('state', 'count')
             ),
@@ -161,21 +160,15 @@ class DashboardOverviewAPI(APIView):
         # Broker Metrics
         brokers = {
             'total_brokers': Broker.objects.count(),
-            'active_brokers': Broker.objects.filter(is_active=True).count(),
-            'brokers_by_company': dict(
-                Broker.objects.values('company_name').annotate(count=Count('id')).values_list('company_name', 'count')
-            ),
             'new_brokers_last_30_days': Broker.objects.filter(created_at__gte=start_date).count(),
         }
         
         # Product Metrics
         products = {
             'total_products': Product.objects.count(),
-            'active_products': Product.objects.filter(is_active=True).count(),
             'products_by_usage': dict(
                 Application.objects.values('product__name').annotate(count=Count('id')).values_list('product__name', 'count')
             ),
-            'average_interest_rate': Product.objects.aggregate(avg_rate=Avg('base_interest_rate'))['avg_rate'] or 0,
         }
         
         # Combine all metrics
@@ -242,7 +235,7 @@ class ApplicationDashboardAPI(APIView):
         
         # Top brokers by application count
         top_brokers = Application.objects.values(
-            'broker__id', 'broker__first_name', 'broker__last_name', 'broker__company_name'
+            'broker__id', 'broker__first_name', 'broker__last_name'
         ).annotate(
             count=Count('id')
         ).order_by('-count')[:10]
@@ -259,8 +252,8 @@ class ApplicationDashboardAPI(APIView):
         loan_amount_distribution = []
         for range_info in loan_amount_ranges:
             count = Application.objects.filter(
-                loan_amount__gte=range_info['min'],
-                loan_amount__lt=range_info['max']
+                gross_loan_amount__gte=range_info['min'],
+                gross_loan_amount__lt=range_info['max']
             ).count()
             loan_amount_distribution.append({
                 'label': range_info['label'],
@@ -411,24 +404,19 @@ class BorrowerBrokerDashboardAPI(APIView):
             select={'date': "DATE(created_at)"}
         ).values('date').annotate(count=Count('id')).order_by('date')
         
-        # Brokers by company
-        brokers_by_company = Broker.objects.values('company_name').annotate(
-            count=Count('id')
-        ).order_by('-count')
-        
         # Top borrowers by loan amount
         top_borrowers = Application.objects.values(
             'borrower__id', 'borrower__first_name', 'borrower__last_name'
         ).annotate(
-            total_loan_amount=Sum('loan_amount'),
+            total_loan_amount=Sum('gross_loan_amount'),
             application_count=Count('id')
         ).order_by('-total_loan_amount')[:10]
         
         # Top brokers by loan amount
         top_brokers = Application.objects.values(
-            'broker__id', 'broker__first_name', 'broker__last_name', 'broker__company_name'
+            'broker__id', 'broker__first_name', 'broker__last_name'
         ).annotate(
-            total_loan_amount=Sum('loan_amount'),
+            total_loan_amount=Sum('gross_loan_amount'),
             application_count=Count('id')
         ).order_by('-total_loan_amount')[:10]
         
@@ -437,7 +425,6 @@ class BorrowerBrokerDashboardAPI(APIView):
             'borrowers_over_time': list(borrowers_over_time),
             'borrowers_by_state': list(borrowers_by_state),
             'brokers_over_time': list(brokers_over_time),
-            'brokers_by_company': list(brokers_by_company),
             'top_borrowers': list(top_borrowers),
             'top_brokers': list(top_brokers),
             'last_updated': timezone.now(),

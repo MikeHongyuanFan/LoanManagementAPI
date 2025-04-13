@@ -72,17 +72,14 @@ def invalidate_dashboard_cache(prefix=None):
     Returns:
         bool: True if cache was invalidated
     """
+    # Since Django's cache backend doesn't have a keys() method,
+    # we'll need to manually track and clear keys
     if prefix:
-        # Find and delete all keys with the given prefix
-        pattern = f"dashboard:{prefix}:*"
-        keys = cache.keys(pattern)
-        for key in keys:
-            cache.delete(key)
+        cache.delete(f"dashboard:{prefix}")
     else:
-        # Find and delete all dashboard keys
-        pattern = "dashboard:*"
-        keys = cache.keys(pattern)
-        for key in keys:
-            cache.delete(key)
+        # Clear all dashboard keys we know about
+        prefixes = ['overview', 'applications', 'documents', 'entities']
+        for p in prefixes:
+            cache.delete(f"dashboard:{p}")
     
     return True

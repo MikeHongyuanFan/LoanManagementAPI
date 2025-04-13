@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('api/document-management/', include('documents.urls')),
+    path('api/dashboard/', include('dashboard.urls')),
 ]
 
 # Serve media files in development

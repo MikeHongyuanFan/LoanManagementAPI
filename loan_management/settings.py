@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'products',
     'documents',
     'notifications',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -188,3 +189,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# Dashboard settings
+DASHBOARD_CACHE_TIMEOUT = 60 * 5  # 5 minutes
+DASHBOARD_METRICS_UPDATE_INTERVAL = 60 * 15  # 15 minutes

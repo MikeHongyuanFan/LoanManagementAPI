@@ -4,6 +4,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import logging
 
 from .models import (
     DashboardMetric, 
@@ -18,6 +19,7 @@ from .serializers import (
     UserDashboardPreferenceSerializer,
     DashboardOverviewSerializer
 )
+from .cache import get_cached_dashboard_data, cache_dashboard_data
 
 # Import models from other apps for data aggregation
 from applications.models import Application
@@ -25,6 +27,9 @@ from documents.models import Document
 from borrowers.models import Borrower
 from brokers.models import Broker
 from products.models import Product
+
+# Set up logger
+logger = logging.getLogger('dashboard')
 
 
 class DashboardMetricViewSet(viewsets.ModelViewSet):
@@ -102,6 +107,17 @@ class DashboardOverviewAPI(APIView):
     def get(self, request, format=None):
         # Get time range from query params (default to last 30 days)
         days = int(request.query_params.get('days', 30))
+        
+        # Try to get cached data first
+        cache_params = {'days': days}
+        cached_data = get_cached_dashboard_data('overview', cache_params)
+        if cached_data:
+            logger.info("Serving dashboard overview from cache")
+            return Response(cached_data)
+        
+        logger.info("Generating dashboard overview data")
+        start_time = timezone.now()
+        
         start_date = timezone.now() - timezone.timedelta(days=days)
         
         # Loan Application Metrics
@@ -172,7 +188,14 @@ class DashboardOverviewAPI(APIView):
             'last_updated': timezone.now(),
         }
         
+        # Calculate generation time
+        generation_time = (timezone.now() - start_time).total_seconds()
+        logger.info(f"Dashboard overview data generated in {generation_time:.3f}s")
+        
+        # Cache the data
         serializer = DashboardOverviewSerializer(overview_data)
+        cache_dashboard_data('overview', serializer.data, cache_params)
+        
         return Response(serializer.data)
 
 
@@ -185,6 +208,17 @@ class ApplicationDashboardAPI(APIView):
     def get(self, request, format=None):
         # Get time range from query params (default to last 30 days)
         days = int(request.query_params.get('days', 30))
+        
+        # Try to get cached data first
+        cache_params = {'days': days}
+        cached_data = get_cached_dashboard_data('applications', cache_params)
+        if cached_data:
+            logger.info("Serving application dashboard from cache")
+            return Response(cached_data)
+        
+        logger.info("Generating application dashboard data")
+        start_time = timezone.now()
+        
         start_date = timezone.now() - timezone.timedelta(days=days)
         
         # Applications over time (grouped by day)
@@ -243,6 +277,13 @@ class ApplicationDashboardAPI(APIView):
             'last_updated': timezone.now(),
         }
         
+        # Calculate generation time
+        generation_time = (timezone.now() - start_time).total_seconds()
+        logger.info(f"Application dashboard data generated in {generation_time:.3f}s")
+        
+        # Cache the data
+        cache_dashboard_data('applications', dashboard_data, cache_params)
+        
         return Response(dashboard_data)
 
 
@@ -255,6 +296,17 @@ class DocumentDashboardAPI(APIView):
     def get(self, request, format=None):
         # Get time range from query params (default to last 30 days)
         days = int(request.query_params.get('days', 30))
+        
+        # Try to get cached data first
+        cache_params = {'days': days}
+        cached_data = get_cached_dashboard_data('documents', cache_params)
+        if cached_data:
+            logger.info("Serving document dashboard from cache")
+            return Response(cached_data)
+        
+        logger.info("Generating document dashboard data")
+        start_time = timezone.now()
+        
         start_date = timezone.now() - timezone.timedelta(days=days)
         
         # Documents over time (grouped by day)
@@ -308,6 +360,13 @@ class DocumentDashboardAPI(APIView):
             'last_updated': timezone.now(),
         }
         
+        # Calculate generation time
+        generation_time = (timezone.now() - start_time).total_seconds()
+        logger.info(f"Document dashboard data generated in {generation_time:.3f}s")
+        
+        # Cache the data
+        cache_dashboard_data('documents', dashboard_data, cache_params)
+        
         return Response(dashboard_data)
 
 
@@ -320,6 +379,17 @@ class BorrowerBrokerDashboardAPI(APIView):
     def get(self, request, format=None):
         # Get time range from query params (default to last 30 days)
         days = int(request.query_params.get('days', 30))
+        
+        # Try to get cached data first
+        cache_params = {'days': days}
+        cached_data = get_cached_dashboard_data('entities', cache_params)
+        if cached_data:
+            logger.info("Serving entity dashboard from cache")
+            return Response(cached_data)
+        
+        logger.info("Generating entity dashboard data")
+        start_time = timezone.now()
+        
         start_date = timezone.now() - timezone.timedelta(days=days)
         
         # Borrowers over time
@@ -372,5 +442,12 @@ class BorrowerBrokerDashboardAPI(APIView):
             'top_brokers': list(top_brokers),
             'last_updated': timezone.now(),
         }
+        
+        # Calculate generation time
+        generation_time = (timezone.now() - start_time).total_seconds()
+        logger.info(f"Entity dashboard data generated in {generation_time:.3f}s")
+        
+        # Cache the data
+        cache_dashboard_data('entities', dashboard_data, cache_params)
         
         return Response(dashboard_data)

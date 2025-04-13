@@ -39,7 +39,6 @@ This document provides an overview of the documentation structure for the CRM Lo
 | Document | Status | Notes |
 |----------|--------|-------|
 | ProjectPlan.md | ✅ | Detailed information of project development lifecycle|
-| API_USAGE_GUIDE.md | ✅ | Current |
 | API_REFERENCE.md | ✅ | Current |
 | DocumentOrganizieStructure.md | ✅ | Current |
 | payment_verification_plan.md | ✅ | Current (Chinese version) |

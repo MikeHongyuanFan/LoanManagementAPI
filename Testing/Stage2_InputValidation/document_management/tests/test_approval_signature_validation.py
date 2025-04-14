@@ -54,50 +54,52 @@ class ApprovalSignatureValidationTestCase(TestCase):
     def test_create_approval_missing_required_fields(self):
         """Test that creating an approval without required fields returns 400."""
         data = {
-            # Missing required 'reviewer' field
+            # Missing required 'reviewer_id' field
             'document': self.document.id,
             'status': 'pending'
         }
-        # Skip this test as the current implementation doesn't validate required fields
-        self.skipTest("Current implementation doesn't validate required fields")
+        response = self.client.post(f'/api/document-management/documents/{self.document.id}/request-approval/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('reviewer_id', response.data)
     
     def test_create_approval_invalid_status(self):
         """Test that creating an approval with invalid status returns 400."""
         data = {
             'document': self.document.id,
-            'reviewer': self.reviewer.id,
+            'reviewer_id': self.reviewer.id,
             'status': 'invalid_status'  # Invalid status
         }
-        # Skip this test as the current implementation doesn't validate status values
-        self.skipTest("Current implementation doesn't validate status values")
+        response = self.client.post('/api/document-management/approvals/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('status', response.data)
     
     def test_create_approval_invalid_document(self):
         """Test that creating an approval with invalid document returns 400."""
         data = {
-            'document': 999,  # Non-existent document
-            'reviewer': self.reviewer.id,
-            'status': 'pending'
+            'reviewer_id': self.reviewer.id,
+            'approval_level': 1
         }
-        # Skip this test as the current implementation doesn't validate document existence
-        self.skipTest("Current implementation doesn't validate document existence")
+        response = self.client.post('/api/document-management/documents/999/request-approval/', data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
     
     def test_create_approval_invalid_reviewer(self):
         """Test that creating an approval with invalid reviewer returns 400."""
         data = {
-            'document': self.document.id,
-            'reviewer': 999,  # Non-existent reviewer
-            'status': 'pending'
+            'reviewer_id': 999,  # Non-existent reviewer
+            'approval_level': 1
         }
-        # Skip this test as the current implementation doesn't validate reviewer existence
-        self.skipTest("Current implementation doesn't validate reviewer existence")
+        response = self.client.post(f'/api/document-management/documents/{self.document.id}/request-approval/', data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertIn('reviewer_id', response.data)
     
     def test_update_approval_invalid_data(self):
         """Test that updating an approval with invalid data returns 400."""
         data = {
             'status': 'invalid_status'  # Invalid status
         }
-        # Skip this test as the current implementation doesn't validate status values on update
-        self.skipTest("Current implementation doesn't validate status values on update")
+        response = self.client.patch(f'/api/document-management/approvals/{self.approval.id}/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('status', response.data)
     
     def test_respond_to_approval_invalid_data(self):
         """Test that responding to an approval with invalid data returns 400."""
@@ -106,27 +108,28 @@ class ApprovalSignatureValidationTestCase(TestCase):
             'status': 'invalid_status',  # Invalid status
             'comments': 'Test comments'
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post(f'/api/document-management/approvals/{self.approval.id}/respond/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('status', response.data)
     
     def test_create_signature_request_missing_required_fields(self):
         """Test that creating a signature request without required fields returns 400."""
         data = {
-            # Missing required 'signer' field
+            # Missing required 'signer_id' field
             'document': self.document.id,
             'message': 'Please sign this document'
         }
-        # Skip this test as the current implementation doesn't validate required fields
-        self.skipTest("Current implementation doesn't validate required fields")
+        response = self.client.post('/api/document-management/signature-requests/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('signer_id', response.data)
     
     def test_create_signature_request_invalid_document(self):
         """Test that creating a signature request with invalid document returns 400."""
         data = {
             'document': 999,  # Non-existent document
-            'signer': self.signer.id,
+            'signer_id': self.signer.id,
             'message': 'Please sign this document'
         }
-        # Update the URL to match the actual implementation
         response = self.client.post('/api/document-management/signature-requests/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
@@ -134,21 +137,21 @@ class ApprovalSignatureValidationTestCase(TestCase):
         """Test that creating a signature request with invalid signer returns 400."""
         data = {
             'document': self.document.id,
-            'signer': 999,  # Non-existent signer
+            'signer_id': 999,  # Non-existent signer
             'message': 'Please sign this document'
         }
-        # Skip this test as the current implementation doesn't validate signer existence
-        self.skipTest("Current implementation doesn't validate signer existence")
+        response = self.client.post('/api/document-management/signature-requests/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('signer_id', response.data)
     
     def test_create_signature_request_invalid_due_date(self):
         """Test that creating a signature request with invalid due date returns 400."""
         data = {
             'document': self.document.id,
-            'signer': self.signer.id,
+            'signer_id': self.signer.id,
             'message': 'Please sign this document',
             'due_date': 'invalid-date'  # Invalid date format
         }
-        # Update the URL to match the actual implementation
         response = self.client.post('/api/document-management/signature-requests/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
@@ -157,7 +160,6 @@ class ApprovalSignatureValidationTestCase(TestCase):
         data = {
             'status': 'invalid_status'  # Invalid status
         }
-        # Update the URL to match the actual implementation
         response = self.client.patch(f'/api/document-management/signature-requests/{self.signature_request.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
@@ -168,8 +170,8 @@ class ApprovalSignatureValidationTestCase(TestCase):
             'status': 'invalid_status',  # Invalid status
             'signature_data': 'Test signature data'
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post(f'/api/document-management/signature-requests/{self.signature_request.id}/respond/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
     def test_decline_signature_request_missing_reason(self):
         """Test that declining a signature request without a reason returns 400."""
@@ -178,8 +180,9 @@ class ApprovalSignatureValidationTestCase(TestCase):
             'status': 'declined',
             # Missing required 'decline_reason' field when status is 'declined'
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post(f'/api/document-management/signature-requests/{self.signature_request.id}/respond/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('decline_reason', response.data)
     
     def test_sign_document_invalid_signature_data(self):
         """Test that signing a document with invalid signature data returns 400."""
@@ -188,5 +191,6 @@ class ApprovalSignatureValidationTestCase(TestCase):
             'status': 'signed',
             'signature_data': ''  # Empty signature data
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post(f'/api/document-management/signature-requests/{self.signature_request.id}/respond/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('signature_data', response.data)

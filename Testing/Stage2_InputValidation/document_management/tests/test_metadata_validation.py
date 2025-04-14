@@ -95,22 +95,24 @@ class MetadataValidationTestCase(TestCase):
     def test_create_document_metadata_missing_required_fields(self):
         """Test that creating document metadata without required fields returns 400."""
         data = {
-            # Missing required 'field_id' field
+            # Missing required 'field' field
             'document': self.document.id,
             'value': 'Test value'
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post('/api/document-management/document-metadata/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('field', response.data)
     
     def test_create_document_metadata_invalid_field(self):
         """Test that creating document metadata with invalid field returns 400."""
         data = {
             'document': self.document.id,
-            'field_id': 999,  # Non-existent field
+            'field': 999,  # Non-existent field
             'value': 'Test value'
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post('/api/document-management/document-metadata/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('field', response.data)
     
     def test_create_document_metadata_invalid_value_type(self):
         """Test that creating document metadata with invalid value type returns 400."""
@@ -124,11 +126,12 @@ class MetadataValidationTestCase(TestCase):
         
         data = {
             'document': self.document.id,
-            'field_id': number_field.id,
+            'field': number_field.id,
             'value': 'not-a-number'  # Invalid value for number field
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post('/api/document-management/document-metadata/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('value', response.data)
     
     def test_create_document_metadata_invalid_select_value(self):
         """Test that creating document metadata with invalid select value returns 400."""
@@ -143,19 +146,21 @@ class MetadataValidationTestCase(TestCase):
         
         data = {
             'document': self.document.id,
-            'field_id': select_field.id,
+            'field': select_field.id,
             'value': 'invalid_option'  # Not in the options list
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post('/api/document-management/document-metadata/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('value', response.data)
     
     def test_update_document_metadata_invalid_data(self):
         """Test that updating document metadata with invalid data returns 400."""
         data = {
             'value': ''  # Empty value
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.patch(f'/api/document-management/document-metadata/{self.metadata.id}/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('value', response.data)
     
     def test_bulk_update_metadata_invalid_data(self):
         """Test that bulk updating metadata with invalid data returns 400."""
@@ -167,5 +172,6 @@ class MetadataValidationTestCase(TestCase):
                 }
             ]
         }
-        # Skip this test as the endpoint doesn't exist or is configured differently
-        self.skipTest("Endpoint doesn't exist or is configured differently")
+        response = self.client.post(f'/api/document-management/documents/{self.document.id}/update-metadata/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('metadata', response.data)

@@ -137,8 +137,13 @@ class DocumentValidationTestCase(TestCase):
     
     def test_filter_documents_invalid_parameters(self):
         """Test that filtering documents with invalid parameters returns appropriate response."""
-        # Skip this test as the current implementation doesn't validate filter parameters
-        self.skipTest("Current implementation doesn't validate filter parameters")
+        # Test with invalid date format
+        response = self.client.get('/api/document-management/search/?date_from=invalid-date')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # Should still return 200 but with empty results
+        
+        # Test with invalid category ID
+        response = self.client.get('/api/document-management/search/?category=999')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # Should still return 200 but with empty results
 
 
 class DocumentCategoryValidationTestCase(TestCase):
@@ -164,8 +169,9 @@ class DocumentCategoryValidationTestCase(TestCase):
             # Missing required 'name' field
             'description': 'Test category description'
         }
-        # Skip this test as the current implementation doesn't validate required fields
-        self.skipTest("Current implementation doesn't validate required fields")
+        response = self.client.post('/api/document-management/categories/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('name', response.data)
     
     def test_create_category_name_too_long(self):
         """Test that creating a category with a name that's too long returns 400."""
@@ -193,8 +199,9 @@ class DocumentCategoryValidationTestCase(TestCase):
         data = {
             'name': ''  # Empty name
         }
-        # Skip this test as the current implementation doesn't validate empty names
-        self.skipTest("Current implementation doesn't validate empty names")
+        response = self.client.patch(f'/api/document-management/categories/{self.category.id}/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('name', response.data)
 
 
 class DocumentCollectionValidationTestCase(TestCase):
@@ -258,7 +265,8 @@ class DocumentCollectionValidationTestCase(TestCase):
     def test_share_collection_invalid_users(self):
         """Test that sharing a collection with invalid users returns 400."""
         data = {
-            'user_ids': [999]  # Non-existent user
+            'shared_with_ids': [999]  # Non-existent user
         }
-        # Skip this test as the current implementation doesn't validate user existence
-        self.skipTest("Current implementation doesn't validate user existence")
+        response = self.client.patch(f'/api/document-management/collections/{self.collection.id}/', data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('shared_with_ids', response.data)

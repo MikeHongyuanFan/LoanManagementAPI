@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 
 class ProductFilter(filters.FilterSet):
     min_interest_rate = filters.NumberFilter(field_name='interest_rate', lookup_expr='gte')
@@ -18,10 +19,22 @@ class ProductFilter(filters.FilterSet):
         fields = ['is_active', 'min_interest_rate', 'max_interest_rate', 'loan_amount', 'credit_score']
     
     def filter_by_loan_amount(self, queryset, name, value):
-        return queryset.filter(min_loan_amount__lte=value, max_loan_amount__gte=value)
+        try:
+            value = float(value)
+            if value < 0:
+                raise ValidationError({"loan_amount": ["Loan amount cannot be negative."]})
+            return queryset.filter(min_loan_amount__lte=value, max_loan_amount__gte=value)
+        except (ValueError, TypeError):
+            raise ValidationError({"loan_amount": ["Loan amount must be a valid number."]})
     
     def filter_by_credit_score(self, queryset, name, value):
-        return queryset.filter(min_credit_score__lte=value)
+        try:
+            value = int(value)
+            if value < 300 or value > 850:
+                raise ValidationError({"credit_score": ["Credit score must be between 300 and 850."]})
+            return queryset.filter(min_credit_score__lte=value)
+        except (ValueError, TypeError):
+            raise ValidationError({"credit_score": ["Credit score must be a valid number."]})
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()

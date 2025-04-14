@@ -95,24 +95,24 @@ class MetadataValidationTestCase(TestCase):
     def test_create_document_metadata_missing_required_fields(self):
         """Test that creating document metadata without required fields returns 400."""
         data = {
-            # Missing required 'field' field
+            # Missing required 'field_id' field
             'document': self.document.id,
             'value': 'Test value'
         }
         response = self.client.post('/api/document-management/document-metadata/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('field', response.data)
+        self.assertIn('field_id', response.data)
     
     def test_create_document_metadata_invalid_field(self):
         """Test that creating document metadata with invalid field returns 400."""
         data = {
             'document': self.document.id,
-            'field': 999,  # Non-existent field
+            'field_id': 999,  # Non-existent field
             'value': 'Test value'
         }
         response = self.client.post('/api/document-management/document-metadata/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('field', response.data)
+        self.assertIn('field_id', response.data)
     
     def test_create_document_metadata_invalid_value_type(self):
         """Test that creating document metadata with invalid value type returns 400."""

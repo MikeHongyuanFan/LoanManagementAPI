@@ -151,11 +151,12 @@ class LoanCalculatorAPITestCase(TestCase):
         
     def test_compare_products(self):
         """Test that comparing multiple products works correctly."""
+        self.client.force_authenticate(user=self.user)
         data = {
             'loan_amount': 300000,
             'product_ids': [self.product.id, self.premium_product.id]
         }
-        response = self.client.post('/api/calculator/compare-products/', data)
+        response = self.client.post('/api/calculator/compare-products/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         

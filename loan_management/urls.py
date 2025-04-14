@@ -28,6 +28,8 @@ router.register(r'document-management/signatures', DocumentSignatureViewSet, bas
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include('applications.urls')),
+    path('api/', include('borrowers.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/document-management/', include('documents.urls')),
     path('api/dashboard/', include('dashboard.urls')),

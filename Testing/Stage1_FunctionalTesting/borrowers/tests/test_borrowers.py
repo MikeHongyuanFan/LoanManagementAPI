@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from borrowers.models import Borrower
+from datetime import date
 
 User = get_user_model()
 
@@ -22,10 +23,9 @@ class BorrowerAPITestCase(TestCase):
             last_name='Doe',
             email='john.doe@example.com',
             phone_number='1234567890',
-            address='123 Main St',
-            city='Anytown',
             state='CA',
-            zip_code='12345'
+            dob=date(1980, 1, 1),
+            repayment_account='1234567890'
         )
         self.client.force_authenticate(user=self.user)
         
@@ -52,10 +52,9 @@ class BorrowerAPITestCase(TestCase):
             'last_name': 'Smith',
             'email': 'jane.smith@example.com',
             'phone_number': '0987654321',
-            'address': '456 Oak St',
-            'city': 'Othertown',
             'state': 'NY',
-            'zip_code': '54321'
+            'dob': '1985-05-15',
+            'repayment_account': '0987654321'
         }
         response = self.client.post('/api/borrowers/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -70,18 +69,17 @@ class BorrowerAPITestCase(TestCase):
             'last_name': 'Doe',
             'email': 'john.doe@example.com',
             'phone_number': '1234567890',
-            'address': '789 Pine St',  # Updated address
-            'city': 'Newtown',  # Updated city
-            'state': 'CA',
-            'zip_code': '12345'
+            'state': 'NY',  # Updated state
+            'dob': '1980-01-01',
+            'repayment_account': '9876543210'  # Updated account
         }
         response = self.client.put(f'/api/borrowers/{self.borrower.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['address'], '789 Pine St')
-        self.assertEqual(response.data['city'], 'Newtown')
+        self.assertEqual(response.data['state'], 'NY')
+        self.assertEqual(response.data['repayment_account'], '9876543210')
         self.borrower.refresh_from_db()
-        self.assertEqual(self.borrower.address, '789 Pine St')
-        self.assertEqual(self.borrower.city, 'Newtown')
+        self.assertEqual(self.borrower.state, 'NY')
+        self.assertEqual(self.borrower.repayment_account, '9876543210')
         
     def test_partial_update_borrower(self):
         """Test that partially updating a borrower works correctly."""
@@ -108,20 +106,18 @@ class BorrowerAPITestCase(TestCase):
             last_name='Doe',
             email='jane.doe@example.com',
             phone_number='0987654321',
-            address='456 Oak St',
-            city='Anytown',
             state='CA',
-            zip_code='12345'
+            dob=date(1982, 3, 15),
+            repayment_account='2345678901'
         )
         Borrower.objects.create(
             first_name='Bob',
             last_name='Smith',
             email='bob.smith@example.com',
             phone_number='1122334455',
-            address='789 Elm St',
-            city='Othertown',
             state='NY',
-            zip_code='54321'
+            dob=date(1975, 8, 22),
+            repayment_account='3456789012'
         )
         
         # Search by last name
@@ -129,8 +125,8 @@ class BorrowerAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
         
-        # Search by city
-        response = self.client.get('/api/borrowers/?search=Othertown')
+        # Search by email
+        response = self.client.get('/api/borrowers/?search=bob.smith')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['first_name'], 'Bob')
@@ -143,20 +139,18 @@ class BorrowerAPITestCase(TestCase):
             last_name='Doe',
             email='jane.doe@example.com',
             phone_number='0987654321',
-            address='456 Oak St',
-            city='Anytown',
             state='CA',
-            zip_code='12345'
+            dob=date(1982, 3, 15),
+            repayment_account='2345678901'
         )
         Borrower.objects.create(
             first_name='Bob',
             last_name='Smith',
             email='bob.smith@example.com',
             phone_number='1122334455',
-            address='789 Elm St',
-            city='Othertown',
             state='NY',
-            zip_code='54321'
+            dob=date(1975, 8, 22),
+            repayment_account='3456789012'
         )
         
         # Filter by CA state

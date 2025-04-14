@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from applications.models import Application
 from borrowers.models import Borrower
 from products.models import Product
+import datetime
 
 User = get_user_model()
 
@@ -22,19 +23,21 @@ class ApplicationAPITestCase(TestCase):
         self.borrower = Borrower.objects.create(
             first_name='John',
             last_name='Doe',
-            email='john@example.com'
+            email='john@example.com',
+            phone_number='1234567890',
+            state='CA',
+            dob=datetime.date(1980, 1, 1)
         )
         self.product = Product.objects.create(
             name='Standard Loan',
-            interest_rate=5.5,
-            term_months=360
+            description='A standard loan product'
         )
         self.application = Application.objects.create(
             borrower=self.borrower,
             product=self.product,
-            loan_amount=250000,
-            status='pending',
-            created_by=self.user
+            gross_loan_amount=250000,
+            net_loan_amount=240000,
+            status='pending'
         )
         self.client.force_authenticate(user=self.user)
         
@@ -50,7 +53,8 @@ class ApplicationAPITestCase(TestCase):
         """Test that the application detail endpoint returns 200 and correct data."""
         response = self.client.get(f'/api/applications/{self.application.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['loan_amount'], 250000)
+        self.assertEqual(response.data['gross_loan_amount'], '250000.00')
+        self.assertEqual(response.data['net_loan_amount'], '240000.00')
         self.assertEqual(response.data['status'], 'pending')
         
     def test_create_application(self):
@@ -58,12 +62,14 @@ class ApplicationAPITestCase(TestCase):
         data = {
             'borrower': self.borrower.id,
             'product': self.product.id,
-            'loan_amount': 300000,
-            'status': 'pending'
+            'gross_loan_amount': 300000,
+            'net_loan_amount': 290000,
+            'status': 'draft'
         }
         response = self.client.post('/api/applications/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['loan_amount'], 300000)
+        self.assertEqual(response.data['gross_loan_amount'], '300000.00')
+        self.assertEqual(response.data['net_loan_amount'], '290000.00')
         self.assertEqual(Application.objects.count(), 2)
         
     def test_update_application(self):
@@ -71,18 +77,43 @@ class ApplicationAPITestCase(TestCase):
         data = {
             'borrower': self.borrower.id,
             'product': self.product.id,
-            'loan_amount': 275000,
+            'gross_loan_amount': 275000,
+            'net_loan_amount': 265000,
             'status': 'approved'
         }
         response = self.client.put(f'/api/applications/{self.application.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['loan_amount'], 275000)
+        self.assertEqual(response.data['gross_loan_amount'], '275000.00')
+        self.assertEqual(response.data['net_loan_amount'], '265000.00')
         self.assertEqual(response.data['status'], 'approved')
         self.application.refresh_from_db()
-        self.assertEqual(self.application.loan_amount, 275000)
+        self.assertEqual(self.application.gross_loan_amount, 275000)
         
     def test_delete_application(self):
         """Test that deleting an application works correctly."""
         response = self.client.delete(f'/api/applications/{self.application.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Application.objects.count(), 0)
+        
+    def test_transition_application(self):
+        """Test that transitioning an application's status and stage works correctly."""
+        data = {
+            'status': 'approved',
+            'stage': 'approval'
+        }
+        response = self.client.post(f'/api/applications/{self.application.id}/transition/', data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['status'], 'approved')
+        self.assertEqual(response.data['stage'], 'approval')
+        self.application.refresh_from_db()
+        self.assertEqual(self.application.status, 'approved')
+        self.assertEqual(self.application.stage, 'approval')
+        
+    def test_duplicate_application(self):
+        """Test that duplicating an application works correctly."""
+        response = self.client.post(f'/api/applications/{self.application.id}/duplicate/')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Application.objects.count(), 2)
+        self.assertEqual(response.data['status'], 'draft')
+        self.assertEqual(response.data['gross_loan_amount'], '250000.00')
+        self.assertEqual(response.data['net_loan_amount'], '240000.00')

@@ -46,32 +46,24 @@ class ProductPaymentValidationTests(APITestCase):
             updated_at=timezone.now()
         )
         
-        # Create test fees in the calculator app (not products app)
+        # Create test fees in the products app
         self.fee1 = Fee.objects.create(
             name='Application Fee',
-            description='Application processing fee',
-            fee_type='application',
-            calculation_method='fixed',
-            amount=500.00,
-            is_active=True,
+            amount=500,
+            is_percentage=False,
+            product=self.product1,
             created_at=timezone.now(),
             updated_at=timezone.now()
         )
         
         self.fee2 = Fee.objects.create(
             name='Origination Fee',
-            description='Loan origination fee',
-            fee_type='establishment',
-            calculation_method='percentage',
             amount=1.0,  # 1% of loan amount
-            is_active=True,
+            is_percentage=True,
+            product=self.product1,
             created_at=timezone.now(),
             updated_at=timezone.now()
         )
-        
-        # Add fees to products using the many-to-many relationship
-        self.fee1.products.add(self.product1, self.product2)
-        self.fee2.products.add(self.product1, self.product2)
         
         # URLs
         self.product_payment_url = reverse('product-payment')

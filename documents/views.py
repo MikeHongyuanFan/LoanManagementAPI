@@ -597,3 +597,18 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         
         return Response(verification_data)
 from .views_endpoints import document_metadata_bulk_update, signature_request_respond
+
+# Import custom endpoints
+from .views_endpoints import document_metadata_bulk_update, signature_request_respond
+from .views_approval import (
+    request_document_approval, respond_to_approval, 
+    cancel_approval_request, reassign_approval
+)
+from .views_version import (
+    create_document_version, get_document_versions,
+    revert_to_version, compare_versions
+)
+from .views_search import (
+    advanced_document_search, full_text_search,
+    recent_documents, document_suggestions
+)

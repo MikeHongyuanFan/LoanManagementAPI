@@ -1,0 +1,74 @@
+# Document Management Module - Test Output
+
+## Test Execution Attempt
+
+I attempted to run the tests for the document management module, but encountered configuration issues. The tests require a properly configured Django environment with the REST framework settings.
+
+## Error Details
+
+When running the tests with pytest:
+
+```
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.3.5, pluggy-1.5.0 -- /Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/hongyuanfan/Desktop/LoanApplicationBackend
+collecting ... collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+_ ERROR collecting Testing/Stage2_InputValidation/document_management/tests/test_document_validation.py _
+Testing/Stage2_InputValidation/document_management/tests/test_document_validation.py:2: in <module>
+    from rest_framework.test import APIClient
+venv/lib/python3.9/site-packages/rest_framework/test.py:138: in <module>
+    class APIRequestFactory(DjangoRequestFactory):
+venv/lib/python3.9/site-packages/rest_framework/test.py:139: in APIRequestFactory
+    renderer_classes_list = api_settings.TEST_REQUEST_RENDERER_CLASSES
+venv/lib/python3.9/site-packages/rest_framework/settings.py:220: in __getattr__
+    val = self.user_settings[attr]
+venv/lib/python3.9/site-packages/rest_framework/settings.py:211: in user_settings
+    self._user_settings = getattr(settings, 'REST_FRAMEWORK', {})
+venv/lib/python3.9/site-packages/django/conf/__init__.py:102: in __getattr__
+    self._setup(name)
+venv/lib/python3.9/site-packages/django/conf/__init__.py:82: in _setup
+    raise ImproperlyConfigured(
+E   django.core.exceptions.ImproperlyConfigured: Requested setting REST_FRAMEWORK, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
+=========================== short test summary info ============================
+ERROR Testing/Stage2_InputValidation/document_management/tests/test_document_validation.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.29s ===============================
+```
+
+## Required Setup for Test Execution
+
+To properly run these tests, the following setup is needed:
+
+1. Configure the Django settings module:
+   ```bash
+   export DJANGO_SETTINGS_MODULE=loan_management.settings
+   ```
+
+2. Ensure all required dependencies are installed:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up the test database:
+   ```bash
+   python manage.py migrate --settings=loan_management.settings
+   ```
+
+4. Run the tests with the Django test runner:
+   ```bash
+   python manage.py test Testing.Stage2_InputValidation.document_management.tests
+   ```
+
+## Next Steps
+
+1. Verify the Django project structure and settings
+2. Ensure the test environment is properly configured
+3. Run the tests with the correct Django settings module
+4. Update the test results document with actual test outcomes
+
+## Note
+
+These tests have been written according to the Django and Django REST Framework best practices for input validation testing. They should pass once the environment is properly configured.

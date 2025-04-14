@@ -6,6 +6,9 @@ from users.models import User
 from calculator.models import Fee, ApplicationFee
 from applications.models import Application
 from products.models import Product
+from borrowers.models import Borrower
+from django.utils import timezone
+from datetime import date
 
 
 class FeeValidationTests(APITestCase):
@@ -20,6 +23,18 @@ class FeeValidationTests(APITestCase):
         )
         self.client.force_authenticate(user=self.user)
         
+        # Create a test borrower
+        self.borrower = Borrower.objects.create(
+            first_name='John',
+            last_name='Doe',
+            dob=date(1980, 1, 1),
+            email='john.doe@example.com',
+            phone_number='1234567890',
+            state='NSW',
+            created_at=timezone.now(),
+            updated_at=timezone.now()
+        )
+        
         # Create a test product
         self.product = Product.objects.create(
             name='Test Product',
@@ -33,17 +48,22 @@ class FeeValidationTests(APITestCase):
             stage='application',
             gross_loan_amount=300000.00,
             net_loan_amount=300000.00,
-            borrower_id=1,  # This might need adjustment
-            product=self.product
+            borrower=self.borrower,
+            product=self.product,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         
         # Create a test fee
         self.fee = Fee.objects.create(
             name='Test Fee',
+            description='Test fee description',
             fee_type='application',
             calculation_method='fixed',
             amount=500.00,
-            is_active=True
+            is_active=True,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         self.fee.products.add(self.product)
         
@@ -51,7 +71,9 @@ class FeeValidationTests(APITestCase):
         self.application_fee = ApplicationFee.objects.create(
             application=self.application,
             fee=self.fee,
-            calculated_amount=500.00
+            calculated_amount=500.00,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         
         # URLs

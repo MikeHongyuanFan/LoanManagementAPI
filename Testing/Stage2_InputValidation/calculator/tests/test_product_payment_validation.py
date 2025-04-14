@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import User
 from products.models import Product, Fee
+from django.utils import timezone
 
 
 class ProductPaymentValidationTests(APITestCase):
@@ -18,33 +19,59 @@ class ProductPaymentValidationTests(APITestCase):
         )
         self.client.force_authenticate(user=self.user)
         
-        # Create test products
+        # Create test products with all required fields
         self.product1 = Product.objects.create(
             name='Standard Loan',
+            description='Standard loan product',
             interest_rate=5.5,
-            term_months=360
+            term_months=360,
+            is_active=True,
+            max_loan_amount=1000000.00,
+            min_loan_amount=50000.00,
+            min_credit_score=650,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         
         self.product2 = Product.objects.create(
             name='Premium Loan',
+            description='Premium loan product',
             interest_rate=4.5,
-            term_months=360
+            term_months=360,
+            is_active=True,
+            max_loan_amount=2000000.00,
+            min_loan_amount=100000.00,
+            min_credit_score=700,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         
-        # Create test fees with required product field
+        # Create test fees in the calculator app (not products app)
         self.fee1 = Fee.objects.create(
             name='Application Fee',
-            amount=500,
-            is_percentage=False,
-            product=self.product1
+            description='Application processing fee',
+            fee_type='application',
+            calculation_method='fixed',
+            amount=500.00,
+            is_active=True,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
         
         self.fee2 = Fee.objects.create(
             name='Origination Fee',
+            description='Loan origination fee',
+            fee_type='establishment',
+            calculation_method='percentage',
             amount=1.0,  # 1% of loan amount
-            is_percentage=True,
-            product=self.product1
+            is_active=True,
+            created_at=timezone.now(),
+            updated_at=timezone.now()
         )
+        
+        # Add fees to products using the many-to-many relationship
+        self.fee1.products.add(self.product1, self.product2)
+        self.fee2.products.add(self.product1, self.product2)
         
         # URLs
         self.product_payment_url = reverse('product-payment')

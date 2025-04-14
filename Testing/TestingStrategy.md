@@ -429,30 +429,48 @@ jobs:
 
 ```
 tests/
-├── test_api/                  # API endpoint tests
-│   ├── test_document_api.py
-│   ├── test_application_api.py
-│   └── test_borrower_api.py
-├── test_models/               # Model logic tests
-│   ├── test_document_model.py
-│   ├── test_application_model.py
-│   └── test_borrower_model.py
-├── test_serializers/          # Serializer tests
-│   ├── test_document_serializers.py
-│   └── test_application_serializers.py
-├── test_permissions/          # Permission tests
-│   └── test_document_permissions.py
-├── test_integration/          # Integration tests
-│   ├── test_document_workflow.py
-│   └── test_loan_application_workflow.py
-├── test_security/             # Security tests
-│   └── test_api_security.py
-├── test_performance/          # Performance tests
-│   └── test_api_performance.py
-├── factories.py               # Test data factories
-└── conftest.py                # Shared fixtures
-```
-
+├── document_management/
+│   ├── tests/
+│   │   ├── __init__.py
+│   │   ├── test_documents.py
+│   │   ├── test_categories.py
+│   │   ├── test_templates.py
+│   │   ├── test_collections.py
+│   │   ├── test_relationships.py
+│   │   ├── test_metadata.py
+│   │   ├── test_comments.py
+│   │   ├── test_approvals.py
+│   │   ├── test_signature_requests.py
+│   │   └── factories.py  # optional: test data generators
+│
+├── applications/
+│   ├── tests/
+│   │   ├── __init__.py
+│   │   ├── test_applications.py
+│   │   └── test_transitions.py
+│
+├── borrowers/
+│   ├── tests/
+│   │   └── test_borrowers.py
+│
+├── brokers/
+│   ├── tests/
+│   │   └── test_brokers.py
+│
+├── calculator/
+│   ├── tests/
+│   │   ├── test_calculations.py
+│   │   ├── test_repayments.py
+│   │   └── test_fees.py
+│
+├── notifications/
+│   ├── tests/
+│   │   ├── test_notifications.py
+│   │   └── test_notes.py
+│
+├── products/
+│   ├── tests/
+│   │   └── test_products.py
 ---
 
 ## ✅ Best Practices

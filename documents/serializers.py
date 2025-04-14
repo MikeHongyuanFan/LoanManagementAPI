@@ -79,11 +79,18 @@ class DocumentCollectionSerializer(serializers.ModelSerializer):
     parent_name = serializers.SerializerMethodField()
     full_path = serializers.SerializerMethodField()
     document_count = serializers.SerializerMethodField()
+    shared_with_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all(),
+        source='shared_with',
+        write_only=True,
+        required=False
+    )
     
     class Meta:
         model = DocumentCollection
         fields = ['id', 'name', 'description', 'created_by', 'created_at', 'updated_at',
-                  'is_shared', 'shared_with', 'parent', 'parent_name', 'full_path',
+                  'is_shared', 'shared_with', 'shared_with_ids', 'parent', 'parent_name', 'full_path',
                   'icon', 'color', 'document_count']
     
     def get_parent_name(self, obj):
@@ -94,6 +101,43 @@ class DocumentCollectionSerializer(serializers.ModelSerializer):
         
     def get_document_count(self, obj):
         return obj.get_document_count()
+    
+    def validate_name(self, value):
+        if not value:
+            raise serializers.ValidationError("Name is required")
+        if len(value) > 100:
+            raise serializers.ValidationError("Name cannot be longer than 100 characters")
+        return value
+    
+    def validate_parent(self, value):
+        if value:
+            try:
+                DocumentCollection.objects.get(pk=value.id)
+            except DocumentCollection.DoesNotExist:
+                raise serializers.ValidationError("Parent collection does not exist")
+        return value
+    
+    def validate(self, data):
+        # Validate that parent is not the same as the collection itself (for updates)
+        instance = getattr(self, 'instance', None)
+        if instance and data.get('parent') and instance.id == data['parent'].id:
+            raise serializers.ValidationError({"parent": "A collection cannot be its own parent"})
+        
+        # Check for circular parent relationships
+        if data.get('parent') and instance:
+            if self._would_create_circular_reference(instance, data['parent']):
+                raise serializers.ValidationError({"parent": "This would create a circular reference"})
+        
+        return data
+    
+    def _would_create_circular_reference(self, collection, new_parent):
+        """Check if setting new_parent as the parent of collection would create a circular reference"""
+        current = new_parent
+        while current:
+            if current.id == collection.id:
+                return True
+            current = current.parent
+        return False
 
 class CustomMetadataFieldSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
@@ -206,6 +250,77 @@ class DocumentRelationshipSerializer(serializers.ModelSerializer):
         
     def get_relationship_display(self, obj):
         return obj.custom_type if obj.relationship_type == 'custom' else obj.get_relationship_type_display()
+    
+    def validate_source_document(self, value):
+        try:
+            Document.objects.get(pk=value.id)
+        except Document.DoesNotExist:
+            raise serializers.ValidationError("Source document does not exist")
+        return value
+    
+    def validate_target_document(self, value):
+        try:
+            Document.objects.get(pk=value.id)
+        except Document.DoesNotExist:
+            raise serializers.ValidationError("Target document does not exist")
+        return value
+    
+    def validate_relationship_type(self, value):
+        valid_types = ['parent', 'child', 'related', 'supersedes', 'superseded_by', 'version', 'custom']
+        if value not in valid_types:
+            raise serializers.ValidationError(f"Relationship type must be one of: {', '.join(valid_types)}")
+        return value
+    
+    def validate(self, data):
+        # Validate that source and target documents are different
+        if data.get('source_document') and data.get('target_document'):
+            if data['source_document'].id == data['target_document'].id:
+                raise serializers.ValidationError({"target_document": "Source and target documents cannot be the same"})
+        
+        # Validate that custom_type is provided when relationship_type is 'custom'
+        if data.get('relationship_type') == 'custom' and not data.get('custom_type'):
+            raise serializers.ValidationError({"custom_type": "Custom type is required when relationship type is 'custom'"})
+        
+        # Check for circular relationships
+        if data.get('relationship_type') in ['parent', 'child']:
+            source_doc = data.get('source_document')
+            target_doc = data.get('target_document')
+            
+            if data.get('relationship_type') == 'parent':
+                # Check if target is already a parent of source (directly or indirectly)
+                if self._is_parent(target_doc, source_doc):
+                    raise serializers.ValidationError({"target_document": "This would create a circular parent-child relationship"})
+            else:  # child
+                # Check if target is already a child of source (directly or indirectly)
+                if self._is_parent(source_doc, target_doc):
+                    raise serializers.ValidationError({"target_document": "This would create a circular parent-child relationship"})
+        
+        return data
+    
+    def _is_parent(self, potential_parent, document):
+        """Check if potential_parent is already a parent of document (directly or indirectly)"""
+        if not potential_parent or not document:
+            return False
+            
+        # Check direct parent relationship
+        parent_relationships = DocumentRelationship.objects.filter(
+            source_document=document,
+            target_document=potential_parent,
+            relationship_type='parent'
+        )
+        if parent_relationships.exists():
+            return True
+            
+        # Check indirect parent relationships (recursively)
+        parent_relationships = DocumentRelationship.objects.filter(
+            source_document=document,
+            relationship_type='parent'
+        )
+        for rel in parent_relationships:
+            if self._is_parent(potential_parent, rel.target_document):
+                return True
+                
+        return False
 
 class DocumentCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -217,11 +332,41 @@ class DocumentCommentSerializer(serializers.ModelSerializer):
 class DocumentApprovalSerializer(serializers.ModelSerializer):
     reviewer = UserSerializer(read_only=True)
     requested_by = UserSerializer(read_only=True)
+    reviewer_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        source='reviewer',
+        write_only=True,
+        required=True
+    )
     
     class Meta:
         model = DocumentApproval
-        fields = ['id', 'document', 'reviewer', 'requested_by', 'status', 'comments', 
+        fields = ['id', 'document', 'reviewer', 'reviewer_id', 'requested_by', 'status', 'comments', 
                   'requested_date', 'response_date', 'approval_level']
+    
+    def validate_document(self, value):
+        try:
+            Document.objects.get(pk=value.id)
+        except Document.DoesNotExist:
+            raise serializers.ValidationError("Document does not exist")
+        return value
+    
+    def validate_status(self, value):
+        valid_statuses = ['pending', 'approved', 'rejected', 'cancelled']
+        if value not in valid_statuses:
+            raise serializers.ValidationError(f"Status must be one of: {', '.join(valid_statuses)}")
+        return value
+    
+    def validate_approval_level(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Approval level must be between 1 and 5")
+        return value
+    
+    def validate(self, data):
+        # Validate that comments are provided when status is 'rejected'
+        if data.get('status') == 'rejected' and not data.get('comments'):
+            raise serializers.ValidationError({"comments": "Comments are required when status is rejected"})
+        return data
 
 class DocumentSignatureRequestSerializer(serializers.ModelSerializer):
     signer = UserSerializer(read_only=True)

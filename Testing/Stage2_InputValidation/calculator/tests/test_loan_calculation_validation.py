@@ -27,9 +27,13 @@ class LoanCalculationValidationTests(APITestCase):
             term_months=360
         )
         
-        # Create a test application
+        # Create a test application with required fields
         self.application = Application.objects.create(
-            title='Test Application',
+            status='pending',
+            stage='application',
+            gross_loan_amount=300000.00,
+            net_loan_amount=300000.00,
+            borrower_id=1,  # This might need adjustment
             product=self.product
         )
         

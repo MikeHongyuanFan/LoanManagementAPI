@@ -31,22 +31,20 @@ class ProductPaymentValidationTests(APITestCase):
             term_months=360
         )
         
-        # Create test fees
+        # Create test fees with required product field
         self.fee1 = Fee.objects.create(
             name='Application Fee',
             amount=500,
-            is_percentage=False
+            is_percentage=False,
+            product=self.product1
         )
         
         self.fee2 = Fee.objects.create(
             name='Origination Fee',
             amount=1.0,  # 1% of loan amount
-            is_percentage=True
+            is_percentage=True,
+            product=self.product1
         )
-        
-        # Add fees to products
-        self.product1.fees.add(self.fee1, self.fee2)
-        self.product2.fees.add(self.fee1, self.fee2)
         
         # URLs
         self.product_payment_url = reverse('product-payment')

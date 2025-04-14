@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from taggit.models import Tag
 from taggit.serializers import (TagListSerializerField, TaggitSerializer)
+from django.utils import timezone
+from datetime import datetime
 
 # Custom implementation for TagListSerializerField to fix the set() issue
 class CustomTagListSerializerField(serializers.ListField):
@@ -100,6 +102,28 @@ class CustomMetadataFieldSerializer(serializers.ModelSerializer):
         model = CustomMetadataField
         fields = ['id', 'name', 'description', 'field_type', 'required', 
                   'default_value', 'options', 'document_types', 'created_by', 'created_at']
+    
+    def validate_name(self, value):
+        if len(value) > 100:
+            raise serializers.ValidationError("Name cannot be longer than 100 characters")
+        return value
+    
+    def validate_field_type(self, value):
+        valid_types = ['text', 'number', 'date', 'boolean', 'select', 'multi-select']
+        if value not in valid_types:
+            raise serializers.ValidationError(f"Field type must be one of: {', '.join(valid_types)}")
+        return value
+    
+    def validate_options(self, value):
+        if value and not isinstance(value, list):
+            raise serializers.ValidationError("Options must be a list")
+        return value
+    
+    def validate(self, data):
+        # Validate that options are provided for select and multi-select fields
+        if data.get('field_type') in ['select', 'multi-select'] and not data.get('options'):
+            raise serializers.ValidationError({"options": "Options are required for select and multi-select fields"})
+        return data
 
 class DocumentMetadataSerializer(serializers.ModelSerializer):
     field = CustomMetadataFieldSerializer(read_only=True)
@@ -112,6 +136,55 @@ class DocumentMetadataSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentMetadata
         fields = ['id', 'document', 'field', 'field_id', 'value', 'created_by', 'created_at', 'updated_at']
+    
+    def validate_value(self, value):
+        if value == '':
+            raise serializers.ValidationError("Value cannot be empty")
+        return value
+    
+    def validate(self, data):
+        field = data.get('field')
+        value = data.get('value')
+        
+        if field and value:
+            # Validate number fields
+            if field.field_type == 'number':
+                try:
+                    float(value)
+                except ValueError:
+                    raise serializers.ValidationError({"value": "Value must be a number"})
+                    
+            # Validate date fields
+            elif field.field_type == 'date':
+                try:
+                    datetime.strptime(value, '%Y-%m-%d')
+                except ValueError:
+                    raise serializers.ValidationError({"value": "Value must be a valid date in YYYY-MM-DD format"})
+                    
+            # Validate boolean fields
+            elif field.field_type == 'boolean':
+                if value.lower() not in ['true', 'false', '1', '0', 'yes', 'no']:
+                    raise serializers.ValidationError({"value": "Value must be a boolean (true/false, 1/0, yes/no)"})
+                    
+            # Validate select fields
+            elif field.field_type == 'select' and field.options:
+                if value not in field.options:
+                    raise serializers.ValidationError({"value": f"Value must be one of: {', '.join(field.options)}"})
+                    
+            # Validate multi-select fields
+            elif field.field_type == 'multi-select' and field.options:
+                try:
+                    values = json.loads(value) if isinstance(value, str) else value
+                    if not isinstance(values, list):
+                        raise serializers.ValidationError({"value": "Value must be a list for multi-select fields"})
+                    
+                    for val in values:
+                        if val not in field.options:
+                            raise serializers.ValidationError({"value": f"All values must be from options: {', '.join(field.options)}"})
+                except json.JSONDecodeError:
+                    raise serializers.ValidationError({"value": "Value must be a valid JSON list for multi-select fields"})
+                    
+        return data
 
 class DocumentRelationshipSerializer(serializers.ModelSerializer):
     source_document_title = serializers.SerializerMethodField()
@@ -153,11 +226,41 @@ class DocumentApprovalSerializer(serializers.ModelSerializer):
 class DocumentSignatureRequestSerializer(serializers.ModelSerializer):
     signer = UserSerializer(read_only=True)
     requested_by = UserSerializer(read_only=True)
+    signer_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        source='signer',
+        write_only=True,
+        required=True
+    )
     
     class Meta:
         model = DocumentSignatureRequest
-        fields = ['id', 'document', 'signer', 'requested_by', 'status', 'message', 
+        fields = ['id', 'document', 'signer', 'signer_id', 'requested_by', 'status', 'message', 
                   'requested_date', 'viewed_date', 'response_date', 'due_date', 'decline_reason']
+    
+    def validate_document(self, value):
+        try:
+            Document.objects.get(pk=value.id)
+        except Document.DoesNotExist:
+            raise serializers.ValidationError("Document does not exist")
+        return value
+    
+    def validate_status(self, value):
+        valid_statuses = ['pending', 'viewed', 'signed', 'declined', 'expired', 'cancelled']
+        if value not in valid_statuses:
+            raise serializers.ValidationError(f"Status must be one of: {', '.join(valid_statuses)}")
+        return value
+    
+    def validate_due_date(self, value):
+        if value and value < timezone.now().date():
+            raise serializers.ValidationError("Due date cannot be in the past")
+        return value
+    
+    def validate(self, data):
+        # Validate that decline_reason is provided when status is 'declined'
+        if data.get('status') == 'declined' and not data.get('decline_reason'):
+            raise serializers.ValidationError({"decline_reason": "Decline reason is required when status is declined"})
+        return data
 
 class DocumentSignatureSerializer(serializers.ModelSerializer):
     signer = UserSerializer(read_only=True)
@@ -213,3 +316,32 @@ class DocumentSerializer(CustomTaggitSerializer, serializers.ModelSerializer):
             })
             
         return result
+    
+    def validate_title(self, value):
+        if not value:
+            raise serializers.ValidationError("Title is required")
+        if len(value) > 255:
+            raise serializers.ValidationError("Title cannot be longer than 255 characters")
+        return value
+    
+    def validate_document_type(self, value):
+        valid_types = ['contract', 'application', 'id', 'financial', 'legal', 'other']
+        if value and value not in valid_types:
+            raise serializers.ValidationError(f"Document type must be one of: {', '.join(valid_types)}")
+        return value
+    
+    def validate_status(self, value):
+        valid_statuses = ['draft', 'pending', 'approved', 'rejected', 'archived']
+        if value and value not in valid_statuses:
+            raise serializers.ValidationError(f"Status must be one of: {', '.join(valid_statuses)}")
+        return value
+    
+    def validate_expiration_date(self, value):
+        if value and value < timezone.now().date():
+            raise serializers.ValidationError("Expiration date cannot be in the past")
+        return value
+    
+    def validate_tags(self, value):
+        if value and not isinstance(value, list):
+            raise serializers.ValidationError("Tags must be a list")
+        return value

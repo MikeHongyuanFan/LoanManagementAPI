@@ -13,8 +13,12 @@ router.register(r'signatures', views.DocumentSignatureViewSet)
 router.register(r'collections', views.DocumentCollectionViewSet)
 router.register(r'relationships', views.DocumentRelationshipViewSet)
 router.register(r'metadata-fields', views.CustomMetadataFieldViewSet)
-router.register(r'metadata', views.DocumentMetadataViewSet)
+router.register(r'document-metadata', views.DocumentMetadataViewSet, basename='document-metadata')
 
 urlpatterns = [
     path('', include(router.urls)),
+    # Add custom endpoint for document metadata bulk update
+    path('documents/<int:pk>/update-metadata/', views.document_metadata_bulk_update, name='document-metadata-bulk-update'),
+    # Add custom endpoint for signature request response
+    path('signature-requests/<int:pk>/respond/', views.signature_request_respond, name='signature-request-respond'),
 ]

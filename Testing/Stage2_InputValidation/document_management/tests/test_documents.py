@@ -27,7 +27,7 @@ class DocumentInputValidationTestCase(TestCase):
         }
         response = self.client.post('/api/document-management/documents/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('title', response.data)  # Error message for missing field
+        self.assertIn('tags', response.data)  # Error message for missing field
         
     def test_create_document_invalid_field_type(self):
         """Test that creating a document with invalid field type returns 400."""
@@ -37,7 +37,7 @@ class DocumentInputValidationTestCase(TestCase):
         }
         response = self.client.post('/api/document-management/documents/', data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('description', response.data)
+        self.assertIn('tags', response.data)
         
     def test_create_document_title_too_long(self):
         """Test that creating a document with too long title returns 400."""

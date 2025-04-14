@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, status, filters
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
@@ -20,6 +20,7 @@ from django.db.models import Q
 import json
 import hashlib
 import time
+from datetime import datetime
 
 User = get_user_model()
 
@@ -429,6 +430,31 @@ class DocumentSignatureRequestViewSet(viewsets.ModelViewSet):
     filterset_fields = ['document', 'signer', 'status', 'requested_by']
     ordering_fields = ['requested_date', 'due_date']
     
+    def perform_create(self, serializer):
+        """Create a new signature request"""
+        # Validate document exists
+        document_id = self.request.data.get('document')
+        try:
+            document = Document.objects.get(pk=document_id)
+        except Document.DoesNotExist:
+            raise serializers.ValidationError({"document": "Document does not exist"})
+            
+        # Validate due date
+        due_date = self.request.data.get('due_date')
+        if due_date:
+            try:
+                due_date = datetime.strptime(due_date, '%Y-%m-%d').date()
+                if due_date < timezone.now().date():
+                    raise serializers.ValidationError({"due_date": "Due date cannot be in the past"})
+            except ValueError:
+                raise serializers.ValidationError({"due_date": "Invalid date format. Use YYYY-MM-DD"})
+        
+        serializer.save(
+            requested_by=self.request.user,
+            requested_date=timezone.now(),
+            status='pending'
+        )
+    
     @action(detail=True, methods=['post'])
     def sign(self, request, pk=None):
         """Sign a document"""
@@ -570,3 +596,4 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         }
         
         return Response(verification_data)
+from .views_endpoints import document_metadata_bulk_update, signature_request_respond

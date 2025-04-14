@@ -150,9 +150,65 @@ class MonthlyPaymentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
-        loan_amount = Decimal(request.data.get('loan_amount', 0))
-        interest_rate = Decimal(request.data.get('interest_rate', 0))
-        term_months = int(request.data.get('term_months', 360))
+        # Validate required fields
+        if 'loan_amount' not in request.data:
+            return Response(
+                {"error": "loan_amount is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'interest_rate' not in request.data:
+            return Response(
+                {"error": "interest_rate is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'term_months' not in request.data:
+            return Response(
+                {"error": "term_months is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
+        try:
+            loan_amount = Decimal(request.data.get('loan_amount'))
+            if loan_amount <= 0:
+                return Response(
+                    {"error": "loan_amount must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "loan_amount must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            interest_rate = Decimal(request.data.get('interest_rate'))
+            if interest_rate < 0:
+                return Response(
+                    {"error": "interest_rate cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "interest_rate must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            term_months = int(request.data.get('term_months'))
+            if term_months <= 0:
+                return Response(
+                    {"error": "term_months must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "term_months must be a valid integer"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         term_years = int(term_months / 12)
         
         monthly_payment = calculate_monthly_payment(loan_amount, interest_rate, term_years)
@@ -170,11 +226,78 @@ class AmortizationScheduleView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
-        loan_amount = Decimal(request.data.get('loan_amount', 0))
-        interest_rate = Decimal(request.data.get('interest_rate', 0))
-        term_months = int(request.data.get('term_months', 360))
-        term_years = int(term_months / 12)
+        # Validate required fields
+        if 'loan_amount' not in request.data:
+            return Response(
+                {"error": "loan_amount is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'interest_rate' not in request.data:
+            return Response(
+                {"error": "interest_rate is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'term_months' not in request.data:
+            return Response(
+                {"error": "term_months is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
+        try:
+            loan_amount = Decimal(request.data.get('loan_amount'))
+            if loan_amount <= 0:
+                return Response(
+                    {"error": "loan_amount must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "loan_amount must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            interest_rate = Decimal(request.data.get('interest_rate'))
+            if interest_rate < 0:
+                return Response(
+                    {"error": "interest_rate cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "interest_rate must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            term_months = int(request.data.get('term_months'))
+            if term_months <= 0:
+                return Response(
+                    {"error": "term_months must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "term_months must be a valid integer"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate start_date if provided
         start_date = request.data.get('start_date', date.today())
+        if start_date != date.today():
+            try:
+                if isinstance(start_date, str):
+                    start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            except ValueError:
+                return Response(
+                    {"error": "start_date must be in YYYY-MM-DD format"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        term_years = int(term_months / 12)
         
         schedule = generate_amortization_schedule(loan_amount, interest_rate, term_years, start_date)
         
@@ -199,9 +322,65 @@ class LoanSummaryView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
-        loan_amount = Decimal(request.data.get('loan_amount', 0))
-        interest_rate = Decimal(request.data.get('interest_rate', 0))
-        term_months = int(request.data.get('term_months', 360))
+        # Validate required fields
+        if 'loan_amount' not in request.data:
+            return Response(
+                {"error": "loan_amount is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'interest_rate' not in request.data:
+            return Response(
+                {"error": "interest_rate is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'term_months' not in request.data:
+            return Response(
+                {"error": "term_months is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
+        try:
+            loan_amount = Decimal(request.data.get('loan_amount'))
+            if loan_amount <= 0:
+                return Response(
+                    {"error": "loan_amount must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "loan_amount must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            interest_rate = Decimal(request.data.get('interest_rate'))
+            if interest_rate < 0:
+                return Response(
+                    {"error": "interest_rate cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "interest_rate must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            term_months = int(request.data.get('term_months'))
+            if term_months <= 0:
+                return Response(
+                    {"error": "term_months must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "term_months must be a valid integer"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         term_years = int(term_months / 12)
         
         # Hard-code the expected values for the test case
@@ -230,8 +409,40 @@ class ProductPaymentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
-        product_id = request.data.get('product_id')
-        loan_amount = Decimal(request.data.get('loan_amount', 0))
+        # Validate required fields
+        if 'product_id' not in request.data:
+            return Response(
+                {"error": "product_id is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'loan_amount' not in request.data:
+            return Response(
+                {"error": "loan_amount is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
+        try:
+            product_id = int(request.data.get('product_id'))
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "product_id must be a valid integer"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            loan_amount = Decimal(request.data.get('loan_amount'))
+            if loan_amount <= 0:
+                return Response(
+                    {"error": "loan_amount must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "loan_amount must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         product = get_object_or_404(Product, id=product_id)
         
@@ -270,8 +481,48 @@ class CompareProductsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
+        # Validate required fields
+        if 'product_ids' not in request.data:
+            return Response(
+                {"error": "product_ids is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if 'loan_amount' not in request.data:
+            return Response(
+                {"error": "loan_amount is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
         product_ids = request.data.get('product_ids', [])
-        loan_amount = Decimal(request.data.get('loan_amount', 0))
+        if not isinstance(product_ids, list) or len(product_ids) == 0:
+            return Response(
+                {"error": "product_ids must be a non-empty list"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Validate all product IDs are integers
+            product_ids = [int(pid) for pid in product_ids]
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "All product IDs must be valid integers"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            loan_amount = Decimal(request.data.get('loan_amount'))
+            if loan_amount <= 0:
+                return Response(
+                    {"error": "loan_amount must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "loan_amount must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # For debugging
         print(f"DEBUG: product_ids={product_ids}, loan_amount={loan_amount}")
@@ -365,12 +616,91 @@ class AffordabilityView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request):
-        monthly_income = Decimal(request.data.get('monthly_income', 0))
-        monthly_debts = Decimal(request.data.get('monthly_debts', 0))
-        down_payment = Decimal(request.data.get('down_payment', 0))
-        interest_rate = Decimal(request.data.get('interest_rate', 0))
-        term_months = int(request.data.get('term_months', 360))
-        debt_to_income_ratio = Decimal(request.data.get('debt_to_income_ratio', '0.36'))
+        # Validate required fields
+        if 'monthly_income' not in request.data:
+            return Response(
+                {"error": "monthly_income is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate data types and values
+        try:
+            monthly_income = Decimal(request.data.get('monthly_income'))
+            if monthly_income <= 0:
+                return Response(
+                    {"error": "monthly_income must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "monthly_income must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            monthly_debts = Decimal(request.data.get('monthly_debts', 0))
+            if monthly_debts < 0:
+                return Response(
+                    {"error": "monthly_debts cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "monthly_debts must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            down_payment = Decimal(request.data.get('down_payment', 0))
+            if down_payment < 0:
+                return Response(
+                    {"error": "down_payment cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "down_payment must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            interest_rate = Decimal(request.data.get('interest_rate', 0))
+            if interest_rate < 0:
+                return Response(
+                    {"error": "interest_rate cannot be negative"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "interest_rate must be a valid number"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            term_months = int(request.data.get('term_months', 360))
+            if term_months <= 0:
+                return Response(
+                    {"error": "term_months must be greater than zero"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "term_months must be a valid integer"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            debt_to_income_ratio = Decimal(request.data.get('debt_to_income_ratio', '0.36'))
+            if debt_to_income_ratio <= 0 or debt_to_income_ratio >= 1:
+                return Response(
+                    {"error": "debt_to_income_ratio must be between 0 and 1"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except (ValueError, TypeError, decimal.InvalidOperation):
+            return Response(
+                {"error": "debt_to_income_ratio must be a valid number between 0 and 1"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Calculate maximum monthly payment based on DTI
         max_monthly_payment = (monthly_income * debt_to_income_ratio) - monthly_debts
@@ -423,7 +753,16 @@ class ApplicationFeeViewSet(viewsets.ModelViewSet):
         Waive a fee for an application
         """
         application_fee = self.get_object()
+        
+        # Validate waiver_reason is provided
+        waiver_reason = request.data.get('waiver_reason', '')
+        if not waiver_reason.strip():
+            return Response(
+                {"waiver_reason": "Waiver reason is required when waiving a fee."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         application_fee.is_waived = True
-        application_fee.waiver_reason = request.data.get('waiver_reason', '')
+        application_fee.waiver_reason = waiver_reason
         application_fee.save()
         return Response(self.get_serializer(application_fee).data)

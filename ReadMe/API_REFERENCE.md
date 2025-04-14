@@ -21,6 +21,11 @@ This document contains every single API endpoint available in the CRM Loan Manag
 | `/api/document-management/documents/{id}/add_metadata/` | POST | Add custom metadata to a document |
 | `/api/document-management/documents/{id}/add_relationship/` | POST | Add a relationship to another document |
 | `/api/document-management/documents/{id}/relationships/` | GET | Get all relationships for a document |
+| `/api/document-management/documents/{id}/create-version/` | POST | Create a new version of a document |
+| `/api/document-management/documents/{id}/versions/` | GET | Get all versions of a document |
+| `/api/document-management/documents/{id}/revert/{version_id}/` | POST | Revert to a previous version |
+| `/api/document-management/documents/{id}/request-approval/` | POST | Request approval for a document |
+| `/api/document-management/documents/{id}/update-metadata/` | POST | Bulk update document metadata |
 
 ### Document Categories
 
@@ -113,6 +118,8 @@ This document contains every single API endpoint available in the CRM Loan Manag
 | `/api/document-management/approvals/{id}/approve/` | POST | Approve a document |
 | `/api/document-management/approvals/{id}/reject/` | POST | Reject a document |
 | `/api/document-management/approvals/{id}/reassign/` | POST | Reassign approval to another reviewer |
+| `/api/document-management/approvals/{id}/respond/` | POST | Respond to an approval request |
+| `/api/document-management/approvals/{id}/cancel/` | POST | Cancel an approval request |
 
 ### Electronic Signature System
 
@@ -128,9 +135,20 @@ This document contains every single API endpoint available in the CRM Loan Manag
 | `/api/document-management/signature-requests/{id}/decline/` | POST | Decline to sign a document |
 | `/api/document-management/signature-requests/{id}/cancel/` | POST | Cancel a signature request |
 | `/api/document-management/signature-requests/{id}/mark_as_viewed/` | POST | Mark a signature request as viewed |
+| `/api/document-management/signature-requests/{id}/respond/` | POST | Respond to a signature request |
 | `/api/document-management/signatures/` | GET | List all signatures |
 | `/api/document-management/signatures/{id}/` | GET | Get signature details |
 | `/api/document-management/signatures/{id}/verify/` | GET | Verify a signature |
+
+### Document Search and Version Management
+
+| Exact API Path | HTTP Method | Description |
+|----------------|-------------|-------------|
+| `/api/document-management/search/` | GET | Advanced document search with multiple filters |
+| `/api/document-management/search/full-text/` | GET | Full-text search within document content |
+| `/api/document-management/documents/recent/` | GET | Get recent documents for the current user |
+| `/api/document-management/documents/suggestions/` | GET | Get document suggestions based on user activity |
+| `/api/document-management/versions/compare/{version1_id}/{version2_id}/` | GET | Compare two document versions |
 
 ## Loan Application APIs
 
@@ -297,9 +315,9 @@ Many API endpoints support filtering, searching, and ordering. Here are the supp
 
 ### Documents
 
-- **Filter fields**: `document_type`, `category`, `status`, `application`, `is_confidential`, `is_favorite`, `is_pinned`
-- **Search fields**: `title`, `description`, `keywords`
-- **Ordering fields**: `title`, `created_at`, `updated_at`, `status`
+- **Filter fields**: `document_type`, `category`, `status`, `application`, `is_confidential`, `is_favorite`, `is_pinned`, `created_by`, `updated_by`, `created_at_after`, `created_at_before`, `updated_at_after`, `updated_at_before`
+- **Search fields**: `title`, `description`, `keywords`, `content` (full-text search)
+- **Ordering fields**: `title`, `created_at`, `updated_at`, `status`, `document_type`
 
 ### Applications
 

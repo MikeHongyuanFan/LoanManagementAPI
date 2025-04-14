@@ -1,6 +1,5 @@
-from decimal import Decimal
 from datetime import date, datetime
-from decimal import Decimal, InvalidOperationfrom datetime import date
+from decimal import Decimal, InvalidOperation
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -84,7 +83,7 @@ class LoanCalculationViewSet(viewsets.ModelViewSet):
             fees = []
             product = application.product
             if product:
-                for fee in product.fees.filter(is_active=True):
+                for fee in product.fees.all():  # Removed is_active filter
                     fee_amount = calculate_fee(
                         loan_amount, fee.fee_type, fee.amount, fee.calculation_method
                     )
@@ -178,7 +177,7 @@ class MonthlyPaymentView(APIView):
                     {"error": "loan_amount must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "loan_amount must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -191,7 +190,7 @@ class MonthlyPaymentView(APIView):
                     {"error": "interest_rate cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "interest_rate must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -254,7 +253,7 @@ class AmortizationScheduleView(APIView):
                     {"error": "loan_amount must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "loan_amount must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -267,7 +266,7 @@ class AmortizationScheduleView(APIView):
                     {"error": "interest_rate cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "interest_rate must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -350,7 +349,7 @@ class LoanSummaryView(APIView):
                     {"error": "loan_amount must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "loan_amount must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -363,7 +362,7 @@ class LoanSummaryView(APIView):
                     {"error": "interest_rate cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "interest_rate must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -439,7 +438,7 @@ class ProductPaymentView(APIView):
                     {"error": "loan_amount must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "loan_amount must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -519,7 +518,7 @@ class CompareProductsView(APIView):
                     {"error": "loan_amount must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "loan_amount must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -567,7 +566,13 @@ class CompareProductsView(APIView):
         results = []
         
         for product_id in product_ids:
-            product = get_object_or_404(Product, id=product_id)
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                return Response(
+                    {"error": f"Product with ID {product_id} not found"}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
             
             # Calculate monthly payment
             interest_rate = Decimal(product.interest_rate)
@@ -632,7 +637,7 @@ class AffordabilityView(APIView):
                     {"error": "monthly_income must be greater than zero"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "monthly_income must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -645,7 +650,7 @@ class AffordabilityView(APIView):
                     {"error": "monthly_debts cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "monthly_debts must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -658,7 +663,7 @@ class AffordabilityView(APIView):
                     {"error": "down_payment cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "down_payment must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -671,7 +676,7 @@ class AffordabilityView(APIView):
                     {"error": "interest_rate cannot be negative"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "interest_rate must be a valid number"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -697,7 +702,7 @@ class AffordabilityView(APIView):
                     {"error": "debt_to_income_ratio must be between 0 and 1"}, 
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except (ValueError, TypeError, decimal.InvalidOperation):
+        except (ValueError, TypeError, InvalidOperation):
             return Response(
                 {"error": "debt_to_income_ratio must be a valid number between 0 and 1"}, 
                 status=status.HTTP_400_BAD_REQUEST

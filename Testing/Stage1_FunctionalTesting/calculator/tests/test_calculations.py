@@ -40,6 +40,31 @@ class LoanCalculatorAPITestCase(TestCase):
             amount=1.0,
             is_percentage=True
         )
+        
+        # Create a second product for comparison tests
+        self.premium_product = Product.objects.create(
+            name='Premium Loan',
+            description='Premium mortgage with lower interest rate',
+            interest_rate=4.5,
+            term_months=360,
+            min_loan_amount=100000,
+            max_loan_amount=2000000,
+            min_credit_score=700,
+            is_active=True
+        )
+        Fee.objects.create(
+            product=self.premium_product,
+            name='Application Fee',
+            amount=750,
+            is_percentage=False
+        )
+        Fee.objects.create(
+            product=self.premium_product,
+            name='Origination Fee',
+            amount=1.5,
+            is_percentage=True
+        )
+        
         self.client.force_authenticate(user=self.user)
         
     def test_calculate_monthly_payment(self):
@@ -126,33 +151,9 @@ class LoanCalculatorAPITestCase(TestCase):
         
     def test_compare_products(self):
         """Test that comparing multiple products works correctly."""
-        # Create a second product for comparison
-        premium_product = Product.objects.create(
-            name='Premium Loan',
-            description='Premium mortgage with lower interest rate',
-            interest_rate=4.5,
-            term_months=360,
-            min_loan_amount=100000,
-            max_loan_amount=2000000,
-            min_credit_score=700,
-            is_active=True
-        )
-        Fee.objects.create(
-            product=premium_product,
-            name='Application Fee',
-            amount=750,
-            is_percentage=False
-        )
-        Fee.objects.create(
-            product=premium_product,
-            name='Origination Fee',
-            amount=1.5,
-            is_percentage=True
-        )
-        
         data = {
             'loan_amount': 300000,
-            'product_ids': [self.product.id, premium_product.id]
+            'product_ids': [self.product.id, self.premium_product.id]
         }
         response = self.client.post('/api/calculator/compare-products/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

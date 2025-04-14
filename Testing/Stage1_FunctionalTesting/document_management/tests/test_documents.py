@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from documents.models import Document
+from documents.models import Document, DocumentCategory
 
 User = get_user_model()
 
@@ -17,10 +17,17 @@ class DocumentAPITestCase(TestCase):
             email='test@example.com',
             password='testpassword'
         )
+        self.category = DocumentCategory.objects.create(
+            name='Test Category',
+            description='Test category description'
+        )
         self.document = Document.objects.create(
             title='Test Document',
             description='Test description',
-            created_by=self.user
+            uploaded_by=self.user,
+            document_type='other',
+            status='draft',
+            category=self.category
         )
         self.client.force_authenticate(user=self.user)
         
@@ -43,9 +50,13 @@ class DocumentAPITestCase(TestCase):
         """Test that creating a document works correctly."""
         data = {
             'title': 'New Document',
-            'description': 'New description'
+            'description': 'New description',
+            'document_type': 'other',
+            'status': 'draft',
+            'category': self.category.id,
+            'tags': []
         }
-        response = self.client.post('/api/document-management/documents/', data)
+        response = self.client.post('/api/document-management/documents/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], 'New Document')
         self.assertEqual(Document.objects.count(), 2)
@@ -54,9 +65,17 @@ class DocumentAPITestCase(TestCase):
         """Test that updating a document works correctly."""
         data = {
             'title': 'Updated Document',
-            'description': 'Updated description'
+            'description': 'Updated description',
+            'document_type': 'other',
+            'status': 'draft',
+            'category': self.category.id,
+            'tags': []
         }
-        response = self.client.put(f'/api/document-management/documents/{self.document.id}/', data)
+        response = self.client.put(
+            f'/api/document-management/documents/{self.document.id}/', 
+            data,
+            format='json'
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], 'Updated Document')
         self.document.refresh_from_db()

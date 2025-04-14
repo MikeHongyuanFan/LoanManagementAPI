@@ -24,7 +24,7 @@ def calculate_monthly_payment(principal: Decimal, annual_interest_rate: Decimal,
     monthly_rate = annual_interest_rate / Decimal('100') / Decimal('12')
     
     # Calculate number of payments
-    num_payments = term_years * 12
+    num_payments = int(term_years * 12)
     
     # Handle edge case of zero interest rate
     if monthly_rate == 0:
@@ -77,7 +77,7 @@ def generate_amortization_schedule(
         start_date = date.today()
     
     monthly_rate = annual_interest_rate / Decimal('100') / Decimal('12')
-    num_payments = term_years * 12
+    num_payments = int(term_years * 12)
     monthly_payment = calculate_monthly_payment(principal, annual_interest_rate, term_years)
     
     schedule = []
@@ -139,7 +139,7 @@ def generate_interest_only_schedule(
         start_date = date.today()
     
     monthly_rate = annual_interest_rate / Decimal('100') / Decimal('12')
-    num_payments = term_years * 12
+    num_payments = int(term_years * 12)
     monthly_payment = calculate_interest_only_payment(principal, annual_interest_rate)
     
     schedule = []

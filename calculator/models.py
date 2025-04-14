@@ -81,7 +81,7 @@ class Fee(models.Model):
     calculation_method = models.CharField(max_length=20, choices=CALCULATION_METHOD_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Fixed amount or percentage
     is_active = models.BooleanField(default=True)
-    products = models.ManyToManyField(Product, related_name='fees', blank=True)
+    products = models.ManyToManyField(Product, related_name='calculator_fees', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

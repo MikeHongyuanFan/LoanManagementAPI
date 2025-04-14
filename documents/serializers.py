@@ -1,25 +1,39 @@
 from rest_framework import serializers
-# Fix for Django 4.2+ compatibility
-try:
-    from taggit_serializer.serializers import TagListSerializerField, TaggitSerializer
-except ImportError:
-    # Create custom implementation if taggit_serializer is incompatible
-    from taggit.models import Tag
-    
-    class TagListSerializerField(serializers.ListField):
-        child = serializers.CharField()
+from taggit.models import Tag
+from taggit.serializers import (TagListSerializerField, TaggitSerializer)
 
-        def to_representation(self, value):
-            return [tag.name for tag in value.all()]
-            
-        def to_internal_value(self, data):
-            if not isinstance(data, list):
-                raise serializers.ValidationError("Expected a list of tags")
-            return data
-            
-    class TaggitSerializer:
-        """Mixin for handling tags in serializers"""
-        pass
+# Custom implementation for TagListSerializerField to fix the set() issue
+class CustomTagListSerializerField(serializers.ListField):
+    child = serializers.CharField()
+
+    def to_representation(self, value):
+        return [tag.name for tag in value.all()]
+        
+    def to_internal_value(self, data):
+        if not isinstance(data, list):
+            raise serializers.ValidationError("Expected a list of tags")
+        return data
+
+# Custom implementation for TaggitSerializer
+class CustomTaggitSerializer:
+    """Mixin for handling tags in serializers"""
+    def create(self, validated_data):
+        tags = validated_data.pop('tags', [])
+        instance = super().create(validated_data)
+        
+        if tags:
+            instance.tags.set(*[tags])  # Pass as a single list argument
+        
+        return instance
+    
+    def update(self, instance, validated_data):
+        tags = validated_data.pop('tags', [])
+        instance = super().update(instance, validated_data)
+        
+        if tags:
+            instance.tags.set(*[tags])  # Pass as a single list argument
+        
+        return instance
 
 from .models import (
     Document, DocumentCategory, DocumentTemplate, DocumentComment, 
@@ -153,8 +167,8 @@ class DocumentSignatureSerializer(serializers.ModelSerializer):
         fields = ['id', 'signature_request', 'document', 'signer', 'signature_type', 
                   'signature_data', 'signature_date', 'ip_address', 'user_agent', 'verification_hash']
 
-class DocumentSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tags = TagListSerializerField()
+class DocumentSerializer(CustomTaggitSerializer, serializers.ModelSerializer):
+    tags = CustomTagListSerializerField()
     category_name = serializers.SerializerMethodField()
     uploaded_by = UserSerializer(read_only=True)
     last_modified_by = UserSerializer(read_only=True)

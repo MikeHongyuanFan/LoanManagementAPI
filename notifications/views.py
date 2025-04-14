@@ -5,24 +5,58 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db.models import Count
+from django.utils import timezone
+from datetime import datetime
 
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['type', 'sent_status', 'related_application']
-    search_fields = ['message']
-    ordering_fields = ['trigger_date', 'created_at']
+    search_fields = ['title', 'message']
+    ordering_fields = ['created_at', 'trigger_date']
     
     def get_queryset(self):
-        # Only show notifications for the current user
-        return Notification.objects.filter(recipient=self.request.user)
+        queryset = Notification.objects.filter(recipient=self.request.user)
+        
+        # Handle date filtering
+        created_after = self.request.query_params.get('created_after')
+        created_before = self.request.query_params.get('created_before')
+        
+        if created_after:
+            try:
+                date_after = datetime.strptime(created_after, '%Y-%m-%d').date()
+                queryset = queryset.filter(created_at__date__gte=date_after)
+            except ValueError:
+                pass
+                
+        if created_before:
+            try:
+                date_before = datetime.strptime(created_before, '%Y-%m-%d').date()
+                queryset = queryset.filter(created_at__date__lte=date_before)
+            except ValueError:
+                pass
+                
+        return queryset
     
-    @action(detail=False)
+    @action(detail=False, methods=['get'])
     def unread(self, request):
         unread = self.get_queryset().filter(sent_status=False)
         serializer = self.get_serializer(unread, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def unread_count(self, request):
+        unread_count = self.get_queryset().filter(sent_status=False).count()
+        return Response({'unread_count': unread_count})
+    
+    @action(detail=False, methods=['post'])
+    def mark_all_read(self, request):
+        unread = self.get_queryset().filter(sent_status=False)
+        count = unread.count()
+        unread.update(sent_status=True)
+        return Response({'marked_count': count})
 
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer

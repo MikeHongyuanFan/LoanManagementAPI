@@ -160,5 +160,6 @@ class LoanCalculationResultSerializer(serializers.Serializer):
     
     # Optional fields if application is provided
     application_id = serializers.IntegerField(required=False)
+    calculation_id = serializers.IntegerField(required=False)
     fees = serializers.ListField(child=serializers.DictField(), required=False)
     total_cost = serializers.DecimalField(max_digits=12, decimal_places=2, required=False)

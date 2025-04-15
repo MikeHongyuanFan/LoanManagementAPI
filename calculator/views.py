@@ -120,6 +120,9 @@ class LoanCalculationViewSet(viewsets.ModelViewSet):
                 total_interest=summary['total_interest']
             )
             
+            # Add calculation ID to result data
+            result_data['calculation_id'] = calculation.id
+            
             # Save the repayment schedule
             for payment in schedule:
                 RepaymentSchedule.objects.create(

@@ -55,8 +55,8 @@ class LoanApplicationWorkflowTest(TestCase):
             description='Standard loan product',
             interest_rate=5.5,
             term_months=360,
-            min_amount=10000,
-            max_amount=500000
+            min_loan_amount=10000,
+            max_loan_amount=500000
         )
         
         # Create test fees
@@ -100,10 +100,8 @@ class LoanApplicationWorkflowTest(TestCase):
         application_data = {
             'borrower': self.borrower.id,
             'product': self.product.id,
-            'loan_amount': 300000.00,
-            'purpose': 'Home purchase',
-            'property_address': '123 Main St, Anytown, USA',
-            'property_value': 375000.00
+            'gross_loan_amount': 300000.00,
+            'net_loan_amount': 297000.00
         }
         
         response = self.client.post(

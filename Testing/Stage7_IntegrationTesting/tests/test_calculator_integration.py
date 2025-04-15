@@ -48,8 +48,8 @@ class CalculatorIntegrationTest(TestCase):
             description='30-year fixed rate loan',
             interest_rate=5.5,
             term_months=360,
-            min_amount=10000,
-            max_amount=500000
+            min_loan_amount=10000,
+            max_loan_amount=500000
         )
         
         self.variable_rate_product = Product.objects.create(
@@ -57,8 +57,8 @@ class CalculatorIntegrationTest(TestCase):
             description='5/1 ARM loan',
             interest_rate=4.5,
             term_months=360,
-            min_amount=10000,
-            max_amount=500000
+            min_loan_amount=10000,
+            max_loan_amount=500000
         )
         
         # Create test fees
@@ -97,20 +97,16 @@ class CalculatorIntegrationTest(TestCase):
         self.fixed_rate_application = Application.objects.create(
             borrower=self.borrower,
             product=self.fixed_rate_product,
-            loan_amount=300000.00,
-            purpose='Home purchase',
-            property_address='123 Main St, Anytown, USA',
-            property_value=375000.00,
+            gross_loan_amount=300000.00,
+            net_loan_amount=297000.00,
             status='in_progress'
         )
         
         self.variable_rate_application = Application.objects.create(
             borrower=self.borrower,
             product=self.variable_rate_product,
-            loan_amount=250000.00,
-            purpose='Home purchase',
-            property_address='456 Oak St, Anytown, USA',
-            property_value=325000.00,
+            gross_loan_amount=250000.00,
+            net_loan_amount=247500.00,
             status='in_progress'
         )
         

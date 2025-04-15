@@ -55,10 +55,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         # Create test application
         self.application = Application.objects.create(
             borrower=self.borrower,
-            loan_amount=300000.00,
-            purpose='Home purchase',
-            property_address='123 Main St, Anytown, USA',
-            property_value=375000.00,
+            gross_loan_amount=300000.00,
+            net_loan_amount=297000.00,
             status='in_progress'
         )
         

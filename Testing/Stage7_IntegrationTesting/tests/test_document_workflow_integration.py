@@ -116,8 +116,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         
         # Step 2: Verify approval notification was created
         reviewer_notifications = Notification.objects.filter(
-            user=self.reviewer_user,
-            notification_type='document_approval_request'
+            recipient=self.reviewer_user,
+            type='system'
         )
         self.assertEqual(reviewer_notifications.count(), 1)
         self.assertIn(f'Document approval requested', reviewer_notifications.first().message)
@@ -135,8 +135,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         
         # Step 4: Verify approval notification was sent to requester
         requester_notifications = Notification.objects.filter(
-            user=self.staff_user,
-            notification_type='document_approved'
+            recipient=self.staff_user,
+            type='system'
         )
         self.assertEqual(requester_notifications.count(), 1)
         self.assertIn(f'Document approved', requester_notifications.first().message)
@@ -160,8 +160,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         
         # Step 6: Verify signature notification was created
         signer_notifications = Notification.objects.filter(
-            user=self.signer_user,
-            notification_type='signature_requested'
+            recipient=self.signer_user,
+            type='system'
         )
         self.assertEqual(signer_notifications.count(), 1)
         self.assertIn(f'Signature requested', signer_notifications.first().message)
@@ -182,8 +182,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         
         # Step 8: Verify signature notification was sent to requester
         signature_notifications = Notification.objects.filter(
-            user=self.staff_user,
-            notification_type='document_signed'
+            recipient=self.staff_user,
+            type='system'
         )
         self.assertEqual(signature_notifications.count(), 1)
         self.assertIn(f'Document signed', signature_notifications.first().message)

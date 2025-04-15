@@ -109,6 +109,7 @@ class LoanCalculationViewSet(viewsets.ModelViewSet):
             # Save the calculation to the database
             calculation = LoanCalculation.objects.create(
                 application=application,
+                product=product,  # Add product reference
                 interest_type=interest_type,
                 interest_rate=interest_rate,
                 loan_amount=loan_amount,
@@ -136,6 +137,7 @@ class LoanCalculationViewSet(viewsets.ModelViewSet):
                 ApplicationFee.objects.create(
                     application=application,
                     fee_id=fee_data['fee'],
+                    calculation=calculation,  # Add calculation reference
                     calculated_amount=fee_data['calculated_amount']
                 )
         

@@ -20,6 +20,7 @@ class LoanCalculation(models.Model):
     ]
     
     application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name='calculation')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='calculations', null=True)
     interest_type = models.CharField(max_length=20, choices=INTEREST_TYPE_CHOICES)
     interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual interest rate as percentage
     loan_amount = models.DecimalField(max_digits=12, decimal_places=2)
@@ -97,7 +98,8 @@ class ApplicationFee(models.Model):
     Links fees to specific applications with their calculated amounts
     """
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='calculator_fees')
-    fee = models.ForeignKey(Fee, on_delete=models.CASCADE)
+    fee = models.ForeignKey(Fee, on_delete=models.CASCADE, related_name='application_fees')
+    calculation = models.ForeignKey(LoanCalculation, on_delete=models.SET_NULL, related_name='fees', null=True)
     calculated_amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_waived = models.BooleanField(default=False)
     waiver_reason = models.TextField(blank=True)

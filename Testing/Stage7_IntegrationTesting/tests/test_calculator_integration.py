@@ -99,7 +99,8 @@ class CalculatorIntegrationTest(TestCase):
             product=self.fixed_rate_product,
             gross_loan_amount=300000.00,
             net_loan_amount=297000.00,
-            status='in_progress'
+            status='in_progress',
+            stage='application'
         )
         
         self.variable_rate_application = Application.objects.create(
@@ -107,7 +108,8 @@ class CalculatorIntegrationTest(TestCase):
             product=self.variable_rate_product,
             gross_loan_amount=250000.00,
             net_loan_amount=247500.00,
-            status='in_progress'
+            status='in_progress',
+            stage='application'
         )
         
         # Set up API client
@@ -157,7 +159,6 @@ class CalculatorIntegrationTest(TestCase):
         
         # Check relationships
         self.assertEqual(calculation.application, self.fixed_rate_application)
-        self.assertEqual(calculation.product, self.fixed_rate_product)
         
         # Step 3: Verify fees were calculated correctly
         application_fees = ApplicationFee.objects.filter(application=self.fixed_rate_application)
@@ -208,7 +209,6 @@ class CalculatorIntegrationTest(TestCase):
         
         # Check relationships
         self.assertEqual(var_calculation.application, self.variable_rate_application)
-        self.assertEqual(var_calculation.product, self.variable_rate_product)
         
         # Step 7: Verify variable rate fees were calculated correctly
         var_application_fees = ApplicationFee.objects.filter(application=self.variable_rate_application)

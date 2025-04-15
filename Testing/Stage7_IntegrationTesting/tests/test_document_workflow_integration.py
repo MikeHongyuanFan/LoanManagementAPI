@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from documents.models import Document, DocumentApproval, DocumentSignatureRequest, DocumentSignature
 from applications.models import Application
 from borrowers.models import Borrower
+from products.models import Product
 from notifications.models import Notification
 
 User = get_user_model()
@@ -52,12 +53,24 @@ class DocumentWorkflowIntegrationTest(TestCase):
             state='CA'
         )
         
+        # Create test product
+        self.product = Product.objects.create(
+            name='Standard Loan',
+            description='Standard loan product',
+            interest_rate=5.5,
+            term_months=360,
+            min_loan_amount=10000,
+            max_loan_amount=500000
+        )
+        
         # Create test application
         self.application = Application.objects.create(
             borrower=self.borrower,
+            product=self.product,  # Required field
             gross_loan_amount=300000.00,
             net_loan_amount=297000.00,
-            status='in_progress'
+            status='in_progress',
+            stage='application'
         )
         
         # Create test document

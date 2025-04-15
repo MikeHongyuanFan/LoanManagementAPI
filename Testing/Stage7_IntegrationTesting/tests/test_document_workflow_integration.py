@@ -100,9 +100,9 @@ class DocumentWorkflowIntegrationTest(TestCase):
         self.client.force_authenticate(user=self.staff_user)
         
         approval_data = {
-            'document': self.document.id,
-            'reviewer': self.reviewer_user.id,
-            'comments': 'Please review this loan agreement'
+            'reviewer_id': self.reviewer_user.id,
+            'comments': 'Please review this loan agreement',
+            'approval_level': 1
         }
         
         response = self.client.post(
@@ -126,8 +126,8 @@ class DocumentWorkflowIntegrationTest(TestCase):
         self.client.force_authenticate(user=self.reviewer_user)
         
         response = self.client.post(
-            reverse('documentapproval-approve', kwargs={'pk': approval_id}),
-            data=json.dumps({'comments': 'Document looks good'}),
+            reverse('respond-to-approval', kwargs={'approval_id': approval_id}),
+            data=json.dumps({'status': 'approved', 'comments': 'Document looks good'}),
             content_type='application/json'
         )
         
@@ -145,8 +145,7 @@ class DocumentWorkflowIntegrationTest(TestCase):
         self.client.force_authenticate(user=self.staff_user)
         
         signature_data = {
-            'document': self.document.id,
-            'signer': self.signer_user.id,
+            'signer_id': self.signer_user.id,
             'message': 'Please sign this loan agreement'
         }
         
@@ -173,7 +172,7 @@ class DocumentWorkflowIntegrationTest(TestCase):
         response = self.client.post(
             reverse('signature-request-respond', kwargs={'pk': signature_request_id}),
             data=json.dumps({
-                'action': 'sign',
+                'status': 'signed',
                 'signature_data': 'base64_encoded_signature_data'
             }),
             content_type='application/json'

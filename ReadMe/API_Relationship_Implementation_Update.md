@@ -132,24 +132,90 @@ path('relationships/<int:pk>/remove/', views.DocumentRelationshipViewSet.as_view
 
 ## 3. Calculator Relationship Improvements
 
-### Future Enhancements
+### Implemented Features
 
-To improve calculator component relationships:
+We have successfully improved the calculator component relationships:
 
-1. **Direct Model Relationships**
-   - Consider adding direct relationships between calculator components
-   - Implement proper foreign key constraints
+1. **Enhanced Model Relationships**
+   - Added direct relationship between `LoanCalculation` and `Product` models
+   - Added direct relationship between `ApplicationFee` and `LoanCalculation` models
+   - Added related_name attributes to improve reverse relationship access
 
-2. **Business Logic Documentation**
-   - Document the business logic connections where direct model relationships don't exist
-   - Create a flow diagram showing the data path
+2. **Comprehensive Documentation**
+   - Created detailed documentation of calculator component relationships
+   - Documented both direct model relationships and business logic connections
+   - Created a data flow diagram showing the relationships between components
+
+### Implementation Details
+
+1. **Model Enhancements**
+   - Added `product` field to `LoanCalculation` model:
+     ```python
+     product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='calculations', null=True)
+     ```
+   - Added `calculation` field to `ApplicationFee` model:
+     ```python
+     calculation = models.ForeignKey(LoanCalculation, on_delete=models.SET_NULL, related_name='fees', null=True)
+     ```
+   - Added related_name to `Fee` model's relationship with `ApplicationFee`:
+     ```python
+     fee = models.ForeignKey(Fee, on_delete=models.CASCADE, related_name='application_fees')
+     ```
+
+2. **View Logic Updates**
+   - Updated the calculation view to store the product reference
+   - Updated the fee creation logic to store the calculation reference
+
+3. **Documentation**
+   - Created comprehensive documentation in `ReadMe/CALCULATOR_RELATIONSHIPS.md`
+   - Documented direct model relationships
+   - Documented business logic connections
+   - Created a data flow diagram
+   - Documented API integration points
+
+### Documentation Excerpt
+
+```markdown
+## Model Relationships
+
+### Direct Model Relationships
+
+The calculator module includes the following direct model relationships:
+
+1. **LoanCalculation → Application**
+   - One-to-one relationship: Each loan calculation is associated with exactly one application
+   - Relationship field: `application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name='calculation')`
+   - This allows easy access to calculation data from an application: `application.calculation`
+
+2. **LoanCalculation → Product**
+   - Many-to-one relationship: Each loan calculation is associated with one product
+   - Relationship field: `product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='calculations', null=True)`
+   - This allows tracking which product was used for the calculation
+   - The relationship is nullable to handle cases where the product is deleted
+
+...
+
+## Business Logic Connections
+
+Beyond direct model relationships, there are several important business logic connections between calculator components:
+
+### 1. Calculation Flow
+
+The calculation flow connects various components in the following sequence:
+
+```
+User Input → LoanCalculation → RepaymentSchedule → ApplicationFee → Total Cost
+```
+```
 
 ## Conclusion
 
-We have successfully implemented two of the key missing relationships identified in our API validation:
+We have successfully implemented all three of the key missing relationships identified in our API validation:
 
 1. **Notification triggers for document workflows** - Ensuring users are properly notified of important events in the document approval and signature workflows.
 
 2. **Document relationship management endpoints** - Providing comprehensive API support for creating, managing, and retrieving relationships between documents.
 
-These enhancements significantly improve the system's functionality and address the gaps identified in our API relationship validation. The next step is to focus on improving the calculator component relationships to complete our implementation plan.
+3. **Calculator component relationship improvements** - Enhancing the direct model relationships between calculator components and documenting the business logic connections.
+
+These enhancements significantly improve the system's functionality, maintainability, and documentation, addressing all the gaps identified in our API relationship validation.

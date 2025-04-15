@@ -83,7 +83,7 @@ class LoanCalculationViewSet(viewsets.ModelViewSet):
             fees = []
             product = application.product
             if product:
-                for fee in product.fees.all():  # Removed is_active filter
+                for fee in product.calculator_fees.all():  # Use calculator_fees instead of fees
                     fee_amount = calculate_fee(
                         loan_amount, fee.fee_type, fee.amount, fee.calculation_method
                     )

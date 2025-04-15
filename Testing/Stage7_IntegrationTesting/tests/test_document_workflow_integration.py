@@ -106,7 +106,7 @@ class DocumentWorkflowIntegrationTest(TestCase):
         }
         
         response = self.client.post(
-            reverse('document-request-approval', kwargs={'pk': self.document.id}),
+            reverse('request-document-approval', kwargs={'document_id': self.document.id}),
             data=json.dumps(approval_data),
             content_type='application/json'
         )

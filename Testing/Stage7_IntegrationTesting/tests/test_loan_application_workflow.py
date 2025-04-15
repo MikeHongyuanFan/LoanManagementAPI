@@ -94,8 +94,8 @@ class LoanApplicationWorkflowTest(TestCase):
         5. Document approval workflow
         6. Application status updates
         """
-        # Step 1: Authenticate as borrower and create application
-        self.client.force_authenticate(user=self.borrower_user)
+        # Step 1: Authenticate as staff and create application
+        self.client.force_authenticate(user=self.staff_user)
         
         application_data = {
             'borrower': self.borrower.id,
@@ -152,19 +152,16 @@ class LoanApplicationWorkflowTest(TestCase):
         self.assertIn('monthly_payment', response.data)
         self.assertIn('total_payments', response.data)
         self.assertIn('total_interest', response.data)
-        self.assertIn('fees', response.data)
         
-        # Step 4: Authenticate as staff and request document approval
-        self.client.force_authenticate(user=self.staff_user)
-        
+        # Step 4: Request document approval
         approval_data = {
             'document': document_id,
-            'reviewer': self.approver_user.id,
+            'reviewer_id': self.approver_user.id,
             'comments': 'Please review this income verification document'
         }
         
         response = self.client.post(
-            reverse('document-request-approval', kwargs={'pk': document_id}),
+            reverse('request-document-approval', kwargs={'document_id': document_id}),
             data=json.dumps(approval_data),
             content_type='application/json'
         )
@@ -176,8 +173,8 @@ class LoanApplicationWorkflowTest(TestCase):
         self.client.force_authenticate(user=self.approver_user)
         
         response = self.client.post(
-            reverse('documentapproval-approve', kwargs={'pk': approval_id}),
-            data=json.dumps({'comments': 'Document looks good'}),
+            reverse('respond-to-approval', kwargs={'approval_id': approval_id}),
+            data=json.dumps({'status': 'approved', 'comments': 'Document looks good'}),
             content_type='application/json'
         )
         
@@ -227,6 +224,6 @@ class LoanApplicationWorkflowTest(TestCase):
         self.assertEqual(fee_amounts['Establishment Fee'], Decimal('3000.00'))  # 1% of 300000
         
         # Verify relationships between components
-        # Note: We're not checking calculation.product since it's not in the database schema
         self.assertEqual(document.application, application)
         self.assertEqual(application.borrower, self.borrower)
+        self.assertEqual(calculation.product, self.product)

@@ -92,6 +92,152 @@ class DocumentViewSet(viewsets.ModelViewSet):
             "requested_date": signature_request.requested_date,
             "due_date": signature_request.due_date
         }, status=status.HTTP_201_CREATED)
+        
+    @action(detail=True, methods=['post'])
+    def add_relationship(self, request, pk=None):
+        """Add a relationship from this document to another document"""
+        source_document = self.get_object()
+        
+        # Validate request data
+        if 'target_document_id' not in request.data:
+            return Response({"target_document_id": "This field is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if 'relationship_type' not in request.data:
+            return Response({"relationship_type": "This field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get target document
+        try:
+            target_document = Document.objects.get(pk=request.data['target_document_id'])
+        except Document.DoesNotExist:
+            return Response({"target_document_id": "Target document not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Validate relationship type
+        relationship_type = request.data['relationship_type']
+        valid_types = ['supersedes', 'supplements', 'references', 'requires', 'amends', 'custom']
+        if relationship_type not in valid_types:
+            return Response(
+                {"relationship_type": f"Must be one of: {', '.join(valid_types)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # If custom type, require custom_type field
+        if relationship_type == 'custom' and 'custom_type' not in request.data:
+            return Response({"custom_type": "Required when relationship_type is 'custom'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if relationship already exists
+        existing_relationship = DocumentRelationship.objects.filter(
+            source_document=source_document,
+            target_document=target_document,
+            relationship_type=relationship_type
+        ).first()
+        
+        if existing_relationship:
+            return Response(
+                {"detail": "This relationship already exists between these documents"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create relationship
+        relationship = DocumentRelationship.objects.create(
+            source_document=source_document,
+            target_document=target_document,
+            relationship_type=relationship_type,
+            custom_type=request.data.get('custom_type', ''),
+            description=request.data.get('description', ''),
+            created_by=request.user
+        )
+        
+        return Response({
+            "id": relationship.id,
+            "source_document": source_document.id,
+            "target_document": target_document.id,
+            "relationship_type": relationship_type,
+            "custom_type": relationship.custom_type,
+            "description": relationship.description,
+            "created_at": relationship.created_at
+        }, status=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['post'])
+    def remove_relationship(self, request, pk=None):
+        """Remove a relationship from this document to another document"""
+        source_document = self.get_object()
+        
+        # Validate request data
+        if 'relationship_id' not in request.data:
+            return Response({"relationship_id": "This field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get relationship
+        try:
+            relationship = DocumentRelationship.objects.get(
+                pk=request.data['relationship_id'],
+                source_document=source_document
+            )
+        except DocumentRelationship.DoesNotExist:
+            return Response({"relationship_id": "Relationship not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if user has permission to delete
+        if relationship.created_by != request.user and not request.user.is_staff:
+            return Response(
+                {"detail": "You do not have permission to delete this relationship"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Store relationship details for response
+        response_data = {
+            "id": relationship.id,
+            "source_document": relationship.source_document.id,
+            "target_document": relationship.target_document.id,
+            "relationship_type": relationship.relationship_type,
+            "deleted": True
+        }
+        
+        # Delete relationship
+        relationship.delete()
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def relationships(self, request, pk=None):
+        """Get all relationships for this document (both source and target)"""
+        document = self.get_object()
+        
+        # Get relationships where document is source
+        source_relationships = DocumentRelationship.objects.filter(source_document=document)
+        source_data = []
+        for rel in source_relationships:
+            source_data.append({
+                "id": rel.id,
+                "source_document": rel.source_document.id,
+                "target_document": rel.target_document.id,
+                "target_document_title": rel.target_document.title,
+                "relationship_type": rel.relationship_type,
+                "custom_type": rel.custom_type,
+                "description": rel.description,
+                "created_at": rel.created_at,
+                "direction": "outgoing"
+            })
+        
+        # Get relationships where document is target
+        target_relationships = DocumentRelationship.objects.filter(target_document=document)
+        target_data = []
+        for rel in target_relationships:
+            target_data.append({
+                "id": rel.id,
+                "source_document": rel.source_document.id,
+                "source_document_title": rel.source_document.title,
+                "target_document": rel.target_document.id,
+                "relationship_type": rel.relationship_type,
+                "custom_type": rel.custom_type,
+                "description": rel.description,
+                "created_at": rel.created_at,
+                "direction": "incoming"
+            })
+        
+        return Response({
+            "outgoing_relationships": source_data,
+            "incoming_relationships": target_data,
+            "total_relationships": len(source_data) + len(target_data)
+        }, status=status.HTTP_200_OK)
 
 class DocumentCategoryViewSet(viewsets.ModelViewSet):
     """
@@ -206,6 +352,98 @@ class DocumentRelationshipViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+        
+    @action(detail=False, methods=['post'])
+    def add_relationship(self, request):
+        """Add a relationship between two documents"""
+        # Validate request data
+        required_fields = ['source_document_id', 'target_document_id', 'relationship_type']
+        for field in required_fields:
+            if field not in request.data:
+                return Response({field: "This field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get documents
+        try:
+            source_document = Document.objects.get(pk=request.data['source_document_id'])
+        except Document.DoesNotExist:
+            return Response({"source_document_id": "Source document not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+        try:
+            target_document = Document.objects.get(pk=request.data['target_document_id'])
+        except Document.DoesNotExist:
+            return Response({"target_document_id": "Target document not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Validate relationship type
+        relationship_type = request.data['relationship_type']
+        valid_types = ['supersedes', 'supplements', 'references', 'requires', 'amends', 'custom']
+        if relationship_type not in valid_types:
+            return Response(
+                {"relationship_type": f"Must be one of: {', '.join(valid_types)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # If custom type, require custom_type field
+        if relationship_type == 'custom' and 'custom_type' not in request.data:
+            return Response({"custom_type": "Required when relationship_type is 'custom'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if relationship already exists
+        existing_relationship = DocumentRelationship.objects.filter(
+            source_document=source_document,
+            target_document=target_document,
+            relationship_type=relationship_type
+        ).first()
+        
+        if existing_relationship:
+            return Response(
+                {"detail": "This relationship already exists between these documents"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create relationship
+        relationship = DocumentRelationship.objects.create(
+            source_document=source_document,
+            target_document=target_document,
+            relationship_type=relationship_type,
+            custom_type=request.data.get('custom_type', ''),
+            description=request.data.get('description', ''),
+            created_by=request.user
+        )
+        
+        return Response({
+            "id": relationship.id,
+            "source_document": source_document.id,
+            "target_document": target_document.id,
+            "relationship_type": relationship_type,
+            "custom_type": relationship.custom_type,
+            "description": relationship.description,
+            "created_at": relationship.created_at
+        }, status=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['delete'])
+    def remove_relationship(self, request, pk=None):
+        """Remove a relationship between documents"""
+        relationship = self.get_object()
+        
+        # Check if user has permission to delete
+        if relationship.created_by != request.user and not request.user.is_staff:
+            return Response(
+                {"detail": "You do not have permission to delete this relationship"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Store relationship details for response
+        response_data = {
+            "id": relationship.id,
+            "source_document": relationship.source_document.id,
+            "target_document": relationship.target_document.id,
+            "relationship_type": relationship.relationship_type,
+            "deleted": True
+        }
+        
+        # Delete relationship
+        relationship.delete()
+        
+        return Response(response_data, status=status.HTTP_200_OK)
 
 class CustomMetadataFieldViewSet(viewsets.ModelViewSet):
     """

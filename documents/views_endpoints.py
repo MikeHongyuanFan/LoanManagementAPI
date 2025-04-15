@@ -6,6 +6,7 @@ from .models import Document, DocumentMetadata, CustomMetadataField, DocumentSig
 from datetime import datetime
 import hashlib
 import time
+from notifications.services import create_signature_request_notification
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -143,6 +144,10 @@ def signature_request_respond(request, pk):
     if request.data['status'] == 'declined':
         signature_request.decline_reason = request.data['decline_reason']
         signature_request.save()
+        
+        # Create notification for the requester
+        create_signature_request_notification(signature_request)
+        
         return Response({"detail": "Signature request declined"}, status=status.HTTP_200_OK)
     
     # Create signature if status is 'signed'
@@ -170,6 +175,10 @@ def signature_request_respond(request, pk):
             verification_hash=verification_hash
         )
         signature_request.save()
+        
+        # Create notification for the requester
+        create_signature_request_notification(signature_request)
+        
         return Response({"detail": "Document signed successfully"}, status=status.HTTP_200_OK)
     
     return Response({"detail": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)

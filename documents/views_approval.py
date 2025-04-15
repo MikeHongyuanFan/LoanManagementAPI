@@ -5,6 +5,7 @@ from django.utils import timezone
 from .models import Document, DocumentApproval
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from notifications.services import create_document_approval_notification
 
 User = get_user_model()
 
@@ -57,6 +58,9 @@ def request_document_approval(request, document_id):
         requested_date=timezone.now(),
         approval_level=approval_level
     )
+    
+    # Create notification for the reviewer
+    create_document_approval_notification(approval)
     
     return Response({
         "id": approval.id,
@@ -131,6 +135,9 @@ def respond_to_approval(request, approval_id):
         approval.document.status = 'rejected'
         approval.document.save()
     
+    # Create notification for the requester
+    create_document_approval_notification(approval)
+    
     return Response({
         "id": approval.id,
         "document": approval.document.id,
@@ -201,8 +208,17 @@ def reassign_approval(request, approval_id):
     except User.DoesNotExist:
         return Response({"reviewer_id": "Reviewer not found"}, status=status.HTTP_404_NOT_FOUND)
     
+    # Store old reviewer for notification
+    old_reviewer = approval.reviewer
+    
     # Update approval
     approval.reviewer = new_reviewer
+    approval.save()
+    
+    # Create notification for the new reviewer
+    approval.status = 'reassigned'  # Temporary status for notification
+    create_document_approval_notification(approval)
+    approval.status = 'pending'  # Reset to actual status
     approval.save()
     
     return Response({

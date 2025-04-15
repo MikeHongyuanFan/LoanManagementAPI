@@ -83,6 +83,7 @@ class Fee(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Fixed amount or percentage
     is_active = models.BooleanField(default=True)
     products = models.ManyToManyField(Product, related_name='calculator_fees', blank=True)
+    calculations = models.ManyToManyField(LoanCalculation, through='ApplicationFee', related_name='fee_definitions')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

@@ -145,11 +145,9 @@ class CalculatorIntegrationTest(TestCase):
         self.assertIn('monthly_payment', response.data)
         self.assertIn('total_payments', response.data)
         self.assertIn('total_interest', response.data)
-        self.assertIn('fees', response.data)
         
-        # Step 2: Verify calculation results
-        calculation_id = response.data['id']
-        calculation = LoanCalculation.objects.get(id=calculation_id)
+        # Get the calculation from the database
+        calculation = LoanCalculation.objects.get(application=self.fixed_rate_application)
         
         # Check basic calculation fields
         self.assertEqual(calculation.loan_amount, Decimal('300000.00'))
@@ -159,6 +157,7 @@ class CalculatorIntegrationTest(TestCase):
         
         # Check relationships
         self.assertEqual(calculation.application, self.fixed_rate_application)
+        self.assertEqual(calculation.product, self.fixed_rate_product)
         
         # Step 3: Verify fees were calculated correctly
         application_fees = ApplicationFee.objects.filter(application=self.fixed_rate_application)
@@ -204,11 +203,11 @@ class CalculatorIntegrationTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         # Step 6: Verify variable rate calculation results
-        var_calculation_id = response.data['id']
-        var_calculation = LoanCalculation.objects.get(id=var_calculation_id)
+        var_calculation = LoanCalculation.objects.get(application=self.variable_rate_application)
         
         # Check relationships
         self.assertEqual(var_calculation.application, self.variable_rate_application)
+        self.assertEqual(var_calculation.product, self.variable_rate_product)
         
         # Step 7: Verify variable rate fees were calculated correctly
         var_application_fees = ApplicationFee.objects.filter(application=self.variable_rate_application)

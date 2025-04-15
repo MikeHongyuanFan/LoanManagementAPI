@@ -56,37 +56,79 @@ def create_signature_request_notification(signature_request):
     # - signed/declined: notify requester
 ```
 
-### Testing Considerations
-
-The notification implementation should be tested for:
-
-1. **Approval Workflow Notifications**
-   - Verify notification creation when approval is requested
-   - Verify notification content for approval/rejection
-   - Verify notification routing to correct users
-
-2. **Signature Request Notifications**
-   - Verify notification creation when signature is requested
-   - Verify notification content for signing/declining
-   - Verify notification routing to correct users
-
 ## 2. Document Relationship Management
 
-### Next Steps
+### Implemented Features
 
-The next priority is to implement a dedicated endpoint for document relationship management. This will involve:
+We have successfully implemented document relationship management endpoints:
 
-1. **Creating a New Endpoint**
-   - Implement `/api/document-management/documents/{id}/add_relationship/` endpoint
-   - Implement `/api/document-management/documents/{id}/remove_relationship/` endpoint
+1. **Document-Centric Relationship Endpoints**
+   - `/api/document-management/documents/{id}/add-relationship/` - Add a relationship from a document to another document
+   - `/api/document-management/documents/{id}/remove-relationship/` - Remove a relationship from a document
+   - `/api/document-management/documents/{id}/relationships/` - Get all relationships for a document (both incoming and outgoing)
 
-2. **Enhancing the DocumentRelationshipViewSet**
-   - Add custom actions for relationship management
-   - Implement proper validation for relationship types
+2. **Relationship-Centric Endpoints**
+   - `/api/document-management/relationships/add/` - Add a relationship between any two documents
+   - `/api/document-management/relationships/{id}/remove/` - Remove a specific relationship
 
-3. **Updating API Documentation**
-   - Document the new endpoints
-   - Provide usage examples
+### Implementation Details
+
+1. **Enhanced DocumentViewSet**
+   - Added `add_relationship` action for creating relationships from a specific document
+   - Added `remove_relationship` action for removing relationships from a specific document
+   - Added `relationships` action for retrieving all relationships for a document
+
+2. **Enhanced DocumentRelationshipViewSet**
+   - Added `add_relationship` action for creating relationships between any two documents
+   - Added `remove_relationship` action for removing specific relationships
+
+3. **Comprehensive Validation**
+   - Validation for required fields (source document, target document, relationship type)
+   - Validation for relationship types with custom type handling
+   - Duplicate relationship checking
+   - Permission checking for relationship deletion
+
+### Code Structure
+
+```python
+# DocumentViewSet relationship actions
+@action(detail=True, methods=['post'])
+def add_relationship(self, request, pk=None):
+    """Add a relationship from this document to another document"""
+    # Implementation for creating a relationship from the current document
+
+@action(detail=True, methods=['post'])
+def remove_relationship(self, request, pk=None):
+    """Remove a relationship from this document to another document"""
+    # Implementation for removing a relationship from the current document
+
+@action(detail=True, methods=['get'])
+def relationships(self, request, pk=None):
+    """Get all relationships for this document (both source and target)"""
+    # Implementation for retrieving all relationships for the current document
+
+# DocumentRelationshipViewSet relationship actions
+@action(detail=False, methods=['post'])
+def add_relationship(self, request):
+    """Add a relationship between two documents"""
+    # Implementation for creating a relationship between any two documents
+
+@action(detail=True, methods=['delete'])
+def remove_relationship(self, request, pk=None):
+    """Remove a relationship between documents"""
+    # Implementation for removing a specific relationship
+```
+
+### URL Configuration
+
+```python
+# Document relationship endpoints
+path('documents/<int:pk>/add-relationship/', views.DocumentViewSet.as_view({'post': 'add_relationship'}), name='document-add-relationship'),
+path('documents/<int:pk>/remove-relationship/', views.DocumentViewSet.as_view({'post': 'remove_relationship'}), name='document-remove-relationship'),
+path('documents/<int:pk>/relationships/', views.DocumentViewSet.as_view({'get': 'relationships'}), name='document-relationships'),
+path('relationships/add/', views.DocumentRelationshipViewSet.as_view({'post': 'add_relationship'}), name='add-relationship'),
+path('relationships/<int:pk>/remove/', views.DocumentRelationshipViewSet.as_view({'delete': 'remove_relationship'}), name='remove-relationship'),
+```
 
 ## 3. Calculator Relationship Improvements
 
@@ -104,6 +146,10 @@ To improve calculator component relationships:
 
 ## Conclusion
 
-The implementation of notification triggers for document workflows addresses one of the key gaps identified in our API relationship validation. This enhancement ensures that users are properly notified of important events in the document approval and signature workflows, improving the overall user experience and system functionality.
+We have successfully implemented two of the key missing relationships identified in our API validation:
 
-Next, we will focus on implementing the document relationship management endpoint to further enhance the document management capabilities of the system.
+1. **Notification triggers for document workflows** - Ensuring users are properly notified of important events in the document approval and signature workflows.
+
+2. **Document relationship management endpoints** - Providing comprehensive API support for creating, managing, and retrieving relationships between documents.
+
+These enhancements significantly improve the system's functionality and address the gaps identified in our API relationship validation. The next step is to focus on improving the calculator component relationships to complete our implementation plan.

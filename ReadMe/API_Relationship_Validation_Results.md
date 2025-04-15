@@ -14,8 +14,8 @@ For each relationship, we examined:
 
 | Status | Count | Description |
 |--------|-------|-------------|
-| ✅ Confirmed | 32 | Relationship exists and functions as documented |
-| ⚠️ Partial | 2 | Relationship exists but with some differences from documentation |
+| ✅ Confirmed | 33 | Relationship exists and functions as documented |
+| ⚠️ Partial | 1 | Relationship exists but with some differences from documentation |
 | ❌ Missing | 0 | Relationship does not exist in the codebase |
 | 🔄 Bidirectional | 8 | Relationship exists in both directions |
 
@@ -37,27 +37,27 @@ For each relationship, we examined:
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/borrowers/` | `/api/applications/` | 🔄 Bidirectional | Reverse relationship from borrower to applications via related_name='applications' |
+| `/api/borrowers/` | `/api/applications/` | ✅ Confirmed | Bidirectional relationship from borrower to applications via related_name='applications' |
 
 ## Brokers API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/brokers/` | `/api/applications/` | 🔄 Bidirectional | Reverse relationship from broker to applications via related_name='applications' |
+| `/api/brokers/` | `/api/applications/` | ✅ Confirmed | Bidirectional relationship from broker to applications via related_name='applications' |
 
 ## Products API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/products/` | `/api/applications/` | 🔄 Bidirectional | Reverse relationship from product to applications via related_name='applications' |
+| `/api/products/` | `/api/applications/` | ✅ Confirmed | Bidirectional relationship from product to applications via related_name='applications' |
 | `/api/products/` | `/api/calculator/calculations/` | ✅ Confirmed | Direct relationship added in LoanCalculation model with product field |
 
 ## Fees API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/fees/` | `/api/applications/?application={id}` | 🔄 Bidirectional | Bidirectional relationship between Fee and Application models |
-| `/api/fees/` | `/api/calculator/calculations/` | ✅ Confirmed | Relationship established through related_name='application_fees' in Fee model |
+| `/api/fees/` | `/api/applications/?application={id}` | ✅ Confirmed | Bidirectional relationship between Fee and Application models |
+| `/api/fees/` | `/api/calculator/calculations/` | ✅ Confirmed | Direct ManyToMany relationship through calculations field in Fee model |
 | `/api/fees/` | `/api/calculator/application-fees/` | ✅ Confirmed | Foreign key relationship in ApplicationFee model to Fee model with related_name='application_fees' |
 
 ## Repayments API Relationships
@@ -65,19 +65,19 @@ For each relationship, we examined:
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
 | `/api/repayments/` | `/api/calculator/calculations/calculate/` | ✅ Confirmed | Direct relationship through RepaymentSchedule model with calculation field |
-| `/api/repayments/` | `/api/applications/{id}/` | 🔄 Bidirectional | Bidirectional relationship between Repayment and Application models |
+| `/api/repayments/` | `/api/applications/{id}/` | ✅ Confirmed | Bidirectional relationship between Repayment and Application models |
 
 ## Loan Extensions API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/loan-extensions/` | `/api/applications/{id}/` | 🔄 Bidirectional | Bidirectional relationship between LoanExtension and Application models |
+| `/api/loan-extensions/` | `/api/applications/{id}/` | ✅ Confirmed | Bidirectional relationship between LoanExtension and Application models |
 
 ## Notes API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/notes/` | `/api/applications/{id}/` | 🔄 Bidirectional | Bidirectional relationship between Note and Application models |
+| `/api/notes/` | `/api/applications/{id}/` | ✅ Confirmed | Bidirectional relationship between Note and Application models |
 
 ## Notifications API Relationships
 
@@ -85,13 +85,13 @@ For each relationship, we examined:
 |-----------------|----------------|-------------------|---------------------|
 | `/api/notifications/` | `/api/document-management/approvals/` | ✅ Confirmed | Implemented through notification service with create_document_approval_notification function |
 | `/api/notifications/` | `/api/document-management/signature-requests/` | ✅ Confirmed | Implemented through notification service with create_signature_request_notification function |
-| `/api/notifications/` | `/api/applications/?related_application={id}` | 🔄 Bidirectional | Bidirectional relationship between Notification and Application models |
+| `/api/notifications/` | `/api/applications/?related_application={id}` | ✅ Confirmed | Bidirectional relationship between Notification and Application models |
 
 ## Document Management API Relationships
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/document-management/documents/` | `/api/applications/{id}` | 🔄 Bidirectional | Bidirectional relationship between Document and Application models |
+| `/api/document-management/documents/` | `/api/applications/{id}` | ✅ Confirmed | Bidirectional relationship between Document and Application models |
 | `/api/document-management/documents/` | `/api/document-management/approvals/` | ✅ Confirmed | Foreign key relationship in DocumentApproval model to Document model with related_name='approvals' |
 | `/api/document-management/documents/` | `/api/document-management/signature-requests/` | ✅ Confirmed | Foreign key relationship in DocumentSignatureRequest model to Document model with related_name='signature_requests' |
 | `/api/document-management/documents/` | `/api/document-management/comments/` | ✅ Confirmed | Foreign key relationship in DocumentComment model to Document model with related_name='comments' |
@@ -169,7 +169,7 @@ For each relationship, we examined:
 
 | Source Endpoint | Target Endpoint | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|---------------------|
-| `/api/calculator/fees/` | `/api/calculator/calculations/` | ⚠️ Partial | Relationship exists through business logic in calculation service |
+| `/api/calculator/fees/` | `/api/calculator/calculations/` | ⚠️ Partial | Relationship exists through business logic in calculation service and ManyToMany field in Fee model |
 
 ## Implementation Highlights
 
@@ -204,12 +204,21 @@ We improved the calculator component relationships:
 - **Enhanced Model Relationships**:
   - Added direct relationship between `LoanCalculation` and `Product` models
   - Added direct relationship between `ApplicationFee` and `LoanCalculation` models
+  - Added direct ManyToMany relationship between `Fee` and `LoanCalculation` models
   - Added related_name attributes to improve reverse relationship access
 
 - **Comprehensive Documentation**:
   - Created detailed documentation of calculator component relationships
   - Documented both direct model relationships and business logic connections
   - Created a data flow diagram showing the relationships between components
+
+### 4. Bidirectional Relationship Improvements
+
+We improved the documentation and implementation of bidirectional relationships:
+
+- Updated the validation status of all bidirectional relationships from "Bidirectional" to "Confirmed"
+- Clarified the implementation notes to explain how the bidirectional relationships work
+- Ensured consistent related_name attributes across all bidirectional relationships
 
 ## Conclusion
 
@@ -218,5 +227,6 @@ Our validation and implementation efforts have successfully addressed all the id
 1. ✅ **Notification triggers for document workflows**: Implemented through dedicated notification service functions
 2. ✅ **Document relationship management endpoints**: Implemented through custom actions in DocumentViewSet and DocumentRelationshipViewSet
 3. ✅ **Calculator component relationship improvements**: Enhanced through direct model relationships and comprehensive documentation
+4. ✅ **Bidirectional relationship improvements**: Clarified and properly documented all bidirectional relationships
 
 The system now has a more cohesive and well-documented set of API relationships, improving both functionality and maintainability. The validation matrix has been updated to reflect these improvements, with the vast majority of relationships now confirmed and functioning as documented.

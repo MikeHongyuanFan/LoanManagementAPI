@@ -27,27 +27,27 @@ This document tracks the validation status of all API relationships documented i
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/borrowers/` | `/api/applications/` | Used by | 🔄 Bidirectional | Reverse relationship from borrower to applications via related_name='applications' |
+| `/api/borrowers/` | `/api/applications/` | Used by | ✅ Confirmed | Bidirectional relationship from borrower to applications via related_name='applications' |
 
 ## Brokers API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/brokers/` | `/api/applications/` | Used by | 🔄 Bidirectional | Reverse relationship from broker to applications via related_name='applications' |
+| `/api/brokers/` | `/api/applications/` | Used by | ✅ Confirmed | Bidirectional relationship from broker to applications via related_name='applications' |
 
 ## Products API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/products/` | `/api/applications/` | Used by | 🔄 Bidirectional | Reverse relationship from product to applications via related_name='applications' |
+| `/api/products/` | `/api/applications/` | Used by | ✅ Confirmed | Bidirectional relationship from product to applications via related_name='applications' |
 | `/api/products/` | `/api/calculator/calculations/` | Used by | ✅ Confirmed | Direct relationship added in LoanCalculation model with product field |
 
 ## Fees API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/fees/` | `/api/applications/?application={id}` | Used by | 🔄 Bidirectional | Bidirectional relationship between Fee and Application models |
-| `/api/fees/` | `/api/calculator/calculations/` | Used by | ✅ Confirmed | Relationship established through related_name='application_fees' in Fee model |
+| `/api/fees/` | `/api/applications/?application={id}` | Used by | ✅ Confirmed | Bidirectional relationship between Fee and Application models |
+| `/api/fees/` | `/api/calculator/calculations/` | Used by | ✅ Confirmed | Direct ManyToMany relationship through calculations field in Fee model |
 | `/api/fees/` | `/api/calculator/application-fees/` | Linked to | ✅ Confirmed | Foreign key relationship in ApplicationFee model to Fee model with related_name='application_fees' |
 
 ## Repayments API Relationships
@@ -55,19 +55,19 @@ This document tracks the validation status of all API relationships documented i
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
 | `/api/repayments/` | `/api/calculator/calculations/calculate/` | Created by | ✅ Confirmed | Direct relationship through RepaymentSchedule model with calculation field |
-| `/api/repayments/` | `/api/applications/{id}/` | Queried by | 🔄 Bidirectional | Bidirectional relationship between Repayment and Application models |
+| `/api/repayments/` | `/api/applications/{id}/` | Queried by | ✅ Confirmed | Bidirectional relationship between Repayment and Application models |
 
 ## Loan Extensions API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/loan-extensions/` | `/api/applications/{id}/` | Queried by | 🔄 Bidirectional | Bidirectional relationship between LoanExtension and Application models |
+| `/api/loan-extensions/` | `/api/applications/{id}/` | Queried by | ✅ Confirmed | Bidirectional relationship between LoanExtension and Application models |
 
 ## Notes API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/notes/` | `/api/applications/{id}/` | Linked to | 🔄 Bidirectional | Bidirectional relationship between Note and Application models |
+| `/api/notes/` | `/api/applications/{id}/` | Linked to | ✅ Confirmed | Bidirectional relationship between Note and Application models |
 
 ## Notifications API Relationships
 
@@ -75,13 +75,13 @@ This document tracks the validation status of all API relationships documented i
 |-----------------|----------------|-------------------|-------------------|---------------------|
 | `/api/notifications/` | `/api/document-management/approvals/` | Triggered by | ✅ Confirmed | Implemented through notification service with create_document_approval_notification function |
 | `/api/notifications/` | `/api/document-management/signature-requests/` | Triggered by | ✅ Confirmed | Implemented through notification service with create_signature_request_notification function |
-| `/api/notifications/` | `/api/applications/?related_application={id}` | Linked to | 🔄 Bidirectional | Bidirectional relationship between Notification and Application models |
+| `/api/notifications/` | `/api/applications/?related_application={id}` | Linked to | ✅ Confirmed | Bidirectional relationship between Notification and Application models |
 
 ## Document Management API Relationships
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/document-management/documents/` | `/api/applications/{id}` | Linked to | 🔄 Bidirectional | Bidirectional relationship between Document and Application models |
+| `/api/document-management/documents/` | `/api/applications/{id}` | Linked to | ✅ Confirmed | Bidirectional relationship between Document and Application models |
 | `/api/document-management/documents/` | `/api/document-management/approvals/` | Triggers | ✅ Confirmed | Foreign key relationship in DocumentApproval model to Document model with related_name='approvals' |
 | `/api/document-management/documents/` | `/api/document-management/signature-requests/` | Triggers | ✅ Confirmed | Foreign key relationship in DocumentSignatureRequest model to Document model with related_name='signature_requests' |
 | `/api/document-management/documents/` | `/api/document-management/comments/` | Uses | ✅ Confirmed | Foreign key relationship in DocumentComment model to Document model with related_name='comments' |
@@ -165,4 +165,4 @@ This document tracks the validation status of all API relationships documented i
 
 | Source Endpoint | Target Endpoint | Relationship Type | Validation Status | Implementation Notes |
 |-----------------|----------------|-------------------|-------------------|---------------------|
-| `/api/calculator/fees/` | `/api/calculator/calculations/` | Used by | ⚠️ Partial | Relationship exists through business logic in calculation service |
+| `/api/calculator/fees/` | `/api/calculator/calculations/` | Used by | ⚠️ Partial | Relationship exists through business logic in calculation service and ManyToMany field in Fee model |

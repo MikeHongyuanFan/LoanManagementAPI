@@ -79,7 +79,7 @@ class DocumentWorkflowIntegrationTest(TestCase):
             description='Official loan agreement document',
             document_type='agreement',
             application=self.application,
-            created_by=self.staff_user
+            uploaded_by=self.staff_user
         )
         
         # Set up API client
@@ -204,7 +204,7 @@ class DocumentWorkflowIntegrationTest(TestCase):
         # Check signature exists
         signature = DocumentSignature.objects.get(signature_request=signature_request)
         self.assertIsNotNone(signature)
-        self.assertEqual(signature.signed_by, self.signer_user)
+        self.assertEqual(signature.signer, self.signer_user)
         
         # Verify relationships between components
         self.assertEqual(approval.document, self.document)

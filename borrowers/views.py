@@ -12,9 +12,10 @@ from datetime import date
 
 from .models import Borrower
 from .serializers import BorrowerSerializer
-from applications.models import Application
-from documents.models import Document
-from notes.models import Note
+# Temporarily comment out imports that might not exist yet
+# from applications.models import Application
+# from documents.models import Document
+# from notes.models import Note
 from us_states import US_STATES
 
 # REST API ViewSet
@@ -136,17 +137,10 @@ def borrower_detail(request, pk):
     """
     borrower = get_object_or_404(Borrower, pk=pk)
     
-    # Get related applications
-    applications = Application.objects.filter(borrower=borrower).order_by('-created_at')
-    
-    # Get related documents
-    documents = Document.objects.filter(borrower=borrower).order_by('-created_at')
-    
-    # Get notes
-    notes = Note.objects.filter(
-        content_type__model='borrower',
-        object_id=borrower.id
-    ).order_by('-created_at')
+    # Temporarily comment out related data fetching
+    applications = []  # Application.objects.filter(borrower=borrower).order_by('-created_at')
+    documents = []  # Document.objects.filter(borrower=borrower).order_by('-created_at')
+    notes = []  # Note.objects.filter(content_type__model='borrower', object_id=borrower.id).order_by('-created_at')
     
     # Check if JSON response is requested
     if request.headers.get("Accept") == "application/json" or request.GET.get("format") == "json":

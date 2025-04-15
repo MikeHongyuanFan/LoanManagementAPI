@@ -44,12 +44,12 @@ class DocumentWorkflowIntegrationTest(TestCase):
         
         # Create test borrower
         self.borrower = Borrower.objects.create(
-            user=self.borrower_user,
             first_name='John',
             last_name='Doe',
             email='john.doe@example.com',
             phone_number='1234567890',
-            date_of_birth='1980-01-01'
+            dob='1980-01-01',
+            state='CA'
         )
         
         # Create test application

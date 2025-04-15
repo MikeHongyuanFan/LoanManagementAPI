@@ -1,0 +1,1025 @@
+INFO 2025-04-13 08:02:33,896 views 70757 7919574080 Generating application dashboard data
+ERROR 2025-04-13 08:02:33,899 log 70757 7919574080 Internal Server Error: /api/dashboard/applications/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1847, in transform
+    return self.try_transform(wrapped, name)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1357, in try_transform
+    raise FieldError(
+django.core.exceptions.FieldError: Unsupported lookup 'company_name' for BigAutoField or join on the field not permitted.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/dashboard/views.py", line 244, in get
+    top_brokers = Application.objects.values(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/query.py", line 1313, in values
+    clone = self._values(*fields, **expressions)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/query.py", line 1308, in _values
+    clone.query.set_values(fields)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 2463, in set_values
+    self.add_fields(field_names, True)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 2171, in add_fields
+    cols.append(join_info.transform_function(target, final_alias))
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1851, in transform
+    raise last_field_exception
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1824, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1725, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: applications, commission_account, created_at, email, first_name, id, last_name, phone_number, updated_at
+INFO 2025-04-13 08:02:34,623 views 70757 7919574080 Generating dashboard overview data
+ERROR 2025-04-13 08:02:34,624 log 70757 7919574080 Internal Server Error: /api/dashboard/overview/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/dashboard/views.py", line 135, in get
+    'total_loan_amount': Application.objects.aggregate(total=Sum('loan_amount'))['total'] or 0,
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/query.py", line 592, in aggregate
+    return self.query.chain().get_aggregation(self.db, kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 398, in get_aggregation
+    aggregate = aggregate_expr.resolve_expression(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/aggregates.py", line 64, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/expressions.py", line 950, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/expressions.py", line 829, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1977, in resolve_ref
+    join_info = self.setup_joins(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1824, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1725, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'loan_amount' into field. Choices are: bdm, bdm_id, borrower, borrower_id, broker, broker_id, calculation, calculator_fees, created_at, documents, extensions, fees, gross_loan_amount, id, net_loan_amount, notes, notifications, product, product_id, qs, qs_id, referral, referral_id, repayments, stage, status, updated_at, valuer, valuer_id
+INFO 2025-04-13 08:02:34,958 views 70757 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:02:34,960 views 70757 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:02:35,287 views 70757 7919574080 Generating entity dashboard data
+ERROR 2025-04-13 08:02:35,287 log 70757 7919574080 Internal Server Error: /api/dashboard/entities/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 2162, in add_fields
+    join_info = self.setup_joins(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1824, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1725, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: applications, commission_account, created_at, email, first_name, id, last_name, phone_number, updated_at
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/dashboard/views.py", line 415, in get
+    brokers_by_company = Broker.objects.values('company_name').annotate(
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/query.py", line 1313, in values
+    clone = self._values(*fields, **expressions)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/query.py", line 1308, in _values
+    clone.query.set_values(fields)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 2463, in set_values
+    self.add_fields(field_names, True)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/db/models/sql/query.py", line 2195, in add_fields
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: applications, commission_account, created_at, email, first_name, id, last_name, phone_number, updated_at
+WARNING 2025-04-13 08:02:36,983 log 70757 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-13 08:16:50,163 views 71991 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:16:50,166 views 71991 7919574080 Document dashboard data generated in 0.003s
+INFO 2025-04-13 08:16:50,170 views 71991 7919574080 Serving document dashboard from cache
+INFO 2025-04-13 08:16:50,551 views 71991 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:16:50,553 views 71991 7919574080 Document dashboard data generated in 0.002s
+WARNING 2025-04-13 08:18:54,955 log 72255 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-13 08:18:57,537 views 72255 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:18:57,540 views 72255 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:18:57,541 views 72255 7919574080 Serving document dashboard from cache
+INFO 2025-04-13 08:18:57,905 views 72255 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:18:57,907 views 72255 7919574080 Document dashboard data generated in 0.002s
+WARNING 2025-04-13 08:21:20,805 log 72478 7919574080 Unauthorized: /api/dashboard/metrics/
+WARNING 2025-04-13 08:21:39,883 log 72510 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-13 08:21:42,479 views 72510 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:21:42,481 views 72510 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:21:42,482 views 72510 7919574080 Serving document dashboard from cache
+INFO 2025-04-13 08:21:42,840 views 72510 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:21:42,842 views 72510 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:37:00,514 autoreload 73787 7919574080 Watching for file changes with StatReloader
+WARNING 2025-04-13 08:37:09,090 log 73819 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-13 08:37:11,593 views 73819 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:37:11,595 views 73819 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:37:11,596 views 73819 7919574080 Serving document dashboard from cache
+INFO 2025-04-13 08:37:11,947 views 73819 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:37:11,949 views 73819 7919574080 Document dashboard data generated in 0.002s
+WARNING 2025-04-13 08:38:51,807 log 73955 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-13 08:38:54,345 views 73955 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:38:54,348 views 73955 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-13 08:38:54,349 views 73955 7919574080 Serving document dashboard from cache
+INFO 2025-04-13 08:38:54,701 views 73955 7919574080 Generating document dashboard data
+INFO 2025-04-13 08:38:54,703 views 73955 7919574080 Document dashboard data generated in 0.002s
+WARNING 2025-04-14 00:25:03,063 log 79791 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:25:03,835 log 79791 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 00:27:37,433 log 80053 7919574080 Not Found: /api/borrowers/
+WARNING 2025-04-14 00:27:37,601 log 80053 7919574080 Not Found: /api/borrowers/1/
+WARNING 2025-04-14 00:27:37,771 log 80053 7919574080 Not Found: /api/borrowers/
+WARNING 2025-04-14 00:27:37,943 log 80053 7919574080 Not Found: /api/borrowers/
+WARNING 2025-04-14 00:27:38,116 log 80053 7919574080 Not Found: /api/borrowers/1/
+WARNING 2025-04-14 00:27:38,287 log 80053 7919574080 Not Found: /api/borrowers/1/
+WARNING 2025-04-14 00:27:38,489 log 80053 7919574080 Not Found: /api/borrowers/
+WARNING 2025-04-14 00:27:38,660 log 80053 7919574080 Not Found: /api/borrowers/1/
+WARNING 2025-04-14 00:29:20,457 log 80307 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:29:21,210 log 80307 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 00:30:38,143 log 80475 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:30:38,902 log 80475 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 00:31:03,640 log 80550 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:31:04,378 log 80550 7919574080 Bad Request: /api/document-management/documents/1/
+ERROR 2025-04-14 00:31:14,329 exception 80576 7919574080 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+WARNING 2025-04-14 00:31:14,378 log 80576 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:31:32,868 log 80622 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 00:31:33,614 log 80622 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 00:38:00,889 log 81207 7919574080 Bad Request: /api/applications/
+ERROR 2025-04-14 01:09:11,767 log 83909 7919574080 Internal Server Error: /api/calculator/amortization-schedule/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 176, in post
+    schedule = generate_amortization_schedule(loan_amount, interest_rate, term_years, start_date)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 81, in generate_amortization_schedule
+    monthly_payment = calculate_monthly_payment(principal, annual_interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 34, in calculate_monthly_payment
+    x = (1 + monthly_rate) ** num_payments
+TypeError: unsupported operand type(s) for ** or pow(): 'decimal.Decimal' and 'float'
+ERROR 2025-04-14 01:09:11,947 log 83909 7919574080 Internal Server Error: /api/calculator/loan-summary/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 204, in post
+    monthly_payment = calculate_monthly_payment(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 34, in calculate_monthly_payment
+    x = (1 + monthly_rate) ** num_payments
+TypeError: unsupported operand type(s) for ** or pow(): 'decimal.Decimal' and 'float'
+ERROR 2025-04-14 01:09:12,112 log 83909 7919574080 Internal Server Error: /api/calculator/monthly-payment/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 158, in post
+    monthly_payment = calculate_monthly_payment(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 34, in calculate_monthly_payment
+    x = (1 + monthly_rate) ** num_payments
+TypeError: unsupported operand type(s) for ** or pow(): 'decimal.Decimal' and 'float'
+ERROR 2025-04-14 01:09:12,278 log 83909 7919574080 Internal Server Error: /api/calculator/product-payment/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 231, in post
+    monthly_payment = calculate_monthly_payment(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 34, in calculate_monthly_payment
+    x = (1 + monthly_rate) ** num_payments
+TypeError: unsupported operand type(s) for ** or pow(): 'decimal.Decimal' and 'float'
+ERROR 2025-04-14 01:09:12,448 log 83909 7919574080 Internal Server Error: /api/calculator/compare-products/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 274, in post
+    monthly_payment = calculate_monthly_payment(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 34, in calculate_monthly_payment
+    x = (1 + monthly_rate) ** num_payments
+TypeError: unsupported operand type(s) for ** or pow(): 'decimal.Decimal' and 'float'
+ERROR 2025-04-14 01:14:15,205 log 84322 7919574080 Internal Server Error: /api/calculator/amortization-schedule/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 176, in post
+    schedule = generate_amortization_schedule(loan_amount, interest_rate, term_years, start_date)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 87, in generate_amortization_schedule
+    for payment_num in range(1, num_payments + 1):
+TypeError: 'decimal.Decimal' object cannot be interpreted as an integer
+ERROR 2025-04-14 01:14:15,393 log 84322 7919574080 Internal Server Error: /api/calculator/loan-summary/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 205, in post
+    schedule = generate_amortization_schedule(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 87, in generate_amortization_schedule
+    for payment_num in range(1, num_payments + 1):
+TypeError: 'decimal.Decimal' object cannot be interpreted as an integer
+ERROR 2025-04-14 01:14:15,934 log 84322 7919574080 Internal Server Error: /api/calculator/compare-products/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/views.py", line 293, in post
+    schedule = generate_amortization_schedule(loan_amount, interest_rate, term_years)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/calculator/utils.py", line 87, in generate_amortization_schedule
+    for payment_num in range(1, num_payments + 1):
+TypeError: 'decimal.Decimal' object cannot be interpreted as an integer
+WARNING 2025-04-14 01:48:22,023 log 87149 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 01:48:22,773 log 87149 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 01:49:42,128 log 87266 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 01:49:42,310 log 87266 7919574080 Not Found: /api/documents/1/
+WARNING 2025-04-14 01:49:42,493 log 87266 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 01:49:42,674 log 87266 7919574080 Not Found: /api/documents/1/
+WARNING 2025-04-14 01:49:42,855 log 87266 7919574080 Not Found: /api/documents/1/
+WARNING 2025-04-14 01:50:43,732 log 87383 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 01:50:44,493 log 87383 7919574080 Bad Request: /api/document-management/documents/1/
+ERROR 2025-04-14 01:51:48,566 log 87508 7919574080 Internal Server Error: /api/document-management/documents/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/mixins.py", line 19, in create
+    self.perform_create(serializer)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/documents/views.py", line 204, in perform_create
+    serializer.save(uploaded_by=self.request.user)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/taggit_serializer/serializers.py", line 100, in create
+    return self._save_tags(tag_object, to_be_tagged)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/taggit_serializer/serializers.py", line 113, in _save_tags
+    getattr(tag_object, key).set(*tag_values)
+TypeError: set() missing 1 required positional argument: 'objs'
+ERROR 2025-04-14 01:51:49,367 log 87508 7919574080 Internal Server Error: /api/document-management/documents/1/
+Traceback (most recent call last):
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/mixins.py", line 68, in update
+    self.perform_update(serializer)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/documents/views.py", line 207, in perform_update
+    serializer.save(last_modified_by=self.request.user)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/rest_framework/serializers.py", line 205, in save
+    self.instance = self.update(self.instance, validated_data)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/taggit_serializer/serializers.py", line 108, in update
+    return self._save_tags(tag_object, to_be_tagged)
+  File "/Users/hongyuanfan/Desktop/LoanApplicationBackend/venv/lib/python3.9/site-packages/taggit_serializer/serializers.py", line 113, in _save_tags
+    getattr(tag_object, key).set(*tag_values)
+TypeError: set() missing 1 required positional argument: 'objs'
+WARNING 2025-04-14 04:09:43,010 log 92939 7919574080 Not Found: /api/notifications/unread-count/
+WARNING 2025-04-14 04:09:43,344 log 92939 7919574080 Method Not Allowed: /api/notifications/mark-all-read/
+WARNING 2025-04-14 04:10:52,414 log 93060 7919574080 Not Found: /api/notifications/unread-count/
+WARNING 2025-04-14 04:10:52,744 log 93060 7919574080 Method Not Allowed: /api/notifications/mark-all-read/
+WARNING 2025-04-14 04:21:31,576 log 93942 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:31:40,875 log 94985 7919574080 Not Found: /api/products/9999/fees/
+WARNING 2025-04-14 04:31:41,046 log 94985 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:31:41,211 log 94985 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:31:41,382 log 94985 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:31:41,551 log 94985 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:31:41,719 log 94985 7919574080 Bad Request: /api/products/1/fees/1/
+WARNING 2025-04-14 04:31:41,887 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,056 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,225 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,392 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,562 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,732 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,899 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,899 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:42,901 log 94985 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:31:43,069 log 94985 7919574080 Bad Request: /api/products/1/
+WARNING 2025-04-14 04:36:58,801 log 95481 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:36:58,965 log 95481 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:36:59,133 log 95481 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:36:59,297 log 95481 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:36:59,299 log 95481 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:36:59,463 log 95481 7919574080 Method Not Allowed: /api/notifications/mark-all-read/
+WARNING 2025-04-14 04:36:59,631 log 95481 7919574080 Bad Request: /api/notifications/1/
+WARNING 2025-04-14 04:38:13,659 log 95596 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:38:13,824 log 95596 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:38:13,995 log 95596 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:38:14,161 log 95596 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:38:14,163 log 95596 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:38:14,333 log 95596 7919574080 Method Not Allowed: /api/notifications/mark-all-read/
+WARNING 2025-04-14 04:38:14,505 log 95596 7919574080 Bad Request: /api/notifications/1/
+WARNING 2025-04-14 04:39:12,214 log 95690 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:12,379 log 95690 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:12,544 log 95690 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:12,708 log 95690 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:12,710 log 95690 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:12,877 log 95690 7919574080 Bad Request: /api/notifications/1/
+WARNING 2025-04-14 04:39:34,806 log 95742 7919574080 Not Found: /api/products/9999/fees/
+WARNING 2025-04-14 04:39:34,973 log 95742 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:39:35,139 log 95742 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:39:35,306 log 95742 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:39:35,474 log 95742 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-14 04:39:35,644 log 95742 7919574080 Bad Request: /api/products/1/fees/1/
+WARNING 2025-04-14 04:39:35,812 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:35,981 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,148 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,317 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,483 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,647 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,812 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,813 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,814 log 95742 7919574080 Bad Request: /api/products/
+WARNING 2025-04-14 04:39:36,979 log 95742 7919574080 Bad Request: /api/products/1/
+WARNING 2025-04-14 04:39:37,143 log 95742 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:37,307 log 95742 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:37,475 log 95742 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:37,638 log 95742 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:37,640 log 95742 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-14 04:39:37,804 log 95742 7919574080 Bad Request: /api/notifications/1/
+WARNING 2025-04-14 04:56:57,893 log 97554 7919574080 Not Found: /api/document-approvals/
+WARNING 2025-04-14 04:56:58,423 log 97554 7919574080 Not Found: /api/document-approvals/
+WARNING 2025-04-14 04:56:58,943 log 97554 7919574080 Not Found: /api/document-approvals/
+WARNING 2025-04-14 04:56:59,468 log 97554 7919574080 Not Found: /api/document-approvals/
+WARNING 2025-04-14 04:56:59,984 log 97554 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 04:57:00,505 log 97554 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 04:57:01,020 log 97554 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 04:57:01,538 log 97554 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 04:57:02,064 log 97554 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 04:57:02,629 log 97554 7919574080 Not Found: /api/document-approvals/1/respond/
+WARNING 2025-04-14 04:57:03,146 log 97554 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 04:57:03,660 log 97554 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 04:57:04,182 log 97554 7919574080 Not Found: /api/document-approvals/1/
+WARNING 2025-04-14 04:57:04,700 log 97554 7919574080 Not Found: /api/signature-requests/1/
+WARNING 2025-04-14 04:57:04,871 log 97554 7919574080 Not Found: /api/document-categories/
+WARNING 2025-04-14 04:57:05,037 log 97554 7919574080 Not Found: /api/document-categories/
+WARNING 2025-04-14 04:57:05,203 log 97554 7919574080 Not Found: /api/document-categories/
+WARNING 2025-04-14 04:57:05,372 log 97554 7919574080 Not Found: /api/document-categories/1/
+WARNING 2025-04-14 04:57:05,540 log 97554 7919574080 Not Found: /api/document-collections/
+WARNING 2025-04-14 04:57:05,706 log 97554 7919574080 Not Found: /api/document-collections/
+WARNING 2025-04-14 04:57:05,880 log 97554 7919574080 Not Found: /api/document-collections/
+WARNING 2025-04-14 04:57:06,052 log 97554 7919574080 Not Found: /api/document-collections/1/share/
+WARNING 2025-04-14 04:57:06,220 log 97554 7919574080 Not Found: /api/document-collections/1/
+WARNING 2025-04-14 04:57:06,407 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:06,593 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:06,779 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:06,962 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:07,152 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:07,336 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:07,516 log 97554 7919574080 Not Found: /api/documents/
+WARNING 2025-04-14 04:57:07,699 log 97554 7919574080 Not Found: /api/documents/1/
+WARNING 2025-04-14 04:57:07,870 log 97554 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 04:57:08,042 log 97554 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 04:57:08,211 log 97554 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 04:57:08,380 log 97554 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 04:57:08,547 log 97554 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 04:57:08,712 log 97554 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 04:57:08,896 log 97554 7919574080 Not Found: /api/documents/1/update-metadata/
+WARNING 2025-04-14 04:57:09,084 log 97554 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 04:57:09,264 log 97554 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 04:57:09,449 log 97554 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 04:57:09,634 log 97554 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 04:57:09,816 log 97554 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 04:57:10,007 log 97554 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 04:57:10,190 log 97554 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 04:57:10,371 log 97554 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 04:57:10,552 log 97554 7919574080 Not Found: /api/document-metadata/1/
+WARNING 2025-04-14 04:57:10,735 log 97554 7919574080 Not Found: /api/metadata-fields/1/
+WARNING 2025-04-14 05:06:07,037 log 98505 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:07,205 log 98505 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:07,373 log 98505 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:07,539 log 98505 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:07,708 log 98505 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:07,881 log 98505 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:06:59,592 log 98609 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:59,761 log 98609 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:06:59,927 log 98609 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:00,095 log 98609 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:00,261 log 98609 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:00,425 log 98609 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:07:09,837 log 98639 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-14 05:07:10,862 log 98639 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-14 05:07:11,895 log 98639 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 05:07:12,418 log 98639 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 05:07:12,931 log 98639 7919574080 Not Found: /api/signature-requests/
+WARNING 2025-04-14 05:07:13,960 log 98639 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 05:07:14,473 log 98639 7919574080 Not Found: /api/document-management/approvals/1/respond/
+WARNING 2025-04-14 05:07:14,986 log 98639 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 05:07:15,490 log 98639 7919574080 Not Found: /api/signature-requests/1/respond/
+WARNING 2025-04-14 05:07:16,000 log 98639 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-14 05:07:16,510 log 98639 7919574080 Not Found: /api/signature-requests/1/
+WARNING 2025-04-14 05:07:16,677 log 98639 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:07:17,008 log 98639 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:07:17,342 log 98639 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:07:17,506 log 98639 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:07:17,673 log 98639 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:07:18,020 log 98639 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:07:18,203 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:18,392 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:18,573 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:18,754 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:18,936 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:19,118 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:19,304 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:19,493 log 98639 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:07:19,660 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:19,826 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:20,034 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:20,201 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:20,367 log 98639 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:07:20,533 log 98639 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:07:20,715 log 98639 7919574080 Not Found: /api/documents/1/update-metadata/
+WARNING 2025-04-14 05:07:20,896 log 98639 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 05:07:21,074 log 98639 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 05:07:21,259 log 98639 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 05:07:21,439 log 98639 7919574080 Not Found: /api/document-metadata/
+WARNING 2025-04-14 05:07:21,618 log 98639 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 05:07:21,797 log 98639 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 05:07:21,983 log 98639 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 05:07:22,169 log 98639 7919574080 Not Found: /api/metadata-fields/
+WARNING 2025-04-14 05:07:22,348 log 98639 7919574080 Not Found: /api/document-metadata/1/
+WARNING 2025-04-14 05:07:22,531 log 98639 7919574080 Not Found: /api/metadata-fields/1/
+WARNING 2025-04-14 05:17:03,126 log 99594 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:17:03,647 log 99594 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:17:05,198 log 99594 7919574080 Not Found: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:17:06,230 log 99594 7919574080 Not Found: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:17:06,739 log 99594 7919574080 Not Found: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:17:07,773 log 99594 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:17:07,978 log 99594 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:17:08,306 log 99594 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:17:08,641 log 99594 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:17:08,806 log 99594 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:17:08,979 log 99594 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:17:09,327 log 99594 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:17:09,510 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:09,698 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:09,878 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:10,065 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:10,251 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:10,430 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:10,798 log 99594 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:17:10,968 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:11,133 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:11,307 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:11,472 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:11,635 log 99594 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:17:11,799 log 99594 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:17:11,989 log 99594 7919574080 Not Found: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-14 05:17:12,169 log 99594 7919574080 Not Found: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:17:12,349 log 99594 7919574080 Not Found: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:17:12,529 log 99594 7919574080 Not Found: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:17:12,710 log 99594 7919574080 Not Found: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:17:12,898 log 99594 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:17:13,076 log 99594 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:17:13,257 log 99594 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:17:13,437 log 99594 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:17:13,618 log 99594 7919574080 Not Found: /api/document-management/document-metadata/1/
+WARNING 2025-04-14 05:17:13,811 log 99594 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 05:20:30,821 log 99942 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:20:31,336 log 99942 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:20:35,455 log 99942 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:20:35,627 log 99942 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:20:35,969 log 99942 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:20:36,307 log 99942 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:20:36,473 log 99942 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:20:36,648 log 99942 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:20:37,000 log 99942 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:20:37,187 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:37,372 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:37,551 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:37,736 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:37,921 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:38,109 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:38,473 log 99942 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:20:38,642 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:38,810 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:38,981 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:39,149 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:39,314 log 99942 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:20:39,477 log 99942 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:20:40,593 log 99942 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:20:40,774 log 99942 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:20:40,965 log 99942 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:20:41,146 log 99942 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:20:41,507 log 99942 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 05:37:57,050 log 1358 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:37:57,560 log 1358 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:38:01,664 log 1358 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:38:01,831 log 1358 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:38:02,160 log 1358 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:38:02,487 log 1358 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:38:02,652 log 1358 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:38:02,817 log 1358 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:38:03,154 log 1358 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:38:03,344 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:03,525 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:03,705 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:03,886 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:04,069 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:04,257 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:04,616 log 1358 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:38:04,783 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:04,949 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:05,115 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:05,280 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:05,448 log 1358 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:38:05,613 log 1358 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:38:06,696 log 1358 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:38:06,879 log 1358 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:38:07,068 log 1358 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:38:07,248 log 1358 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:38:07,610 log 1358 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 05:49:05,049 log 2590 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:49:05,562 log 2590 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:49:09,632 log 2590 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:49:09,842 log 2590 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:49:10,172 log 2590 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:49:10,504 log 2590 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:49:10,667 log 2590 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:49:10,838 log 2590 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:49:11,172 log 2590 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:49:11,363 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:11,543 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:11,725 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:11,906 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:12,091 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:12,278 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:12,637 log 2590 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:49:12,803 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:12,970 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:13,137 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:13,304 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:13,472 log 2590 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:49:13,636 log 2590 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:49:14,721 log 2590 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:49:14,902 log 2590 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:49:15,089 log 2590 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:49:15,269 log 2590 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:49:15,634 log 2590 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 05:56:35,239 log 3311 7919574080 Not Found: /api/document-management/documents/999/request-approval/
+WARNING 2025-04-14 05:56:35,755 log 3311 7919574080 Not Found: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 05:56:36,282 log 3311 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-14 05:56:36,793 log 3311 7919574080 Bad Request: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 05:56:37,310 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:56:37,826 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:56:38,341 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:56:38,853 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:56:39,369 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:56:39,887 log 3311 7919574080 Bad Request: /api/document-management/approvals/1/respond/
+WARNING 2025-04-14 05:56:40,395 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:56:40,901 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:56:41,464 log 3311 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-14 05:56:41,972 log 3311 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:56:42,142 log 3311 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:56:42,478 log 3311 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:56:42,811 log 3311 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:56:42,978 log 3311 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:56:43,153 log 3311 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:56:43,330 log 3311 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:56:43,499 log 3311 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:56:43,690 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:43,872 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:44,056 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:44,235 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:44,422 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:44,608 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:44,981 log 3311 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:56:45,149 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:45,316 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:45,483 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:45,648 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:45,814 log 3311 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:56:45,980 log 3311 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:56:46,161 log 3311 7919574080 Bad Request: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-14 05:56:46,344 log 3311 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:56:46,533 log 3311 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:56:46,713 log 3311 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:56:46,900 log 3311 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:56:47,081 log 3311 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:56:47,262 log 3311 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:56:47,451 log 3311 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:56:47,634 log 3311 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:56:47,817 log 3311 7919574080 Bad Request: /api/document-management/document-metadata/1/
+WARNING 2025-04-14 05:56:48,000 log 3311 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 05:58:17,983 log 3542 7919574080 Not Found: /api/document-management/documents/999/request-approval/
+WARNING 2025-04-14 05:58:18,505 log 3542 7919574080 Not Found: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 05:58:19,012 log 3542 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-14 05:58:19,525 log 3542 7919574080 Bad Request: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 05:58:20,034 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:58:20,543 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:58:21,063 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:58:21,571 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 05:58:22,083 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:58:22,593 log 3542 7919574080 Bad Request: /api/document-management/approvals/1/respond/
+WARNING 2025-04-14 05:58:23,110 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:58:23,621 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 05:58:24,136 log 3542 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-14 05:58:24,648 log 3542 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 05:58:24,816 log 3542 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:58:25,149 log 3542 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 05:58:25,480 log 3542 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:58:25,644 log 3542 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:58:25,810 log 3542 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 05:58:25,993 log 3542 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:58:26,162 log 3542 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 05:58:26,348 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:26,532 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:26,722 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:26,904 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:27,087 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:27,308 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:27,688 log 3542 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 05:58:27,854 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:28,018 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:28,184 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:28,350 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:28,516 log 3542 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 05:58:28,681 log 3542 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 05:58:28,861 log 3542 7919574080 Bad Request: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-14 05:58:29,042 log 3542 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:58:29,225 log 3542 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:58:29,405 log 3542 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:58:29,593 log 3542 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 05:58:29,773 log 3542 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:58:29,951 log 3542 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:58:30,132 log 3542 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:58:30,312 log 3542 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 05:58:30,502 log 3542 7919574080 Bad Request: /api/document-management/document-metadata/1/
+WARNING 2025-04-14 05:58:30,683 log 3542 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 06:02:56,171 log 3859 7919574080 Not Found: /api/document-management/documents/999/request-approval/
+WARNING 2025-04-14 06:02:56,680 log 3859 7919574080 Not Found: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 06:02:57,190 log 3859 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-14 06:02:57,703 log 3859 7919574080 Bad Request: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-14 06:02:58,217 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 06:02:58,735 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 06:02:59,245 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 06:02:59,755 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-14 06:03:00,265 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 06:03:00,777 log 3859 7919574080 Bad Request: /api/document-management/approvals/1/respond/
+WARNING 2025-04-14 06:03:01,299 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 06:03:01,814 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-14 06:03:02,326 log 3859 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-14 06:03:02,838 log 3859 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-14 06:03:03,007 log 3859 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 06:03:03,345 log 3859 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-14 06:03:03,680 log 3859 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 06:03:03,851 log 3859 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 06:03:04,023 log 3859 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-14 06:03:04,236 log 3859 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 06:03:04,407 log 3859 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-14 06:03:04,590 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:04,779 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:04,960 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:05,143 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:05,328 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:05,509 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:05,890 log 3859 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-14 06:03:06,059 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:06,225 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:06,395 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:06,560 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:06,726 log 3859 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-14 06:03:06,894 log 3859 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-14 06:03:07,076 log 3859 7919574080 Bad Request: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-14 06:03:07,257 log 3859 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 06:03:07,438 log 3859 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 06:03:07,625 log 3859 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 06:03:07,809 log 3859 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-14 06:03:07,991 log 3859 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 06:03:08,174 log 3859 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 06:03:08,356 log 3859 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 06:03:08,545 log 3859 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-14 06:03:08,726 log 3859 7919574080 Bad Request: /api/document-management/document-metadata/1/
+WARNING 2025-04-14 06:03:08,906 log 3859 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-14 06:03:10,593 log 3859 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-14 06:03:13,120 views 3859 7919574080 Generating document dashboard data
+INFO 2025-04-14 06:03:13,122 views 3859 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-14 06:03:13,123 views 3859 7919574080 Serving document dashboard from cache
+INFO 2025-04-14 06:03:13,476 views 3859 7919574080 Generating document dashboard data
+INFO 2025-04-14 06:03:13,478 views 3859 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-15 07:16:53,674 autoreload 54688 7919574080 Watching for file changes with StatReloader
+INFO 2025-04-15 07:17:12,405 autoreload 54750 7919574080 Watching for file changes with StatReloader
+WARNING 2025-04-15 07:20:44,863 log 55115 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-15 07:20:45,191 log 55115 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-15 07:20:45,526 log 55115 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 07:20:45,692 log 55115 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 07:20:45,857 log 55115 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 07:20:46,029 log 55115 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-15 07:20:46,194 log 55115 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-15 07:20:46,388 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:46,567 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:46,747 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:46,938 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:47,136 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:47,316 log 55115 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 07:20:47,689 log 55115 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-15 07:20:59,565 log 55163 7919574080 Bad Request: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-15 07:20:59,746 log 55163 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 07:20:59,923 log 55163 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 07:21:00,103 log 55163 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 07:21:00,286 log 55163 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 07:21:00,471 log 55163 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 07:21:00,650 log 55163 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 07:21:00,832 log 55163 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 07:21:01,011 log 55163 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 07:21:01,192 log 55163 7919574080 Bad Request: /api/document-management/document-metadata/1/
+WARNING 2025-04-15 07:21:01,381 log 55163 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-15 07:21:14,224 log 55188 7919574080 Not Found: /api/document-management/documents/999/request-approval/
+WARNING 2025-04-15 07:21:14,731 log 55188 7919574080 Not Found: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-15 07:21:15,242 log 55188 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-15 07:21:15,751 log 55188 7919574080 Bad Request: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-15 07:21:16,286 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 07:21:16,798 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 07:21:17,309 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 07:21:17,823 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 07:21:18,330 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 07:21:18,846 log 55188 7919574080 Bad Request: /api/document-management/approvals/1/respond/
+WARNING 2025-04-15 07:21:19,352 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 07:21:19,860 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 07:21:20,372 log 55188 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-15 07:21:20,886 log 55188 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-15 07:21:32,941 log 55223 7919574080 Bad Request: /api/applications/
+WARNING 2025-04-15 07:21:33,105 log 55223 7919574080 Bad Request: /api/applications/
+WARNING 2025-04-15 07:21:33,275 log 55223 7919574080 Bad Request: /api/applications/
+WARNING 2025-04-15 07:21:33,443 log 55223 7919574080 Bad Request: /api/applications/
+WARNING 2025-04-15 07:21:33,615 log 55223 7919574080 Bad Request: /api/applications/
+WARNING 2025-04-15 07:21:33,782 log 55223 7919574080 Not Found: /api/applications/999/
+WARNING 2025-04-15 07:21:33,948 log 55223 7919574080 Not Found: /api/applications/999/duplicate/
+WARNING 2025-04-15 07:21:34,114 log 55223 7919574080 Not Found: /api/applications/999/
+WARNING 2025-04-15 07:21:34,286 log 55223 7919574080 Bad Request: /api/applications/1/transition/
+WARNING 2025-04-15 07:21:34,459 log 55223 7919574080 Bad Request: /api/applications/1/transition/
+WARNING 2025-04-15 07:21:34,625 log 55223 7919574080 Not Found: /api/applications/999/transition/
+WARNING 2025-04-15 07:21:34,797 log 55223 7919574080 Bad Request: /api/applications/1/
+WARNING 2025-04-15 07:21:34,963 log 55223 7919574080 Not Found: /api/applications/999/
+WARNING 2025-04-15 07:21:46,212 log 55256 7919574080 Bad Request: /api/borrowers/
+WARNING 2025-04-15 07:21:46,385 log 55256 7919574080 Bad Request: /api/borrowers/
+WARNING 2025-04-15 07:21:46,549 log 55256 7919574080 Bad Request: /api/borrowers/
+WARNING 2025-04-15 07:21:46,718 log 55256 7919574080 Bad Request: /api/borrowers/
+WARNING 2025-04-15 07:21:46,882 log 55256 7919574080 Bad Request: /api/borrowers/
+WARNING 2025-04-15 07:21:47,049 log 55256 7919574080 Not Found: /api/borrowers/999/
+WARNING 2025-04-15 07:21:47,381 log 55256 7919574080 Bad Request: /api/borrowers/1/
+WARNING 2025-04-15 07:21:47,546 log 55256 7919574080 Not Found: /api/borrowers/999/
+WARNING 2025-04-15 07:21:47,713 log 55256 7919574080 Bad Request: /api/borrowers/1/
+WARNING 2025-04-15 07:21:47,875 log 55256 7919574080 Not Found: /api/borrowers/999/
+WARNING 2025-04-15 07:21:58,946 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,110 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,277 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,440 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,607 log 55278 7919574080 Not Found: /api/brokers/999/
+WARNING 2025-04-15 07:21:59,775 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,775 log 55278 7919574080 Bad Request: /api/brokers/
+WARNING 2025-04-15 07:21:59,943 log 55278 7919574080 Bad Request: /api/brokers/1/
+WARNING 2025-04-15 07:22:00,109 log 55278 7919574080 Not Found: /api/brokers/999/
+WARNING 2025-04-15 07:22:00,274 log 55278 7919574080 Bad Request: /api/brokers/1/
+WARNING 2025-04-15 07:22:00,437 log 55278 7919574080 Not Found: /api/brokers/999/
+WARNING 2025-04-15 07:22:09,912 log 55300 7919574080 Not Found: /api/products/9999/fees/
+WARNING 2025-04-15 07:22:10,078 log 55300 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-15 07:22:10,245 log 55300 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-15 07:22:10,413 log 55300 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-15 07:22:10,576 log 55300 7919574080 Bad Request: /api/products/1/fees/
+WARNING 2025-04-15 07:22:10,739 log 55300 7919574080 Bad Request: /api/products/1/fees/1/
+WARNING 2025-04-15 07:22:10,908 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,071 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,236 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,403 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,569 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,732 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,900 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,900 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:11,901 log 55300 7919574080 Bad Request: /api/products/
+WARNING 2025-04-15 07:22:12,064 log 55300 7919574080 Bad Request: /api/products/1/
+WARNING 2025-04-15 07:22:21,185 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,383 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,384 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,558 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,733 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,734 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,735 log 55325 7919574080 Bad Request: /api/calculator/application-fees/
+WARNING 2025-04-15 07:22:21,907 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:21,908 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,078 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,252 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,422 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,590 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,591 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,592 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,592 log 55325 7919574080 Bad Request: /api/calculator/fees/
+WARNING 2025-04-15 07:22:22,766 log 55325 7919574080 Bad Request: /api/calculator/fees/1/
+WARNING 2025-04-15 07:22:22,768 log 55325 7919574080 Bad Request: /api/calculator/fees/1/
+WARNING 2025-04-15 07:22:22,942 log 55325 7919574080 Bad Request: /api/calculator/application-fees/1/waive/
+WARNING 2025-04-15 07:22:23,317 log 55325 7919574080 Bad Request: /api/calculator/affordability/
+WARNING 2025-04-15 07:22:23,317 log 55325 7919574080 Bad Request: /api/calculator/affordability/
+WARNING 2025-04-15 07:22:23,318 log 55325 7919574080 Bad Request: /api/calculator/affordability/
+WARNING 2025-04-15 07:22:23,492 log 55325 7919574080 Bad Request: /api/calculator/amortization-schedule/
+WARNING 2025-04-15 07:22:23,494 log 55325 7919574080 Bad Request: /api/calculator/amortization-schedule/
+WARNING 2025-04-15 07:22:23,671 log 55325 7919574080 Not Found: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:23,842 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,016 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,016 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,189 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,360 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,361 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,537 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,537 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,538 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,538 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,711 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,711 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:24,713 log 55325 7919574080 Bad Request: /api/calculator/calculations/calculate/
+WARNING 2025-04-15 07:22:25,090 log 55325 7919574080 Bad Request: /api/calculator/loan-summary/
+WARNING 2025-04-15 07:22:25,091 log 55325 7919574080 Bad Request: /api/calculator/loan-summary/
+WARNING 2025-04-15 07:22:25,266 log 55325 7919574080 Bad Request: /api/calculator/monthly-payment/
+WARNING 2025-04-15 07:22:25,266 log 55325 7919574080 Bad Request: /api/calculator/monthly-payment/
+WARNING 2025-04-15 07:22:25,438 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,439 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,439 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,609 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,609 log 55325 7919574080 Not Found: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,610 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,778 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:25,779 log 55325 7919574080 Bad Request: /api/calculator/compare-products/
+WARNING 2025-04-15 07:22:26,122 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,123 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,123 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,291 log 55325 7919574080 Not Found: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,291 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,464 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:26,464 log 55325 7919574080 Bad Request: /api/calculator/product-payment/
+WARNING 2025-04-15 07:22:40,198 log 55726 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-15 07:22:40,388 log 55726 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-15 07:22:40,560 log 55726 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-15 07:22:40,727 log 55726 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-15 07:22:40,729 log 55726 7919574080 Bad Request: /api/notifications/
+WARNING 2025-04-15 07:22:40,895 log 55726 7919574080 Bad Request: /api/notifications/1/

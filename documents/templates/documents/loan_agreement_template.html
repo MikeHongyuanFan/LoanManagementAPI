@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Agreement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .date {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .parties {
+            margin-bottom: 20px;
+        }
+        .party {
+            margin-bottom: 10px;
+        }
+        .party-label {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .terms ol {
+            margin-left: 20px;
+        }
+        .terms li {
+            margin-bottom: 10px;
+        }
+        .signatures {
+            margin-top: 50px;
+        }
+        .signature-line {
+            display: inline-block;
+            width: 45%;
+            border-top: 1px solid #000;
+            margin-top: 50px;
+            margin-right: 5%;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 10px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Loan Agreement</h1>
+    </div>
+    
+    <div class="date">
+        <p>Date: {{ current_date }}</p>
+    </div>
+    
+    <div class="section">
+        <p>THIS LOAN AGREEMENT is made between:</p>
+        
+        <div class="parties">
+            <div class="party">
+                <span class="party-label">Lender:</span> {{ company_name }}<br>
+                {{ company_address }}<br>
+                Phone: {{ company_phone }}<br>
+                Email: {{ company_email }}
+            </div>
+            
+            <div class="party">
+                <span class="party-label">Borrower:</span> {{ borrower_name }}<br>
+                Email: {{ borrower_email }}<br>
+                Phone: {{ borrower_phone }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">LOAN DETAILS</div>
+        
+        <table>
+            <tr>
+                <th>Loan Amount:</th>
+                <td>{{ loan_amount }}</td>
+            </tr>
+            <tr>
+                <th>Interest Rate:</th>
+                <td>{{ interest_rate }}</td>
+            </tr>
+            <tr>
+                <th>Loan Term:</th>
+                <td>{{ loan_term }}</td>
+            </tr>
+            <tr>
+                <th>Start Date:</th>
+                <td>{{ start_date }}</td>
+            </tr>
+            <tr>
+                <th>End Date:</th>
+                <td>{{ end_date }}</td>
+            </tr>
+            <tr>
+                <th>Payment Frequency:</th>
+                <td>{{ payment_frequency }}</td>
+            </tr>
+            <tr>
+                <th>Payment Amount:</th>
+                <td>{{ payment_amount }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section terms">
+        <div class="section-title">TERMS AND CONDITIONS</div>
+        
+        <ol>
+            <li><strong>Loan Amount:</strong> The Lender agrees to lend the Borrower the principal sum as specified above.</li>
+            <li><strong>Interest Rate:</strong> The loan shall bear interest at the rate specified above.</li>
+            <li><strong>Repayment:</strong> The Borrower shall repay the loan in installments as specified above.</li>
+            <li><strong>Late Payment:</strong> If any payment is late, the Borrower shall pay a late fee of 5% of the payment amount.</li>
+            <li><strong>Prepayment:</strong> The Borrower may prepay the loan in whole or in part at any time without penalty.</li>
+            <li><strong>Default:</strong> If the Borrower defaults on any payment, the entire loan balance shall become immediately due.</li>
+            <li><strong>Security:</strong> This loan is secured by the property and assets specified in the attached security agreement, if applicable.</li>
+            <li><strong>Governing Law:</strong> This Agreement shall be governed by and construed in accordance with the laws of the state in which the Lender is located.</li>
+            <li><strong>Amendments:</strong> This Agreement may only be amended in writing signed by both parties.</li>
+            <li><strong>Entire Agreement:</strong> This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof.</li>
+        </ol>
+    </div>
+    
+    <div class="section signatures">
+        <div class="section-title">SIGNATURES</div>
+        
+        <div class="signature-line">
+            Lender Signature<br>
+            {{ company_name }}
+        </div>
+        
+        <div class="signature-line">
+            Borrower Signature<br>
+            {{ borrower_name }}
+        </div>
+        
+        <div class="signature-line">
+            Date
+        </div>
+        
+        <div class="signature-line">
+            Date
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Loan Agreement - Reference Number: {{ application_id }}</p>
+    </div>
+</body>
+</html>

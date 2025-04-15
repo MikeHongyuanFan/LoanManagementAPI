@@ -1,0 +1,197 @@
+**CRM Loan Management System - Application Design and Database Schema**
+
+---
+
+### Application Design Structure
+
+#### Development Phases
+
+**Phase 1: Basic Framework & Setup**
+- Set up project repository and CI/CD pipeline.
+- Initialize backend (Django) and frontend (HTML template).
+- Establish MySQL database and ORM mapping.
+- Implement authentication system (JWT/session-based).
+- Define base routing and role-based access control.
+
+**Phase 2: Core Entities & Relationships**
+- Create foundational modules: Users, Borrowers, Brokers, Products.
+- Develop database schema with primary and foreign keys.
+- Build admin interfaces for managing core data.
+
+**Phase 3: Application Lifecycle Engine**
+- Implement Application Form with multi-step input flow.
+- Integrate Stage Transition Engine with notifications.
+- Build document generator (PDF generation & DocuSign integration).
+- Set up application dashboard with filters and indicators.
+
+**Phase 4: Loan Calculations & Financial Modules**
+- Create Loan Calculator with dynamic fee and net/gross calculation.
+- Develop Fees Management and Repayment Schedule manager.
+- Implement Loan Extension tracking and recalculation.
+
+**Phase 5: Linking & Advanced User Actions**
+- Build Borrower and Broker profile pages.
+- Enable entity linking: Brokers, BDMs, Valuers, QS.
+- Introduce Application Duplication and prefill functionality.
+
+**Phase 6: Document & Notification Infrastructure**
+- Finalize Document Upload Manager with drag-and-drop UI.
+- Create Notification Management with scheduling logic and tracking.
+- Add Notes system with reminders and calendar integration.
+
+**Phase 7: Productization & Settings Management**
+- Add Product Configuration Panel with advanced rules per product.
+- Enable dynamic settings: SLA durations, notification intervals.
+
+**Phase 8: Testing, QA, and Deployment**
+- Write unit and integration tests.
+- Conduct UAT (User Acceptance Testing) with internal users.
+- Final deployment on cloud infrastructure (e.g., Docker + CI/CD).
+
+---
+
+### Module-Specific Features (Phase-aligned)
+
+#### 1. Application Module
+(Phases 3, 4, 5, 6)
+- Application Dashboard with filters and indicators.
+- Multi-step Application Form with borrower, loan, product, and documents.
+- Stage Management with SLA rules and alerts.
+- Document Generator (Disbursement Letter, Indicative Letter, Application Form, Loan Agreement).
+- Document Upload Manager with drag-and-drop, preview, and categorization.
+- Notes with reminder logic and in-app/email alerts.
+- Fees & Invoice tracking, with upload support.
+- Loan Calculator to determine net/gross and repayment.
+- Repayment Manager for scheduling and status tracking.
+- Loan Extension system to generate new terms and versions.
+- Entity Linking for borrowers, brokers, valuers, QS.
+- Application Duplication functionality.
+
+#### 2. Borrower Module
+(Phases 2, 5)
+- Borrower Directory with search and filters.
+- Borrower Profile page with repayment accounts and application history.
+
+#### 3. Broker Module
+(Phases 2, 5)
+- Broker Directory and registration tools.
+- Profile view with commission tracking and borrower associations.
+
+#### 4. Valuer Module
+(Phases 2, 5)
+- Valuer management and linkage to applications.
+- Upload and access to appraisal reports.
+
+#### 5. QS Module
+(Phases 2, 5)
+- Manage QS profiles.
+- Assign and link to applications for cost tracking.
+
+#### 6. Product Module
+(Phases 2, 7)
+- Product list management.
+- Configuration of lending rules per product.
+- Attachment of product-related templates.
+
+#### 7. Account Module
+(Phase 1)
+- Authentication and role-based access control.
+- Admin user creation and password management.
+
+#### 8. Notification Management
+(Phase 6)
+- Reminder emails for repayments and loan maturity.
+- Notifications for stage delays and overdue payments.
+- Notes reminder alerts.
+- Notification log with status tracking.
+
+---
+
+### Database Schema
+
+#### Users
+- `user_id` (PK)
+- `email` (Unique)
+- `password_hash`
+- `role`
+- `created_at`, `updated_at`
+
+#### Borrowers
+- `borrower_id` (PK)
+- `first_name`, `last_name`
+- `dob`, `email`, `phone_number`, `state`
+- `repayment_account`
+- `created_at`, `updated_at`
+
+#### Brokers
+- `broker_id` (PK)
+- `first_name`, `last_name`, `email`, `phone_number`
+- `commission_account`
+- `created_at`, `updated_at`
+
+#### Applications
+- `application_id` (PK)
+- FK: `borrower_id`, `broker_id`, `bdm_id`, `referral_id`, `valuer_id`, `qs_id`, `product_id`
+- `status`, `stage`, `gross_loan_amount`, `net_loan_amount`
+- `created_at`, `updated_at`
+
+#### Documents
+- `document_id` (PK)
+- FK: `application_id`
+- `document_type`, `file_path`
+- `created_at`, `updated_at`
+
+#### Notes
+- `note_id` (PK)
+- FK: `application_id`, `user_id`
+- `content`, `reminder_date`
+- `created_at`, `updated_at`
+
+#### Fees
+- `fee_id` (PK)
+- FK: `application_id`
+- `amount`, `status`, `invoice_path`
+- `created_at`, `updated_at`
+
+#### Repayments
+- `repayment_id` (PK)
+- FK: `application_id`
+- `due_date`, `amount`, `invoice_path`, `status`
+- `created_at`, `updated_at`
+
+#### LoanExtensions
+- `extension_id` (PK)
+- FK: `application_id`
+- `new_rate`, `new_loan_amount`, `new_repayment_schedule`
+- `created_at`, `updated_at`
+
+#### Products
+- `product_id` (PK)
+- `name`, `description`, `document_path`
+- `created_at`, `updated_at`
+
+#### Valuers
+- `valuer_id` (PK)
+- `name`, `contact_info`
+- `created_at`, `updated_at`
+
+#### QS (Quantity Surveyors)
+- `qs_id` (PK)
+- `name`, `contact_info`
+- `created_at`, `updated_at`
+
+#### Referrals
+- `referral_id` (PK)
+- `name`, `source`
+- `created_at`, `updated_at`
+
+#### Notifications
+- `notification_id` (PK)
+- `type`, `recipient_id`, `related_application_id`
+- `trigger_date`, `sent_status`
+- `created_at`, `updated_at`
+
+---
+
+*This full design includes the application structure, detailed phased implementation plan, module functionality, and a normalized database schema for a scalable, maintainable loan CRM system.*
+

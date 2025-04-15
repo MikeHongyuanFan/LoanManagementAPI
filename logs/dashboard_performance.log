@@ -76,3 +76,14 @@
 2025-04-14 06:03:13,122 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.003s
 2025-04-14 06:03:13,123 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.001s
 2025-04-14 06:03:13,478 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.003s
+2025-04-15 01:22:03,072 Dashboard API: POST /api/dashboard/widgets/ - 201 - 0.002s
+2025-04-15 01:22:03,455 Dashboard API: GET /api/dashboard/layouts/ - 200 - 0.003s
+2025-04-15 01:22:03,784 Dashboard API: GET /api/dashboard/metrics/ - 200 - 0.001s
+2025-04-15 01:22:04,111 Dashboard API: GET /api/dashboard/metrics/ - 200 - 0.001s
+2025-04-15 01:22:04,438 Dashboard API: GET /api/dashboard/metrics/ - 401 - 0.000s
+2025-04-15 01:22:04,770 Dashboard API: PATCH /api/dashboard/layouts/1/ - 200 - 0.003s
+2025-04-15 01:22:05,113 Dashboard API: GET /api/dashboard/preferences/ - 200 - 0.008s
+2025-04-15 01:22:05,450 Dashboard API: GET /api/dashboard/widgets/ - 200 - 0.002s
+2025-04-15 01:22:06,970 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.003s
+2025-04-15 01:22:06,971 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.001s
+2025-04-15 01:22:07,325 Dashboard API: GET /api/dashboard/documents/ - 200 - 0.003s

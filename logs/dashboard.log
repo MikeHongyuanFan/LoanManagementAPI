@@ -869,3 +869,54 @@ INFO 2025-04-14 06:03:13,122 views 3859 7919574080 Document dashboard data gener
 INFO 2025-04-14 06:03:13,123 views 3859 7919574080 Serving document dashboard from cache
 INFO 2025-04-14 06:03:13,476 views 3859 7919574080 Generating document dashboard data
 INFO 2025-04-14 06:03:13,478 views 3859 7919574080 Document dashboard data generated in 0.002s
+WARNING 2025-04-15 01:21:49,931 log 22442 7919574080 Not Found: /api/document-management/documents/999/request-approval/
+WARNING 2025-04-15 01:21:50,453 log 22442 7919574080 Not Found: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-15 01:21:50,979 log 22442 7919574080 Bad Request: /api/document-management/approvals/
+WARNING 2025-04-15 01:21:51,497 log 22442 7919574080 Bad Request: /api/document-management/documents/1/request-approval/
+WARNING 2025-04-15 01:21:52,016 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 01:21:52,536 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 01:21:53,056 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 01:21:53,577 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/
+WARNING 2025-04-15 01:21:54,091 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 01:21:54,603 log 22442 7919574080 Bad Request: /api/document-management/approvals/1/respond/
+WARNING 2025-04-15 01:21:55,129 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 01:21:55,644 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/1/respond/
+WARNING 2025-04-15 01:21:56,161 log 22442 7919574080 Bad Request: /api/document-management/approvals/1/
+WARNING 2025-04-15 01:21:56,672 log 22442 7919574080 Bad Request: /api/document-management/signature-requests/1/
+WARNING 2025-04-15 01:21:56,841 log 22442 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-15 01:21:57,173 log 22442 7919574080 Bad Request: /api/document-management/categories/
+WARNING 2025-04-15 01:21:57,504 log 22442 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 01:21:57,670 log 22442 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 01:21:57,838 log 22442 7919574080 Bad Request: /api/document-management/collections/
+WARNING 2025-04-15 01:21:58,022 log 22442 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-15 01:21:58,192 log 22442 7919574080 Bad Request: /api/document-management/collections/1/
+WARNING 2025-04-15 01:21:58,378 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:58,567 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:58,750 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:58,932 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:59,116 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:59,299 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:21:59,682 log 22442 7919574080 Bad Request: /api/document-management/documents/1/
+WARNING 2025-04-15 01:21:59,850 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:22:00,016 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:22:00,186 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:22:00,353 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:22:00,519 log 22442 7919574080 Bad Request: /api/document-management/documents/
+WARNING 2025-04-15 01:22:00,685 log 22442 7919574080 Not Found: /api/document-management/documents/999/
+WARNING 2025-04-15 01:22:00,868 log 22442 7919574080 Bad Request: /api/document-management/documents/1/update-metadata/
+WARNING 2025-04-15 01:22:01,052 log 22442 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 01:22:01,234 log 22442 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 01:22:01,424 log 22442 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 01:22:01,607 log 22442 7919574080 Bad Request: /api/document-management/document-metadata/
+WARNING 2025-04-15 01:22:01,787 log 22442 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 01:22:01,968 log 22442 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 01:22:02,152 log 22442 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 01:22:02,344 log 22442 7919574080 Bad Request: /api/document-management/metadata-fields/
+WARNING 2025-04-15 01:22:02,528 log 22442 7919574080 Bad Request: /api/document-management/document-metadata/1/
+WARNING 2025-04-15 01:22:02,710 log 22442 7919574080 Bad Request: /api/document-management/metadata-fields/1/
+WARNING 2025-04-15 01:22:04,438 log 22442 7919574080 Unauthorized: /api/dashboard/metrics/
+INFO 2025-04-15 01:22:06,967 views 22442 7919574080 Generating document dashboard data
+INFO 2025-04-15 01:22:06,969 views 22442 7919574080 Document dashboard data generated in 0.002s
+INFO 2025-04-15 01:22:06,971 views 22442 7919574080 Serving document dashboard from cache
+INFO 2025-04-15 01:22:07,323 views 22442 7919574080 Generating document dashboard data
+INFO 2025-04-15 01:22:07,325 views 22442 7919574080 Document dashboard data generated in 0.002s

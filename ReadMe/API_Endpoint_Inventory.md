@@ -99,22 +99,24 @@ This document provides a comprehensive inventory of all implemented API endpoint
 | `/api/document-management/relationships/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete a document relationship | Updated relationship data | Relationship details |
 | `/api/document-management/metadata-fields/` | GET, POST | List all metadata fields or create a new one | Metadata field data | List of metadata fields or created field details |
 | `/api/document-management/metadata-fields/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete a metadata field | Updated metadata field data | Metadata field details |
-| `/api/document-management/document-metadata/` | GET, POST | List all document metadata or create a new one | Document metadata data | List of document metadata or created metadata details |
-| `/api/document-management/document-metadata/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete document metadata | Updated document metadata data | Document metadata details |
-| `/api/document-management/documents/{id}/update-metadata/` | POST | Update metadata for a document | Metadata key-value pairs | Updated document with metadata |
+| `/api/document-management/metadata/` | GET, POST | List all document metadata or create a new one | Document metadata data | List of document metadata or created metadata details |
+| `/api/document-management/metadata/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete document metadata | Updated document metadata data | Document metadata details |
+| `/api/document-management/documents/{id}/metadata/` | POST | Update metadata for a document | Metadata key-value pairs | Updated document with metadata |
 | `/api/document-management/signature-requests/{id}/respond/` | POST | Respond to a signature request | Response data (approve/reject) | Updated signature request |
 | `/api/document-management/documents/{id}/request-approval/` | POST | Request approval for a document | Approval request data | Created approval request |
 | `/api/document-management/approvals/{id}/respond/` | POST | Respond to an approval request | Response data (approve/reject) | Updated approval request |
 | `/api/document-management/approvals/{id}/cancel/` | POST | Cancel an approval request | - | Cancelled approval request |
 | `/api/document-management/approvals/{id}/reassign/` | POST | Reassign an approval request | New assignee data | Reassigned approval request |
-| `/api/document-management/documents/{id}/create-version/` | POST | Create a new version of a document | Document content | Created document version |
-| `/api/document-management/documents/{id}/versions/` | GET | Get all versions of a document | - | List of document versions |
-| `/api/document-management/documents/{id}/revert/{version_id}/` | POST | Revert a document to a previous version | - | Updated document |
-| `/api/document-management/versions/compare/{version1_id}/{version2_id}/` | GET | Compare two document versions | - | Comparison results |
-| `/api/document-management/search/` | GET | Advanced document search | Search parameters | Search results |
-| `/api/document-management/search/full-text/` | GET | Full-text document search | Search query | Search results |
-| `/api/document-management/documents/recent/` | GET | Get recent documents | - | List of recent documents |
-| `/api/document-management/documents/suggestions/` | GET | Get document suggestions | Query parameters | List of suggested documents |
+| `/api/document-management/documents/{id}/add-relationship/` | POST | Add a relationship to a document | Target document ID, relationship type, description | Created relationship |
+| `/api/document-management/documents/{id}/remove-relationship/` | POST | Remove a relationship from a document | Relationship ID | Success message |
+| `/api/document-management/documents/{id}/relationships/` | GET | Get all relationships for a document | - | List of document relationships |
+| `/api/document-management/relationships/add/` | POST | Add a relationship between documents | Source document ID, target document ID, relationship type | Created relationship |
+| `/api/document-management/relationships/{id}/remove/` | DELETE | Remove a relationship | - | Success message |
+| `/api/document-management/collections/{id}/add-documents/` | POST | Add documents to a collection | List of document IDs | Updated collection |
+| `/api/document-management/collections/{id}/remove-documents/` | POST | Remove documents from a collection | List of document IDs | Updated collection |
+| `/api/document-management/documents/{id}/comments/` | GET | Get all comments for a document | - | List of document comments |
+| `/api/document-management/documents/{id}/comments/create/` | POST | Create a comment for a document | Comment text, user ID | Created comment |
+| `/api/document-management/comments/{id}/` | GET, PUT, DELETE | Retrieve, update or delete a comment | Updated comment data | Comment details |
 
 ## Notifications
 
@@ -124,6 +126,8 @@ This document provides a comprehensive inventory of all implemented API endpoint
 | `/api/notifications/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete a notification | Updated notification data | Notification details |
 | `/api/notes/` | GET, POST | List all notes or create a new one | Note data | List of notes or created note details |
 | `/api/notes/{id}/` | GET, PUT, PATCH, DELETE | Retrieve, update or delete a note | Updated note data | Note details |
+| `/api/notes/create/` | POST | Create a new note | Note data | Created note details |
+| `/api/notes/{id}/` | PUT, PATCH | Update a note | Updated note data | Updated note details |
 
 ## Dashboard
 

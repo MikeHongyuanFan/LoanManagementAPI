@@ -1,18 +1,21 @@
 # API Relationship Data Flow Analysis
 
-This document analyzes the data flow between connected API endpoints in the CRM Loan Management System, completing the third part of our relationship validation process.
+This document analyzes the data flow between connected API endpoints in the CRM Loan Management System, identifying the current implementation status and areas that need further work.
 
 ## Data Flow Analysis Methodology
 
-For each confirmed relationship, we examined:
+For each relationship, we examined:
 1. The data passed between services
 2. The direction of data flow
 3. The completeness of the data exchange
 4. Potential performance concerns
+5. Implementation status
 
-## Applications API Data Flows
+## Core Entity Relationships
 
-### `/api/applications/` ↔ `/api/borrowers/{id}/`
+### 1. Applications API Data Flows
+
+#### `/api/applications/` ↔ `/api/borrowers/{id}/`
 
 **Data Flow Direction:** Bidirectional
 - Applications retrieve borrower data during creation/retrieval
@@ -22,14 +25,15 @@ For each confirmed relationship, we examined:
 - Application → Borrower: borrower_id (foreign key)
 - Borrower → Application: borrower profile data (name, contact info, etc.)
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship ensures data integrity
 - ApplicationSerializer includes borrower_id for proper linking
+- Reverse relationship properly configured with related_name='applications'
 
 **Performance Considerations:**
 - Consider adding select_related('borrower') in application queries to optimize database access
 
-### `/api/applications/` ↔ `/api/brokers/{id}/`
+#### `/api/applications/` ↔ `/api/brokers/{id}/`
 
 **Data Flow Direction:** Bidirectional
 - Applications retrieve broker data during creation/retrieval
@@ -39,14 +43,15 @@ For each confirmed relationship, we examined:
 - Application → Broker: broker_id (foreign key, optional)
 - Broker → Application: broker profile data
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Optional foreign key allows applications without brokers
 - ApplicationSerializer includes broker_id for proper linking
+- Reverse relationship properly configured with related_name='applications'
 
 **Performance Considerations:**
-- None identified
+- Consider adding select_related('broker') when broker data is needed
 
-### `/api/applications/` ↔ `/api/products/{id}/`
+#### `/api/applications/` ↔ `/api/products/{id}/`
 
 **Data Flow Direction:** Bidirectional
 - Applications retrieve product data during creation/retrieval
@@ -56,118 +61,52 @@ For each confirmed relationship, we examined:
 - Application → Product: product_id (foreign key)
 - Product → Application: product details (interest rate, terms, etc.)
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship ensures data integrity
 - ApplicationSerializer includes product_id for proper linking
+- Reverse relationship properly configured with related_name='applications'
 
 **Performance Considerations:**
 - Consider adding select_related('product') in application queries to optimize database access
 
-### `/api/applications/` ↔ `/api/fees/?application={id}`
+#### `/api/applications/` ↔ `/api/valuers/{id}/`, `/api/qs/{id}/`, `/api/referrals/{id}/`
 
 **Data Flow Direction:** Bidirectional
-- Applications retrieve associated fees
-- Fees are linked to specific applications
+- Applications retrieve supporting entity data during creation/retrieval
+- Supporting entities can access their applications through reverse relationship
 
 **Data Exchanged:**
-- Application → Fee: application_id (foreign key)
-- Fee → Application: fee details (name, amount, status)
+- Application → Supporting Entity: entity_id (foreign key, optional)
+- Supporting Entity → Application: entity profile data
 
-**Implementation Quality:** ✅ Complete
-- Foreign key relationship with related_name='fees' allows easy access
-- ApplicationSerializer includes fees with FeeSerializer
-
-**Performance Considerations:**
-- Consider using prefetch_related('fees') when retrieving applications with fee data
-
-### `/api/applications/` ↔ `/api/repayments/?application={id}`
-
-**Data Flow Direction:** Bidirectional
-- Applications retrieve associated repayments
-- Repayments are linked to specific applications
-
-**Data Exchanged:**
-- Application → Repayment: application_id (foreign key)
-- Repayment → Application: repayment details (due_date, amount, status)
-
-**Implementation Quality:** ✅ Complete
-- Foreign key relationship with related_name='repayments' allows easy access
-- ApplicationSerializer includes repayments with RepaymentSerializer
+**Implementation Status:** ✅ Complete
+- Optional foreign keys allow applications without these entities
+- ApplicationSerializer includes entity_ids for proper linking
+- Reverse relationships properly configured with related_name='applications'
 
 **Performance Considerations:**
-- Consider using prefetch_related('repayments') when retrieving applications with repayment data
+- Consider adding select_related() for these entities when needed
 
-### `/api/applications/` ↔ `/api/loan-extensions/?application={id}`
+### 2. Document Management API Data Flows
 
-**Data Flow Direction:** Bidirectional
-- Applications retrieve associated loan extensions
-- Loan extensions are linked to specific applications
-
-**Data Exchanged:**
-- Application → LoanExtension: application_id (foreign key)
-- LoanExtension → Application: extension details (new_rate, new_loan_amount)
-
-**Implementation Quality:** ✅ Complete
-- Foreign key relationship with related_name='extensions' allows easy access
-- ApplicationSerializer includes extensions with LoanExtensionSerializer
-
-**Performance Considerations:**
-- Consider using prefetch_related('extensions') when retrieving applications with extension data
-
-### `/api/applications/` ↔ `/api/notes/?application={id}`
+#### `/api/document-management/documents/` ↔ `/api/applications/{id}/`
 
 **Data Flow Direction:** Bidirectional
-- Applications retrieve associated notes
-- Notes are linked to specific applications
-
-**Data Exchanged:**
-- Application → Note: application_id (foreign key)
-- Note → Application: note details (content, user, reminder_date)
-
-**Implementation Quality:** ✅ Complete
-- Foreign key relationship with related_name='notes' allows easy access
-- Notes are properly linked to applications in the Note model
-
-**Performance Considerations:**
-- Consider using prefetch_related('notes') when retrieving applications with note data
-
-### `/api/applications/` ↔ `/api/notifications/?related_application={id}`
-
-**Data Flow Direction:** Bidirectional
-- Applications trigger notifications on status changes
-- Notifications are linked to specific applications
-
-**Data Exchanged:**
-- Application → Notification: related_application_id (foreign key)
-- Notification → Application: notification details (title, message, type)
-
-**Implementation Quality:** ✅ Complete
-- Foreign key relationship with related_name='notifications' allows easy access
-- Notifications are properly linked to applications in the Notification model
-
-**Performance Considerations:**
-- None identified
-
-### `/api/applications/` ↔ `/api/document-management/documents/?application={id}`
-
-**Data Flow Direction:** Bidirectional
-- Applications retrieve associated documents
 - Documents are linked to specific applications
+- Applications can retrieve their associated documents
 
 **Data Exchanged:**
-- Application → Document: application_id (foreign key)
-- Document → Application: document details (title, file, status)
+- Document → Application: application_id (foreign key, optional)
+- Application → Document: application details
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship with related_name='documents' allows easy access
-- Documents are properly linked to applications in the Document model
+- DocumentSerializer includes application_id for proper linking
 
 **Performance Considerations:**
 - Consider using prefetch_related('documents') when retrieving applications with document data
 
-## Document Management API Data Flows
-
-### `/api/document-management/documents/` ↔ `/api/document-management/approvals/`
+#### `/api/document-management/documents/` ↔ `/api/document-management/approvals/`
 
 **Data Flow Direction:** Bidirectional
 - Documents have approval workflows
@@ -177,14 +116,14 @@ For each confirmed relationship, we examined:
 - Document → Approval: document_id (foreign key)
 - Approval → Document: approval details (reviewer, status, comments)
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship with related_name='approvals' allows easy access
-- Approvals are properly linked to documents in the DocumentApproval model
+- DocumentApprovalSerializer includes document_id for proper linking
 
 **Performance Considerations:**
 - Consider using select_related('document') in approval queries to optimize database access
 
-### `/api/document-management/documents/` ↔ `/api/document-management/signature-requests/`
+#### `/api/document-management/documents/` ↔ `/api/document-management/signature-requests/`
 
 **Data Flow Direction:** Bidirectional
 - Documents have signature requests
@@ -194,14 +133,14 @@ For each confirmed relationship, we examined:
 - Document → SignatureRequest: document_id (foreign key)
 - SignatureRequest → Document: request details (signer, status, message)
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship with related_name='signature_requests' allows easy access
-- Signature requests are properly linked to documents in the DocumentSignatureRequest model
+- DocumentSignatureRequestSerializer includes document_id for proper linking
 
 **Performance Considerations:**
 - Consider using select_related('document') in signature request queries to optimize database access
 
-### `/api/document-management/signature-requests/` ↔ `/api/document-management/signatures/`
+#### `/api/document-management/signature-requests/` ↔ `/api/document-management/signatures/`
 
 **Data Flow Direction:** One-way (SignatureRequest → Signature)
 - Signature requests create signatures when completed
@@ -211,103 +150,371 @@ For each confirmed relationship, we examined:
 - SignatureRequest → Signature: signature_request_id (one-to-one relationship)
 - Signature contains: signature_type, signature_data, verification_hash
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - One-to-one relationship with related_name='signature' ensures proper linking
-- Signatures are properly linked to signature requests in the DocumentSignature model
+- DocumentSignatureSerializer includes signature_request_id for proper linking
 
 **Performance Considerations:**
 - None identified
 
-## Calculator API Data Flows
+#### `/api/document-management/documents/` ↔ `/api/document-management/collections/`
 
-### `/api/calculator/calculations/` ↔ `/api/calculator/repayments/`
+**Data Flow Direction:** Many-to-Many
+- Documents can belong to multiple collections
+- Collections can contain multiple documents
 
-**Data Flow Direction:** One-way (Calculation → RepaymentSchedule)
-- Calculations generate repayment schedules
+**Data Exchanged:**
+- Document → Collection: ManyToMany relationship
+- Collection → Document: collection details (name, description)
+
+**Implementation Status:** ✅ Complete
+- ManyToMany relationship allows flexible document organization
+- DocumentSerializer includes collections field
+- CollectionSerializer includes documents field
+
+**Performance Considerations:**
+- Consider using prefetch_related('collections') when retrieving documents with collection data
+- Consider using prefetch_related('documents') when retrieving collections with document data
+
+#### `/api/document-management/documents/` ↔ `/api/document-management/relationships/`
+
+**Data Flow Direction:** Bidirectional
+- Documents can have relationships with other documents
+- Relationships link source and target documents
+
+**Data Exchanged:**
+- Document → Relationship: source_document_id or target_document_id (foreign key)
+- Relationship → Document: relationship details (type, description)
+
+**Implementation Status:** ✅ Complete
+- Foreign key relationships with related_name='related_to' and 'related_from' allow easy access
+- DocumentRelationshipSerializer includes source_document_id and target_document_id for proper linking
+
+**Performance Considerations:**
+- Consider using select_related('source_document', 'target_document') in relationship queries
+
+### 3. Calculator API Data Flows
+
+#### `/api/calculator/calculations/` ↔ `/api/applications/{id}/`
+
+**Data Flow Direction:** One-to-One
+- Each application has one calculation
+- Each calculation belongs to one application
+
+**Data Exchanged:**
+- Calculation → Application: application_id (one-to-one relationship)
+- Application → Calculation: application details
+
+**Implementation Status:** ✅ Complete
+- One-to-one relationship with related_name='calculation' ensures proper linking
+- LoanCalculationSerializer includes application_id for proper linking
+
+**Performance Considerations:**
+- Consider using select_related('calculation') when retrieving applications with calculation data
+
+#### `/api/calculator/calculations/` ↔ `/api/calculator/repayments/`
+
+**Data Flow Direction:** One-to-Many
+- Calculations generate multiple repayment schedule entries
 - Repayment schedules are linked to specific calculations
 
 **Data Exchanged:**
 - Calculation → RepaymentSchedule: calculation_id (foreign key)
 - RepaymentSchedule contains: payment details (number, date, amount, principal, interest)
 
-**Implementation Quality:** ✅ Complete
+**Implementation Status:** ✅ Complete
 - Foreign key relationship with related_name='repayments' allows easy access
-- Repayment schedules are properly linked to calculations in the RepaymentSchedule model
+- RepaymentScheduleSerializer includes calculation_id for proper linking
 
 **Performance Considerations:**
 - Consider using prefetch_related('repayments') when retrieving calculations with repayment data
 
-### `/api/calculator/calculations/` ↔ `/api/calculator/application-fees/`
+#### `/api/calculator/calculations/` ↔ `/api/calculator/fees/`
 
-**Data Flow Direction:** Indirect through Application
-- Calculations reference application fees through the application
-- Application fees are linked to specific applications
+**Data Flow Direction:** Many-to-Many through ApplicationFee
+- Calculations can have multiple fees
+- Fees can be applied to multiple calculations
 
 **Data Exchanged:**
-- Calculation → Application → ApplicationFee
-- ApplicationFee contains: fee details (fee_id, calculated_amount, is_waived)
+- Calculation → Fee: Many-to-many through ApplicationFee
+- Fee → Calculation: fee details (name, amount, type)
 
-**Implementation Quality:** ⚠️ Partial
-- No direct relationship between calculations and application fees
-- Connection is made through the application object
+**Implementation Status:** ✅ Complete
+- Many-to-many relationship through ApplicationFee model
+- ApplicationFeeSerializer includes calculation_id and fee_id for proper linking
 
 **Performance Considerations:**
-- Consider adding a direct relationship between calculations and application fees for clearer data flow
+- Consider using prefetch_related('fees') when retrieving calculations with fee data
 
-## Missing Data Flows
+### 4. Notifications API Data Flows
 
-### Notifications for Document Approvals and Signature Requests
+#### `/api/notifications/` ↔ `/api/applications/{id}/`
+
+**Data Flow Direction:** Bidirectional
+- Applications trigger notifications on status changes
+- Notifications are linked to specific applications
+
+**Data Exchanged:**
+- Application → Notification: related_application_id (foreign key)
+- Notification → Application: notification details (title, message, type)
+
+**Implementation Status:** ✅ Complete
+- Foreign key relationship with related_name='notifications' allows easy access
+- NotificationSerializer includes related_application_id for proper linking
+
+**Performance Considerations:**
+- None identified
+
+#### `/api/notifications/` ↔ `/api/document-management/documents/{id}/`
+
+**Data Flow Direction:** Bidirectional
+- Documents trigger notifications on status changes
+- Notifications are linked to specific documents
+
+**Data Exchanged:**
+- Document → Notification: related_document_id (foreign key)
+- Notification → Document: notification details (title, message, type)
+
+**Implementation Status:** ✅ Complete
+- Foreign key relationship with related_name='notifications' allows easy access
+- NotificationSerializer includes related_document_id for proper linking
+
+**Performance Considerations:**
+- None identified
+
+#### `/api/notes/` ↔ `/api/applications/{id}/`
+
+**Data Flow Direction:** Bidirectional
+- Applications have notes
+- Notes are linked to specific applications
+
+**Data Exchanged:**
+- Application → Note: application_id (foreign key)
+- Note → Application: note details (content, user, reminder_date)
+
+**Implementation Status:** ✅ Complete
+- Foreign key relationship with related_name='notes' allows easy access
+- NoteSerializer includes application_id for proper linking
+
+**Performance Considerations:**
+- Consider using prefetch_related('notes') when retrieving applications with note data
+
+## Dashboard API Data Flows
+
+### `/api/dashboard/metrics/` ↔ Various API Endpoints
+
+**Data Flow Direction:** One-way (API Endpoints → Dashboard Metrics)
+- Dashboard metrics aggregate data from various API endpoints
+- Metrics are calculated and stored for dashboard display
+
+**Data Exchanged:**
+- API Endpoints → Dashboard Metrics: Raw data for metric calculation
+- Dashboard Metrics store: name, value, category, metric_type
+
+**Implementation Status:** ⚠️ Partial
+- DashboardMetric model is implemented
+- Data aggregation services are implemented
+- Missing automated update triggers for some metrics
+
+**Performance Considerations:**
+- Consider implementing caching for frequently accessed metrics
+- Consider background tasks for metric calculation to avoid API performance impact
+
+### `/api/dashboard/widgets/` ↔ `/api/dashboard/metrics/`
+
+**Data Flow Direction:** Many-to-Many
+- Widgets display multiple metrics
+- Metrics can be used in multiple widgets
+
+**Data Exchanged:**
+- Widget → Metric: ManyToMany relationship
+- Metric → Widget: metric details (name, value, type)
+
+**Implementation Status:** ✅ Complete
+- Many-to-many relationship allows flexible widget configuration
+- DashboardWidgetSerializer includes metrics field
+- Proper configuration options for widget display
+
+**Performance Considerations:**
+- Consider using prefetch_related('metrics') when retrieving widgets with metric data
+
+### `/api/dashboard/layouts/` ↔ `/api/dashboard/widgets/`
+
+**Data Flow Direction:** Many-to-Many through DashboardWidgetPlacement
+- Layouts contain multiple widgets
+- Widgets can be used in multiple layouts
+
+**Data Exchanged:**
+- Layout → Widget: Many-to-many through DashboardWidgetPlacement
+- Widget → Layout: widget details (name, type, configuration)
+- DashboardWidgetPlacement contains: position_x, position_y, width, height
+
+**Implementation Status:** ✅ Complete
+- Many-to-many relationship through DashboardWidgetPlacement model
+- DashboardLayoutSerializer includes widgets field with placement information
+- Proper configuration for widget positioning
+
+**Performance Considerations:**
+- Consider using prefetch_related('widgets') when retrieving layouts with widget data
+
+### `/api/dashboard/preferences/` ↔ `/api/dashboard/layouts/`
+
+**Data Flow Direction:** One-to-One
+- Each user has one dashboard preference
+- Each preference references one layout
+
+**Data Exchanged:**
+- Preference → Layout: layout_id (foreign key)
+- Layout → Preference: layout details (name, widgets)
+
+**Implementation Status:** ✅ Complete
+- Foreign key relationship ensures proper linking
+- UserDashboardPreferenceSerializer includes layout_id for proper linking
+- Custom settings field allows user-specific customization
+
+**Performance Considerations:**
+- Consider using select_related('layout') when retrieving user preferences
+
+## Missing or Incomplete Data Flows
+
+### 1. Document Version Management
 
 **Current Status:** ❌ Missing
-- No direct relationship found between notifications and document approvals/signature requests
+- Document model has version fields but no dedicated API endpoints for version management
+- Missing endpoints for creating versions, comparing versions, and reverting to previous versions
 
 **Expected Data Flow:**
-- DocumentApproval → Notification: approval status changes should trigger notifications
-- SignatureRequest → Notification: signature request status changes should trigger notifications
+- Document → Document Version: parent_document_id (foreign key)
+- Document Version → Document: version details (version number, notes)
 
 **Implementation Recommendation:**
-- Add notification creation in the approval and signature request status change handlers
-- Consider using a signal-based approach for loose coupling
+- Add dedicated endpoints for document version management
+- Implement version comparison functionality
+- Add version rollback functionality
 
-### Document Relationship Management Endpoint
+### 2. Document Search Functionality
+
+**Current Status:** ❌ Missing
+- No dedicated search endpoints for document content
+- Missing full-text search implementation
+
+**Expected Data Flow:**
+- Search Query → Document Search: search parameters
+- Document Search → Results: matching documents with relevance scores
+
+**Implementation Recommendation:**
+- Implement full-text search using Django Haystack with Whoosh
+- Add dedicated search endpoints with filtering options
+- Implement relevance scoring for search results
+
+### 3. Notification Triggers for Document Workflows
 
 **Current Status:** ⚠️ Partial
-- No specific endpoint found for adding relationships between documents
-- Relationship functionality exists in the DocumentRelationship model
+- Basic notification model exists
+- Missing automated triggers for document approval and signature workflows
 
 **Expected Data Flow:**
-- API request → Document relationship creation/update
-- Response with relationship details
+- Document Approval/Signature → Notification: event details
+- Notification → Recipients: notification details
 
 **Implementation Recommendation:**
-- Add a dedicated endpoint for document relationship management
-- Implement proper validation for relationship types
+- Implement signal handlers for document workflow events
+- Add notification creation in approval and signature request status change handlers
+- Ensure proper recipient targeting based on workflow roles
+
+### 4. Dashboard Data Aggregation Services
+
+**Current Status:** ⚠️ Partial
+- Dashboard models are implemented
+- Missing comprehensive data aggregation services for all metrics
+
+**Expected Data Flow:**
+- Various API Endpoints → Dashboard Aggregation Service: raw data
+- Dashboard Aggregation Service → Dashboard Metrics: calculated metrics
+
+**Implementation Recommendation:**
+- Complete implementation of data aggregation services for all metric types
+- Add scheduled tasks for regular metric updates
+- Implement caching strategy for dashboard data
 
 ## Performance Optimization Recommendations
 
-1. **Use select_related for Foreign Keys**
-   - Implement select_related for foreign key relationships in querysets
-   - Example: `Application.objects.select_related('borrower', 'broker', 'product')`
+### 1. Database Query Optimization
 
-2. **Use prefetch_related for Reverse Relationships**
-   - Implement prefetch_related for reverse relationships in querysets
-   - Example: `Application.objects.prefetch_related('fees', 'repayments', 'documents')`
+**Current Status:** ⚠️ Partial
+- Some query optimizations implemented
+- Missing consistent use of select_related and prefetch_related
 
-3. **Consider Pagination for Large Collections**
-   - Implement pagination for endpoints that return potentially large collections
-   - Example: Document collections, application lists, repayment schedules
+**Recommendations:**
+- Use select_related for foreign key relationships:
+  ```python
+  Application.objects.select_related('borrower', 'broker', 'product')
+  ```
+- Use prefetch_related for reverse relationships and many-to-many:
+  ```python
+  Application.objects.prefetch_related('documents', 'fees', 'notes')
+  ```
+- Add database indexes for frequently queried fields
 
-4. **Add Caching for Frequently Accessed Data**
-   - Consider caching for frequently accessed, rarely changing data
-   - Example: Product details, fee structures, document templates
+### 2. Caching Strategy
+
+**Current Status:** ❌ Missing
+- No comprehensive caching strategy implemented
+- Missing cache for frequently accessed, rarely changing data
+
+**Recommendations:**
+- Implement Redis or Memcached for caching
+- Cache dashboard metrics and widgets
+- Cache document metadata and relationships
+- Implement cache invalidation strategy for data updates
+
+### 3. Pagination for Large Collections
+
+**Current Status:** ⚠️ Partial
+- Basic pagination implemented in some views
+- Missing consistent pagination across all list endpoints
+
+**Recommendations:**
+- Implement pagination for all list endpoints
+- Add cursor-based pagination for large collections
+- Consider custom pagination for specific use cases
+
+### 4. Background Task Processing
+
+**Current Status:** ❌ Missing
+- No background task processing implemented
+- All operations performed synchronously
+
+**Recommendations:**
+- Implement Celery for background task processing
+- Move metric calculation to background tasks
+- Process document indexing and search updates in background
+- Handle notification delivery in background tasks
 
 ## Conclusion
 
 The data flow analysis reveals that most API relationships are well-implemented with proper data exchange. The main areas for improvement are:
 
-1. Missing notification triggers for document workflows
-2. Lack of a dedicated document relationship management endpoint
-3. Indirect relationships between calculator components
-4. Performance optimizations for database queries
+1. **Document Version Management**: Implement dedicated endpoints and functionality for document versioning.
+2. **Document Search Functionality**: Implement full-text search with proper indexing and relevance scoring.
+3. **Notification Triggers**: Complete implementation of automated notification triggers for all workflows.
+4. **Dashboard Data Aggregation**: Complete implementation of data aggregation services for all dashboard metrics.
+5. **Performance Optimizations**: Implement comprehensive caching strategy, query optimizations, and background task processing.
 
-Addressing these issues will improve the overall API structure and ensure consistent data flow throughout the system.
+Addressing these issues will improve the overall API structure, ensure consistent data flow throughout the system, and enhance performance for end users.
+
+## Implementation Priority
+
+1. **High Priority**:
+   - Document Search Functionality
+   - Notification Triggers for Document Workflows
+   - Performance Optimizations for Database Queries
+
+2. **Medium Priority**:
+   - Document Version Management
+   - Dashboard Data Aggregation Services
+   - Caching Strategy
+
+3. **Low Priority**:
+   - Background Task Processing
+   - Advanced Pagination Strategies
